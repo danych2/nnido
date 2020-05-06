@@ -1,0 +1,12 @@
+<!-- templates/new.html -->
+{% block title %}New{% endblock %}
+
+{% block content %}
+    <p>
+    <form action="{% url 'new'%}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+    </p>
+{% endblock %}

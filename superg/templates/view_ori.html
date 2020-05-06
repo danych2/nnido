@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block title %}View{% endblock %}
+
+{% block head %}
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<style>
+
+svg {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.links line {
+  stroke: #aaa;
+}
+
+.nodes g circle {
+  pointer-events: all;
+  fill: white;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+.nodes g:hover circle{
+fill:red;
+}
+
+.comp {
+    border: solid 1.5px;
+    margin: 2px;
+}
+
+div.comp {
+    padding: 3px;
+}
+
+#container {
+display: flex
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="container">
+    <div>
+        <div class="comp">
+            <b>New node</b><br>
+            Name: <input type="text" id="add_node_name"><br>
+            <button type="button" onclick="add_node()">Create</button>
+        </div>
+        <div class="comp">
+            <b>Remove node</b><br>
+            Name: <select id="remove_node_name">
+            </select><br>
+            <button type="button" onclick="remove_node()">Remove</button>
+        </div>
+        <div class="comp">
+            <b>New edge</b><br>
+            Source: <select id="add_edge_source"></select><br>
+            Target: <select id="add_edge_target"></select><br>
+            <button type="button" onclick="add_edge()">Create</button>
+        </div>
+    </div>
+    
+    <svg width="960" height="600" class="comp" style="float:left"></svg>
+        
+    <div style="float:left">
+        <div class="comp">
+            <b>Active node</b><br>
+            Name: <input type="text" id="active_node_name"><br>
+            <button type="button" onclick="update_active_node()">Update</button>
+        </div>
+        <div class="comp">
+            <button type="button" onclick="save_network()">Save network</button>
+        </div>
+    </div>
+    </div>
+    <div id="csrf" style="display: none;">
+        {% csrf_token %}
+    </div>
+<script>
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+    
+var csrf_token = d3.select("#csrf").select("input").attr("value");
+    
+var active_comp =  null;
+     
+svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .call(d3.zoom()
+        .scaleExtent([1 / 8, 8])
+        .filter(function(d) {
+        return !d3.event.button && d3.event.type != "doubleclick";
+        })
+        .on("zoom", zoomed))
+        .on("dblclick", node_dbclick)
+        .on("dblclick.zoom", null);
+svg.append("g");  
+
+var simulation = d3.forceSimulation().alphaDecay(0.1)
+    .force("link", d3.forceLink().strength(0.04).id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    //.force("center", d3.forceCenter(width / 2, height / 2).strength(0.04))
+    .force("x", d3.forceX().strength(0.01).x(width / 2))
+    .force("y", d3.forceY().strength(0.01).y(height / 2))
+
+var data, link_list, node_list;
+
+var max_node_id = 10, max_edge_id = 10;
+
+  
+  data = JSON.parse('{{ graph.data|safe}}');
+    
+  link_list = svg.select("g").append("g")
+      .attr("class", "links")
+    .selectAll("line")
+
+  node_list = svg.select("g").append("g")
+      .attr("class", "nodes").selectAll("g")
+      
+      update_data()
+
+  simulation
+      .on("tick", ticked);
+
+function ticked() {
+link_list.select("line")
+    .attr("x1", function(d) { return d.source.x; })
+    .attr("y1", function(d) { return d.source.y; })
+    .attr("x2", function(d) { return d.target.x; })
+    .attr("y2", function(d) { return d.target.y; });
+
+node_list
+    .attr("transform", function(d) { return "translate("+d.x+", "+d.y+")";});
+}
+
+function zoomed() {
+  svg.select("g").attr("transform", d3.event.transform);
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+
+function node_dbclick() {
+    var event = d3.event;
+    event.preventDefault;
+    var point = d3.mouse(this);
+    
+    max_node_id += 1
+    data.nodes.push({id: max_node_id, name: "", x: point[0], y: point[1]})
+    
+    update_data();
+}
+
+function remove_node() {
+    var node_id = d3.select("#remove_node_name").node().value
+    
+    //remove node
+    var index = data.nodes.findIndex(function(element) {
+      return element.id == node_id;
+    })
+    data.nodes.splice(index,1);
+          
+    //remove links to node
+    data.links = data.links.filter(function(element) {
+      return element.source.id != node_id && element.target.id != node_id;
+    })
+        
+    update_data()
+}
+
+function add_edge() {
+    var source_id = d3.select("#add_edge_source").node().value
+    var target_id = d3.select("#add_edge_target").node().value
+    max_edge_id += 1
+    data.links.push({id: max_edge_id, source: source_id, target: target_id})
+
+    update_data();
+}
+
+function add_node() {
+    var name = d3.select("#add_node_name").node().value
+    max_node_id += 1
+    data.nodes.push({id: max_node_id, name: name, x: 800, y: 500})
+    
+    update_data()
+}
+
+function change_active_node() {
+    active_comp = this
+    d3.select("#active_node_name").property("value",d3.select(active_comp).select("text").text())
+}
+
+function update_active_node() {
+    if(active_comp) {
+        var new_name = d3.select("#active_node_name").node().value
+        
+        var node_id = d3.select(active_comp).attr("comp_id");
+    
+        var index = data.nodes.findIndex(function(element) {
+          return element.id == node_id;
+        })
+        
+        data.nodes[index].name = new_name
+        
+        update_data()
+    }
+}
+
+function update_data() {
+    node_list = node_list
+        .data(data.nodes, function(d) {return d ? d.id : this.comp_id;})
+        .join(
+            enter => enter.append("g").each(create_node),
+            update => update.call(function(selection) { selection.select("text").text(function(d) { return d.name; })})
+        )
+                    
+    simulation.nodes(data.nodes);
+    
+    d3.select("#remove_node_name").selectAll("option")
+        .data(data.nodes, function(d) {return d ? d.id : this.value;})
+        .join(
+            enter => enter.append("option")
+              .attr("value",function(d) { return d.id; })
+              .text(function(d) { return d.name; })
+            )
+            
+    d3.select("#add_edge_source").selectAll("option")
+        .data(data.nodes, function(d) {return d ? d.id : this.value;})
+        .join(
+            enter => enter.append("option")
+              .attr("value",function(d) { return d.id; })
+              .text(function(d) { return d.name; })
+            )
+            
+    d3.select("#add_edge_target").selectAll("option")
+        .data(data.nodes, function(d) {return d ? d.id : this.value;})
+        .join(
+            enter => enter.append("option")
+              .attr("value",function(d) { return d.id; })
+              .text(function(d) { return d.name; })
+            )
+            
+    link_list = link_list
+        .data(data.links, function(d) {return d ? d.id : this.comp_id;})
+        .join(
+            enter => enter.append("g").each(create_edge)
+            )
+    simulation.force("link")
+      .links(data.links);
+}
+function create_node() {
+    var node = d3.select(this)
+        .on("click", change_active_node)
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended))
+      .attr('comp_id', function(d) { return d.id; })
+         
+    /*node.append("circle").attr("r", 2.5);
+    node.append("text").attr("x",5).attr("y",-5)
+      .text(function(d) { return d.name; });*/
+    node.append("text")
+      .text(function(d) { return d.name; });
+    let text_width = node.select('text').node().getBBox().width
+    let text_height = node.select('text').node().getBBox().height
+    
+    node.select('text').attr("x",-text_width/2).attr("y",text_height/3)
+    node.insert("circle", ':first-child').attr("r", Math.max(text_width, text_height));
+}
+
+function create_edge() {
+    var edge = d3.select(this)
+      .attr('comp_id', function(d) { return d.id; })
+         
+    edge.append("line");
+}
+
+function clean_data(d) {
+    var links_clean = JSON.parse(JSON.stringify(d.links))
+    links_clean.forEach(function(element) {
+        element.source = element.source.id;
+        element.target = element.target.id;
+    })
+    return {'nodes': d.nodes, 'links': links_clean};
+}
+
+function save_network() {
+    d3.text("{% url 'view' graph.id %}", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "X-CSRFToken": csrf_token },
+        body: "data=" + JSON.stringify(clean_data(data))
+    }).then(function(data) {
+      console.log(data);
+    });
+}
+</script>
+{% endblock %}

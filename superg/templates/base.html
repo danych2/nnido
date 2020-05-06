@@ -1,0 +1,21 @@
+<!-- templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}SuperGraphs{% endblock %}</title>
+  {% block head %}
+  {% endblock %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <main>
+    {% if error %}
+      <b style='color:red'>{{ error }}</b><br>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+  </main>
+</body>
+</html>

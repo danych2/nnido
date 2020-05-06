@@ -1,0 +1,87 @@
+body {
+  font-family: monospace;
+}
+
+svg {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.line_visible {
+  stroke: #aaa;
+  stroke-opacity: 1;
+}
+
+.line_hoverarea{
+  stroke: #f11;
+  stroke-width: 15;
+  stroke-opacity: 0;
+}
+
+.line_hoverarea:hover + .line_visible{
+  stroke: #f11 !important;
+  stroke-opacity: 1;
+}
+
+.line_visible:hover{
+  stroke: #f11;
+  stroke-opacity: 1;
+}
+
+.nodes g circle {
+  pointer-events: all;
+  fill: white;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+.nodes g:hover circle{
+fill:red;
+}
+
+.comp {
+    border: solid 1.5px;
+    margin: 2px;
+}
+
+div.comp {
+    padding: 3px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr
+}
+
+#graphContainer {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr
+}
+
+button {
+  font-family: monospace;
+  background-color: white;
+  border: 1px solid black;
+}
+
+button:hover {
+  text-shadow: 0px 0.5px 0px black;
+}
+
+select {
+  border-color: black;
+  margin: 2px 3px;
+}
+
+input[type=text] {
+  border-style: solid;
+  border-width: 1px 1px;
+  border-color: white black;
+  margin: 2px 3px;
+}
+
+input[type=text]:hover {
+  border-color: black;
+}
