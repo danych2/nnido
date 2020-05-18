@@ -19,7 +19,7 @@ export class CreateNode extends Component {
     e.preventDefault();
     const { name } = this.state;
     const node_data = { name };
-    const node_position = { x:200, y:200 };
+    const node_position = { x:0.5, y:0.5 };
     this.props.createNode({ data: node_data, position: node_position });
     this.setState({...this.state, name: ""});
   };

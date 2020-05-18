@@ -16,7 +16,8 @@ export class Header extends Component {
     const authLinks = (
       <div className="comp">
         <div>
-          <button onClick={this.props.logout}>Cerrar sesión</button>
+          <Link to="/">Inicio</Link>
+          <button style={{float:'right'}} onClick={this.props.logout}>Cerrar sesión</button>
         </div>
       </div>
     )

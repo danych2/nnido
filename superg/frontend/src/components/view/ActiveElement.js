@@ -11,13 +11,17 @@ export class ActiveElement extends Component {
     activeElement: PropTypes.object,
   }
 
+  componentDidUpdate(){
+    console.log("activeelement_updated")
+  }
+
   render() {
     let content;
     if (this.props.activeElement) {
       if (this.props.activeElement.type.localeCompare("node") == 0) {
-        content = <ActiveNode key={this.props.activeElement.id} />
+        content = <ActiveNode key={this.props.activeElement.id} node_id={this.props.activeElement.id} />
       } else if (this.props.activeElement.type.localeCompare("link") == 0) {
-        content = <ActiveLink key={this.props.activeElement.id} />
+        content = <ActiveLink key={this.props.activeElement.id} link_id={this.props.activeElement.id} />
       }
     } else {
       content = "Ningún elemento seleccionado"

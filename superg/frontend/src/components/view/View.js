@@ -11,6 +11,7 @@ import DeleteLink from './DeleteLink';
 import GraphViewer from './GraphViewer';
 import ActiveElement from './ActiveElement'
 import SaveGraph from './SaveGraph'
+import Model from './Model'
 
 export class View extends Component {
   static propTypes = {
@@ -25,18 +26,17 @@ export class View extends Component {
     if(Object.keys(this.props.graph).length === 0) {
       return "";
     } else return (
-      <div id="graphContainer">
+      <div id="grid_container">
         <div className="comp">
           <CreateNode />
           <DeleteNode />
           <CreateLink />
           <DeleteLink />
         </div>
-        <div>
-          <GraphViewer />
-        </div>
-        <div>
+        <GraphViewer />
+        <div className="comp">
           <ActiveElement />
+          <Model />
           <SaveGraph />
         </div>
       </div>

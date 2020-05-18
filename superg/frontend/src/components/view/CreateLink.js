@@ -28,7 +28,6 @@ export class CreateLink extends Component {
 
   render() {
     let content;
-    console.log("render select")
     if(this.props.nodes.length > 1) {
       content = (
         <Fragment>
