@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { updateNodePosition, setActiveElement, updateNode, createLink } from '../../actions/graphs';
-import { normalize_coords, denormalize_coords } from '../../aux/func';
+import { normalize_coords, denormalize_coords } from '../../func';
 
 import * as d3 from 'd3';
 

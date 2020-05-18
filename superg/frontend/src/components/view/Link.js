@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { setActiveElement } from '../../actions/graphs';
-import { denormalize_coords } from '../../aux/func';
+import { denormalize_coords } from '../../func';
 
 import * as d3 from 'd3';
 
