@@ -6,20 +6,24 @@ import PropTypes from 'prop-types';
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
-    render={props => {
+    render={(props) => {
       if (auth.isLoading) {
         return <h2>Cargando...</h2>;
-      } else if (!auth.isAuthenticated) {
+      } if (!auth.isAuthenticated) {
         return <Redirect to="/login" />;
-      } else {
-        return <Component {...props} />;
       }
+      return <Component {...props} />;
     }}
   />
 );
 
-const mapStateToProps = state => ({
-  auth: state.auth
+PrivateRoute.propTypes = {
+  component: PropTypes.elementType.isRequired,
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

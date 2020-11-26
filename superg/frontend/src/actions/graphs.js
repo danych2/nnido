@@ -1,138 +1,252 @@
 import axios from 'axios';
-import { tokenConfig } from './auth';
-
-import { GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
-  CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
-  UPDATE_NODE_POSITION, SET_ACTIVE_ELEMENT, UPDATE_ZOOM } from './types'
-
 import { v4 as uuid } from 'uuid';
+
+import {
+  GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
+  CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
+  UPDATE_NODE_POSITION, SET_ACTIVE_ELEMENT, UPDATE_ZOOM, UPDATE_DEFAULT,
+  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
+  CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
+  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER,
+} from './types';
+
+import { tokenConfig } from './auth';
 
 // GET GRAPHS
 export const getGraphs = () => (dispatch, getState) => {
   axios.get('/api/graphs/', tokenConfig(getState))
-    .then(res => {
+    .then((res) => {
       dispatch({
         type: GET_GRAPHS,
-        payload: res.data
+        payload: res.data,
       });
-    }).catch(err => console.log(err));
-}
+    }).catch((err) => console.log(err));
+};
 
-// GET GRAPHS
-export const getGraph = id => (dispatch, getState) => {
+// GET GRAPH
+export const getGraph = (id) => (dispatch, getState) => {
   axios.get(`/api/graphs/${id}/`, tokenConfig(getState))
-    .then(res => {
+    .then((res) => {
       dispatch({
         type: GET_GRAPH,
-        payload: res.data
+        payload: res.data,
       });
-    }).catch(err => console.log(err));
-}
+    }).catch((err) => console.log(err));
+};
 
 // CREATE Graph
-export const createGraph = graph => (dispatch, getState) => {
-  axios.post('/api/graphs/', {...graph, data: JSON.stringify({nodes: [], links: []}),
-    visualization: JSON.stringify({node_positions:{}})}, tokenConfig(getState))
-    .then(res => {
+export const createGraph = (graph) => (dispatch, getState) => {
+  axios.post('/api/graphs/', {
+    ...graph,
+    data: JSON.stringify({ nodes: [], links: [] }),
+    visualization: JSON.stringify({ node_positions: {} }),
+    model: JSON.stringify({ node_types: {}, link_types: {} }),
+  }, tokenConfig(getState))
+    .then((res) => {
       dispatch({
         type: CREATE_GRAPH,
-        payload: res.data
+        payload: res.data,
       });
-    }).catch(err => console.log(err));
-}
+    }).catch((err) => console.log(err));
+};
 
 // DELETE Graph
-export const deleteGraph = id => (dispatch, getState) => {
+export const deleteGraph = (id) => (dispatch, getState) => {
   axios.delete(`/api/graphs/${id}`, tokenConfig(getState))
-    .then(res => {
+    .then(() => {
       dispatch({
         type: DELETE_GRAPH,
-        payload: id
+        payload: id,
       });
-    }).catch(err => console.log(err));
-}
+    }).catch((err) => console.log(err));
+};
 
 // UPDATE Graph
-export const updateGraph = graph => (dispatch, getState) => {
-  axios.patch(`/api/graphs/${graph.pk}/`, {...graph, data: JSON.stringify(graph.data), visualization: JSON.stringify(graph.visualization)}, tokenConfig(getState))
-    .then(res => {
+export const updateGraph = (graph) => (dispatch, getState) => {
+  axios.patch(`/api/graphs/${graph.pk}/`, {
+    ...graph,
+    data: JSON.stringify(graph.data),
+    visualization: JSON.stringify(graph.visualization),
+    model: JSON.stringify(graph.model),
+  }, tokenConfig(getState))
+    .then((res) => {
       dispatch({
         type: UPDATE_GRAPH,
-        payload: res.data
+        payload: res.data,
       });
-    }).catch(err => console.log(err));
-}
+    }).catch((err) => console.log(err));
+};
 
 // CREATE Node
-export const createNode = node => dispatch => {
-  const id = uuid();
+export const createNode = (node) => (dispatch) => {
+  const { data, ...rest } = node; // 'rest' can contain id and position
   dispatch({
     type: CREATE_NODE,
-    payload: {id: id, ...node }
+    payload: {
+      id: uuid(),
+      data: {
+        name: '',
+        content: '',
+        type: '',
+        properties: {},
+        ...data,
+      },
+      ...rest,
+    },
   });
-}
+};
 
 // DELETE Node
-export const deleteNode = id => dispatch => {
+export const deleteNode = (id) => (dispatch) => {
   dispatch({
     type: DELETE_NODE,
-    payload: id
+    payload: id,
   });
-}
+};
 
 // UPDATE Node
-export const updateNode = node => dispatch => {
+export const updateNode = (node) => (dispatch) => {
   dispatch({
     type: UPDATE_NODE,
-    payload: node
+    payload: node,
   });
-}
+};
 
 // CREATE Link
-export const createLink = link => dispatch => {
-  const id = uuid();
+export const createLink = (link) => (dispatch) => {
   dispatch({
     type: CREATE_LINK,
-    payload: {id: id, ...link }
+    payload: {
+      id: uuid(),
+      data: {
+        type: '',
+        properties: {},
+        ...link,
+      },
+    },
   });
-}
+};
 
 // DELETE Link
-export const deleteLink = id => dispatch => {
+export const deleteLink = (id) => (dispatch) => {
   dispatch({
     type: DELETE_LINK,
-    payload: id
+    payload: id,
   });
-}
+};
 
 // UPDATE Link
-export const updateLink = link => dispatch => {
+export const updateLink = (link) => (dispatch) => {
   dispatch({
     type: UPDATE_LINK,
-    payload: link
+    payload: link,
   });
-}
+};
 
 // UPDATE Node position
-export const updateNodePosition = node_position => dispatch => {
+export const updateNodePosition = (nodePosition) => (dispatch) => {
   dispatch({
     type: UPDATE_NODE_POSITION,
-    payload: node_position
+    payload: nodePosition,
   });
-}
+};
 
 // SET Active element
-export const setActiveElement = element => dispatch => {
+export const setActiveElement = (element) => (dispatch) => {
   dispatch({
     type: SET_ACTIVE_ELEMENT,
-    payload: element
+    payload: element,
   });
-}
+};
 
-// SUpdate zoom
-export const updateZoom = transform => dispatch => {
+// Update zoom
+export const updateZoom = (transform) => (dispatch) => {
   dispatch({
     type: UPDATE_ZOOM,
-    payload: transform
+    payload: transform,
   });
-}
+};
+
+// Update default
+export const updateDefault = (payload) => (dispatch) => {
+  dispatch({
+    type: UPDATE_DEFAULT,
+    payload,
+  });
+};
+
+// CREATE Node type
+export const createNodeType = (nodeType) => (dispatch) => {
+  dispatch({
+    type: CREATE_NODE_TYPE,
+    payload: {
+      id: uuid(),
+      data: {
+        properties: {},
+        ...nodeType,
+      },
+    },
+  });
+};
+
+// DELETE Node type
+export const deleteNodeType = (id) => (dispatch) => {
+  dispatch({
+    type: DELETE_NODE_TYPE,
+    payload: id,
+  });
+};
+
+// UPDATE Node type
+export const updateNodeType = (nodeType) => (dispatch) => {
+  dispatch({
+    type: UPDATE_NODE_TYPE,
+    payload: nodeType,
+  });
+};
+
+// CREATE Link type
+export const createLinkType = (linkType) => (dispatch) => {
+  dispatch({
+    type: CREATE_LINK_TYPE,
+    payload: {
+      id: uuid(),
+      data: {
+        properties: {},
+        ...linkType,
+      },
+    },
+  });
+};
+
+// DELETE Link type
+export const deleteLinkType = (id) => (dispatch) => {
+  dispatch({
+    type: DELETE_LINK_TYPE,
+    payload: id,
+  });
+};
+
+// UPDATE Link type
+export const updateLinkType = (linkType) => (dispatch) => {
+  dispatch({
+    type: UPDATE_LINK_TYPE,
+    payload: linkType,
+  });
+};
+
+// SWITCH Node type visibility
+export const switchNodeTypeFilter = (id) => (dispatch) => {
+  dispatch({
+    type: SWITCH_NODETYPE_FILTER,
+    payload: id,
+  });
+};
+
+// SWITCH Link type visibility
+export const switchLinkTypeFilter = (id) => (dispatch) => {
+  dispatch({
+    type: SWITCH_LINKTYPE_FILTER,
+    payload: id,
+  });
+};

@@ -1,3 +1,8 @@
+:root {
+  --hover-color: limegreen;
+  --creating-link-color: blue;
+}
+
 body {
   font-family: monospace;
 }
@@ -9,45 +14,50 @@ svg {
     -ms-user-select: none; /* IE10+ */
 }
 
-.line_visible {
-  stroke: #aaa;
+.creating_link {
+  stroke: var(--creating-link-color);
   stroke-opacity: 1;
+  stroke-width: 3;
+}
+
+.line_visible {
+  stroke-opacity: 1;
+  stroke-width: 2;
 }
 
 .line_hoverarea{
-  stroke: #f11;
+  stroke: white;
   stroke-width: 15;
   stroke-opacity: 0;
 }
 
-.line_hoverarea:hover + .line_visible{
-  stroke: #f11 !important;
-  stroke-opacity: 1;
-}
-
+.line_hoverarea:hover + .line_visible,
 .line_visible:hover{
-  stroke: #f11;
+  stroke: var(--hover-color);
+  stroke-width: 3;
   stroke-opacity: 1;
 }
 
-.nodes g circle {
+.nodes g rect {
   pointer-events: all;
   fill: white;
   stroke: black;
   stroke-width: 2px;
 }
 
-.nodes g:hover circle{
-fill:red;
+.nodes g:hover rect{
+  stroke: var(--hover-color);
+  stroke-width: 3px;
 }
 
 .comp {
-    border: solid 1.5px;
-    margin: 2px;
+  border: solid 1.5px;
+  margin: 2px;
+  padding: 2px;
 }
 
 div.comp {
-    padding: 3px;
+    font-size: 1rem;
 }
 
 .container {
@@ -55,15 +65,17 @@ div.comp {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr
 }
 
-#graphContainer {
+#grid_container {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr
+  /* grid-template-columns: 1fr 3fr 1fr */
+  grid-template-columns: 5fr 1fr
 }
 
 button {
   font-family: monospace;
   background-color: white;
   border: 1px solid black;
+  font-size: 1rem;
 }
 
 button:hover {
@@ -73,6 +85,18 @@ button:hover {
 select {
   border-color: black;
   margin: 2px 3px;
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+option {
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+input {
+  font-family: monospace;
+  font-size: 1rem;
 }
 
 input[type=text] {
@@ -84,4 +108,21 @@ input[type=text] {
 
 input[type=text]:hover {
   border-color: black;
+}
+
+input.seamless {
+  width: 100%;
+  border-width: 0px;
+  margin: 0px;
+  padding: 0px;
+  outline: none;
+}
+
+.collapsible {
+  border: 1px solid black;
+  margin-bottom: 2px;
+}
+
+.collapsibleContent {
+  border-top: 1px solid black;
 }
