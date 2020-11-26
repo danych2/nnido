@@ -1,0 +1,39 @@
+env:
+  browser: true
+  es6: true
+extends:
+  - 'plugin:react/recommended'
+  - airbnb
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 11
+  sourceType: module
+plugins:
+  - react
+parser:
+  babel-eslint
+rules:
+  react/jsx-props-no-spreading: off
+  react/forbid-prop-types: off
+  jsx-a11y/label-has-associated-control: off
+  no-shadow: off
+  no-console: off
+  react/static-property-placement: off
+  react/sort-comp: off
+  react/destructuring-assignment: off
+  camelcase: off
+  no-unused-vars: off
+  no-return-assign: off
+  no-param-reassign: off
+  no-sequences: off
+  one-var-declaration-per-line: off
+  one-var: off
+  jsx-a11y/anchor-is-valid: off
+  jsx-a11y/no-static-element-interactions: off
+  jsx-a11y/click-events-have-key-events: off
+  jsx-a11y/control-has-associated-label: off
+  jsx-a11y/alt-text: off

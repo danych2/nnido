@@ -1,5 +1,4 @@
 :root {
-  --link-color: #aaa;
   --hover-color: limegreen;
   --creating-link-color: blue;
 }
@@ -22,9 +21,8 @@ svg {
 }
 
 .line_visible {
-  stroke: var(--link-color);
   stroke-opacity: 1;
-  stroke-width: 3;
+  stroke-width: 2;
 }
 
 .line_hoverarea{
@@ -36,7 +34,7 @@ svg {
 .line_hoverarea:hover + .line_visible,
 .line_visible:hover{
   stroke: var(--hover-color);
-  stroke-width: 2;
+  stroke-width: 3;
   stroke-opacity: 1;
 }
 
@@ -55,10 +53,10 @@ svg {
 .comp {
   border: solid 1.5px;
   margin: 2px;
+  padding: 2px;
 }
 
 div.comp {
-    padding: 3px;
     font-size: 1rem;
 }
 
@@ -69,7 +67,8 @@ div.comp {
 
 #grid_container {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr
+  /* grid-template-columns: 1fr 3fr 1fr */
+  grid-template-columns: 5fr 1fr
 }
 
 button {
@@ -117,4 +116,13 @@ input.seamless {
   margin: 0px;
   padding: 0px;
   outline: none;
+}
+
+.collapsible {
+  border: 1px solid black;
+  margin-bottom: 2px;
+}
+
+.collapsibleContent {
+  border-top: 1px solid black;
 }
