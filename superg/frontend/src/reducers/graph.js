@@ -7,6 +7,7 @@ import {
   SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER,
 } from '../actions/types';
 import { dictFilter } from '../func';
+import config from '../config';
 
 const initialState = {
   graphs: [],
@@ -18,11 +19,12 @@ export default function (state = initialState, action) {
   // eslint-disable-next-line no-unused-vars
   let value;
   let id;
+  let version;
   let data;
+  let visualization;
+  let model;
   let position;
   let name;
-  let nodeType;
-  let linkType;
   let otherNodes;
   let otherLinks;
   let newPositions;
@@ -35,13 +37,22 @@ export default function (state = initialState, action) {
         graphs: action.payload,
       };
     case GET_GRAPH:
+      version = action.payload.version;
+      data = JSON.parse(action.payload.data);
+      visualization = JSON.parse(action.payload.visualization);
+      model = JSON.parse(action.payload.model);
+      if (version < 1) {
+        visualization.node_types_filtered = {};
+        visualization.link_types_filtered = {};
+      }
       return {
         ...state,
         graph: {
           ...action.payload,
-          data: JSON.parse(action.payload.data),
-          visualization: JSON.parse(action.payload.visualization),
-          model: JSON.parse(action.payload.model),
+          data,
+          visualization,
+          model,
+          version: config.CURRENT_VERSION,
         },
       };
     case CREATE_GRAPH:

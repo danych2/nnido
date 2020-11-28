@@ -4,4 +4,4 @@ from .models import Graph
 class GraphSerializer(serializers.ModelSerializer):
     class Meta:
         model = Graph
-        fields = ['name', 'data', 'date', 'visualization', 'model', 'pk']
+        fields = ['name', 'data', 'date', 'visualization', 'model', 'version', 'pk']
