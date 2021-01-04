@@ -2,10 +2,10 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    home: './superg/frontend/src/home.js',
+    home: './nnido/frontend/src/home.js',
   },
   output: {
-    path: path.resolve(__dirname, 'superg/frontend/static/frontend'),
+    path: path.resolve(__dirname, 'nnido/frontend/static/frontend'),
   },
   resolve: {
     extensions: ['.js', '.jsx'],
