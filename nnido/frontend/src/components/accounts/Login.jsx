@@ -38,7 +38,10 @@ export class Login extends Component {
           <input type="text" name="password" onChange={this.onChange} value={password} />
           <br />
           <button type="submit">Iniciar sesión</button>
-          <div className="comp"><Link to="/register">Regístrate</Link></div>
+          {/*
+            <div className="comp"><Link to="/register">Regístrate</Link></div>
+            Signing up is disabled until all security concerns are dealt with
+          */}
         </form>
       </div>
     );
