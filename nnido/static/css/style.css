@@ -1,6 +1,7 @@
 :root {
   --hover-color: limegreen;
   --creating-link-color: blue;
+  --selected-color: brown;
 }
 
 body {
@@ -36,6 +37,24 @@ svg {
   stroke: var(--hover-color);
   stroke-width: 3;
   stroke-opacity: 1;
+}
+
+#rubberband {
+  stroke: black;
+  stroke-dasharray: 5, 5;
+  stroke-width: 2px;
+  stroke-width: 2px;
+  fill-opacity: 0;
+  stroke-opacity: 0.8;
+}
+
+.nodes .selected rect{
+  stroke: var(--selected-color) !important;
+}
+
+.nodes .rubberband_hovering rect{
+  stroke-width: 3px;
+  stroke-dasharray: 5, 5;
 }
 
 .nodes g rect {

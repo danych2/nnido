@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import * as d3 from 'd3';
 import { v4 as uuid } from 'uuid';
@@ -8,41 +7,48 @@ import { v4 as uuid } from 'uuid';
 import Node from './Node';
 import Link from './Link';
 
-import { createNode, updateZoom } from '../../actions/graphs';
+import { createNode, updateZoom, setRubberBand } from '../../actions/graphs';
 import { normalizeCoords } from '../../func';
+import RubberBand from './RubberBand';
 
 const GraphViewer = () => {
   const dispatch = useDispatch();
   const myRef = useRef();
   const defaultNodeType = useSelector((state) => state.graph.defaultNodeType);
   const visualization = useSelector((state) => state.graph.graph.visualization, shallowEqual);
-  const nodeIdsAndTypes = useSelector((state) => Object.keys(state.graph.graph.data.nodes).reduce(
+  const nodeTypes = useSelector((state) => Object.keys(state.graph.graph.data.nodes).reduce(
     (dict, el) => (dict[el] = state.graph.graph.data.nodes[el].type, dict),
     {},
   ), shallowEqual);
 
   //     v this dictionary stores [type, source, target] of the links
-  const linkIdsAndMore = useSelector((state) => Object.keys(state.graph.graph.data.links).reduce(
-    (dict, el) => (dict[el] = [
-      state.graph.graph.data.links[el].type,
-      state.graph.graph.data.links[el].source,
-      state.graph.graph.data.links[el].target], dict),
+  const linkTypes = useSelector((state) => Object.keys(state.graph.graph.data.links).reduce(
+    (dict, el) => (dict[el] = state.graph.graph.data.links[el].type, dict),
+    {},
+  ), shallowEqual);
+  const linkSources = useSelector((state) => Object.keys(state.graph.graph.data.links).reduce(
+    (dict, el) => (dict[el] = state.graph.graph.data.links[el].source, dict),
+    {},
+  ), shallowEqual);
+  const linkTargets = useSelector((state) => Object.keys(state.graph.graph.data.links).reduce(
+    (dict, el) => (dict[el] = state.graph.graph.data.links[el].target, dict),
     {},
   ), shallowEqual);
 
-  const visibleNodes = Object.keys(nodeIdsAndTypes).filter(
-    (id) => nodeIdsAndTypes[id] === '' || !visualization.node_types_filtered[nodeIdsAndTypes[id]],
+  const visibleNodes = Object.keys(nodeTypes).filter(
+    (id) => nodeTypes[id] === '' || !visualization.node_types_filtered[nodeTypes[id]],
   );
 
-  const visibleLinks = Object.keys(linkIdsAndMore).filter(
-    (id) => (linkIdsAndMore[id][0] === '' || !visualization.link_types_filtered[linkIdsAndMore[id][0]])
-      && visibleNodes.indexOf(linkIdsAndMore[id][1]) > -1
-      && visibleNodes.indexOf(linkIdsAndMore[id][2]) > -1,
+  const visibleLinks = Object.keys(linkTypes).filter(
+    (id) => (linkTypes[id] === '' || !visualization.link_types_filtered[linkTypes[id]])
+      && visibleNodes.indexOf(linkSources[id]) > -1
+      && visibleNodes.indexOf(linkTargets[id]) > -1,
   );
 
+  // zoom behavior and dblclick to create node
   useEffect(() => {
-    const svg = d3.select(myRef.current).select('svg');
-    const svg_g = svg.select('g');
+    const svg = d3.select('#graph_container');
+    const svg_g = svg.select('#nodes_and_links');
 
     const zoom_behavior = d3.zoom().on('zoom', () => {
       svg_g.attr('transform', d3.event.transform);
@@ -84,7 +90,7 @@ const GraphViewer = () => {
             <polygon points="0 0, 10 3.5, 0 7" />
           </marker>
         </defs>
-        <g>
+        <g id="nodes_and_links">
           <g className="links">
             { visibleLinks.map((link_id) => (
               <Link key={link_id} link_id={link_id} />
@@ -96,6 +102,7 @@ const GraphViewer = () => {
             ))}
           </g>
         </g>
+        <RubberBand />
       </svg>
     </div>
   );

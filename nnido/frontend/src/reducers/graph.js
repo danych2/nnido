@@ -1,10 +1,10 @@
 import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
-  UPDATE_NODE_POSITION, SET_ACTIVE_ELEMENT, UPDATE_ZOOM, UPDATE_DEFAULT,
+  UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
   CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
-  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER,
+  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS,
 } from '../actions/types';
 import { dictFilter } from '../func';
 import config from '../config';
@@ -12,7 +12,7 @@ import config from '../config';
 const initialState = {
   graphs: [],
   graph: {},
-  activeElement: null,
+  selection: {},
 };
 
 export default function (state = initialState, action) {
@@ -180,10 +180,24 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case SET_ACTIVE_ELEMENT:
+    case UPDATE_NODES_POSITIONS:
       return {
         ...state,
-        activeElement: action.payload,
+        graph: {
+          ...state.graph,
+          visualization: {
+            ...state.graph.visualization,
+            node_positions: {
+              ...state.graph.visualization.node_positions,
+              ...action.payload,
+            },
+          },
+        },
+      };
+    case SET_SELECTION:
+      return {
+        ...state,
+        selection: action.payload,
       };
     case UPDATE_ZOOM:
       return {

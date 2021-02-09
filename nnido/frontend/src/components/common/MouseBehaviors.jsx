@@ -3,7 +3,7 @@ import {
   normalizeCoords, denormalizeCoords,
 } from '../../func';
 import {
-  updateNodePosition, createLink,
+  updateNodePosition, updateNodesPositions, createLink,
 } from '../../actions/graphs';
 
 export default function createNodeDragBehavior(
@@ -17,12 +17,16 @@ export default function createNodeDragBehavior(
   setDraggingNode,
   defaultLinkType,
   setActiveElement,
+  selection,
 ) {
+  const isSelected = (selection.id && selection.id === node_id)
+    || (selection.ids && selection.ids.includes(node_id));
+
   return d3.drag()
     .on('start', (d) => {
       const currentPos = positionRef.current;
       const { x: currentX, y: currentY } = denormalizeCoords(currentPos.x, currentPos.y);
-      if (d3.event.sourceEvent.shiftKey) {
+      if (d3.event.sourceEvent.shiftKey) { // if shift -> create new link
         d3.select(myRef.current.parentNode).insert('line', ':first-child')
           .attr('class', 'creating_link')
           .attr('x1', currentX)
@@ -38,8 +42,18 @@ export default function createNodeDragBehavior(
           .attr('x2', d3.event.x).attr('y2', d3.event.y);
       } else if (draggingNodeRef.current
                   || Math.max(Math.abs(d3.event.dx), Math.abs(d3.event.dy)) > 1) {
-        d3.select(myRef.current)
-          .attr('transform', `translate(${d3.event.x}, ${d3.event.y})`);
+        if (isSelected && selection.ids) {
+          d3.selectAll('.selected').each(function translateNode(d, i) {
+            const transform = d3.select(this).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
+            const old_x = parseFloat(transform[1]);
+            const old_y = parseFloat(transform[2]);
+            d3.select(this)
+              .attr('transform', `translate(${old_x + d3.event.dx}, ${old_y + d3.event.dy})`);
+          });
+        } else {
+          d3.select(myRef.current)
+            .attr('transform', `translate(${d3.event.x}, ${d3.event.y})`);
+        }
         if (!draggingNodeRef.current) { setDraggingNode(true); }
       }
     })
@@ -47,11 +61,25 @@ export default function createNodeDragBehavior(
       if (draggingNodeRef.current) {
         setDraggingNode(false);
         const { x: eventX, y: eventY } = normalizeCoords(d3.event.x, d3.event.y);
-        dispatch(updateNodePosition({
-          id: node_id,
-          x: eventX,
-          y: eventY,
-        }));
+        if (isSelected && selection.ids) {
+          const new_positions = {};
+          d3.selectAll('.selected').each(function saveNewPosition(d, i) {
+            const id = d3.select(this).node().id.slice(5);
+            const transform = d3.select(this).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
+            new_positions[id] = normalizeCoords(
+              parseFloat(transform[1]) + d3.event.dx,
+              parseFloat(transform[2]) + d3.event.dy,
+            );
+          });
+          dispatch(updateNodesPositions(new_positions));
+        } else {
+          dispatch(updateNodePosition({
+            id: node_id,
+            x: eventX,
+            y: eventY,
+          }));
+          dispatch(setActiveElement({ id: node_id, type: 'node' }));
+        }
       }
       if (creatingLinkRef.current) {
         const targetRect = document
@@ -67,9 +95,6 @@ export default function createNodeDragBehavior(
         }
         d3.select(myRef.current.parentNode).select('line').remove();
         setCreatingLink(false);
-      } else {
-        // Only set element as active if a new link was not created
-        dispatch(setActiveElement({ id: node_id, type: 'node' }));
       }
     });
 }

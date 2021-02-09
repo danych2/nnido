@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import {
-  updateNodePosition, setActiveElement, updateNode, createLink,
+  setActiveElement, updateNode,
 } from '../../actions/graphs';
 import {
-  normalizeCoords, denormalizeCoords, dictFilter, getTextWidth,
+  denormalizeCoords, dictFilter,
 } from '../../func';
 import config from '../../config';
 import createNodeDragBehavior from '../common/MouseBehaviors';
@@ -53,6 +53,8 @@ const Node = ({ node_id }) => {
   const nodeRef = useRef();
   nodeRef.current = node;
 
+  const selection = useSelector((state) => state.graph.selection);
+
   useEffect(() => {
     const { x, y } = denormalizeCoords(position.x, position.y);
 
@@ -79,6 +81,7 @@ const Node = ({ node_id }) => {
       setDraggingNode,
       defaultLinkType,
       setActiveElement,
+      selection,
     );
 
     g.attr('transform', `translate(${x}, ${y})`)
@@ -91,7 +94,7 @@ const Node = ({ node_id }) => {
 
     const rect = d3.select(myRef.current).select('rect');
     Object.entries(rectStyle).forEach(([prop, val]) => rect.style(prop, val));
-  }, [nodeType, defaultLinkType]);
+  }, [nodeType, defaultLinkType, selection]);
 
   useEffect(() => {
     if (editingNode) {
@@ -159,8 +162,11 @@ const Node = ({ node_id }) => {
   let alt_text = '';
   if (node.type) { alt_text = node.type; }
 
+  const isSelected = (selection.id && selection.id === node_id)
+    || (selection.ids && selection.ids.includes(node_id));
+
   return (
-    <g ref={myRef} id={`node_${node_id}`}>
+    <g ref={myRef} id={`node_${node_id}`} className={isSelected ? 'node selected' : 'node'}>
       <title>{alt_text}</title>
       <rect rx="15" ry="15" />
       <text

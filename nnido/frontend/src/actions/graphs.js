@@ -1,13 +1,14 @@
+/* eslint-disable prefer-destructuring */
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 
 import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
-  UPDATE_NODE_POSITION, SET_ACTIVE_ELEMENT, UPDATE_ZOOM, UPDATE_DEFAULT,
+  UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
   CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
-  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER,
+  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS,
 } from './types';
 
 import { tokenConfig } from './auth';
@@ -151,10 +152,33 @@ export const updateNodePosition = (nodePosition) => (dispatch) => {
   });
 };
 
-// SET Active element
+// UPDATE Nodes positions
+export const updateNodesPositions = (nodePosition) => (dispatch) => {
+  dispatch({
+    type: UPDATE_NODES_POSITIONS,
+    payload: nodePosition,
+  });
+};
+
+// SET single selection
 export const setActiveElement = (element) => (dispatch) => {
   dispatch({
-    type: SET_ACTIVE_ELEMENT,
+    type: SET_SELECTION,
+    payload: element,
+  });
+};
+
+// SET multiple selection
+export const selectMultipleNodes = (element) => (dispatch) => {
+  if (element.ids.length === 1) {
+    element.id = element.ids[0];
+    delete element.ids;
+  } else if (element.ids.length === 0) {
+    element.id = '';
+    delete element.ids;
+  }
+  dispatch({
+    type: SET_SELECTION,
     payload: element,
   });
 };
