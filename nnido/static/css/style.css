@@ -48,6 +48,11 @@ svg {
   stroke-opacity: 0.8;
 }
 
+#graph_name {
+  font-size: large;
+  text-align: center;
+}
+
 .nodes .selected rect{
   stroke: var(--selected-color) !important;
 }
@@ -73,6 +78,7 @@ svg {
   border: solid 1.5px;
   margin: 2px;
   padding: 2px;
+  overflow: hidden; /* this is to create a new float context */
 }
 
 div.comp {
@@ -95,6 +101,7 @@ button {
   background-color: white;
   border: 1px solid black;
   font-size: 1rem;
+  margin: 2px;
 }
 
 button:hover {

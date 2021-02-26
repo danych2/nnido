@@ -27,7 +27,7 @@ const Header = (props) => {
     </div>
   );
 
-  return isAuthenticated ? authLinks : guestLinks;
+  return isAuthenticated ? authLinks : ''; // guestLinks;
 };
 
 Header.propTypes = {

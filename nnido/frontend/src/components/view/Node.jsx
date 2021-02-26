@@ -86,6 +86,10 @@ const Node = ({ node_id }) => {
 
     g.attr('transform', `translate(${x}, ${y})`)
       .call(nodeDragBehavior)
+      .on('click', () => {
+        d3.event.stopImmediatePropagation();
+        dispatch(setActiveElement({ id: node_id, type: 'node' }));
+      })
       .on('dblclick', (e) => {
         d3.event.stopImmediatePropagation();
         setName(nodeRef.current.name);
