@@ -124,7 +124,6 @@ const Node = ({ node_id }) => {
 
   const handleNameChange = (e) => { setName(e.target.value); };
   const finishNameChange = (e) => {
-    console.log('finishNameChange');
     setEditingNode(false);
     if (nodeRef.current.name !== name) {
       dispatch(updateNode({

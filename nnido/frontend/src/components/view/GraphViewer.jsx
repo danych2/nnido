@@ -52,9 +52,11 @@ const GraphViewer = () => {
 
     const zoom_behavior = d3.zoom().clickDistance(5).on('zoom', () => {
       svg_g.attr('transform', d3.event.transform);
-    }).on('end', () => {
-      dispatch(updateZoom(d3.event.transform));
     });
+    /* its probably not necessary to update the state on each zoom, this could be saved somehow else
+    .on('end', () => {
+      dispatch(updateZoom(d3.event.transform));
+    }); */
 
     svg.call(zoom_behavior)
       .on('dblclick.zoom', null)

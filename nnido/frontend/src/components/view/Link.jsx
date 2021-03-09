@@ -53,6 +53,7 @@ const Link = ({ link_id }) => {
     d3.select(myRef.current)
       .select('.line_hoverarea')
       .on('click', () => {
+        d3.event.stopImmediatePropagation();
         dispatch(setActiveElement({ id: link_id, type: 'link' }));
       });
     const visibleLine = d3.select(myRef.current).select('.line_visible');
