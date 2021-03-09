@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateNode } from '../../actions/graphs';
+import { updateNode, deleteNode, setActiveElement } from '../../actions/graphs';
 import { useTextInput } from '../../func';
 import EditableProperty from './EditableProperty';
 
@@ -52,6 +52,11 @@ const ActiveNode = ({ node_id }) => {
     }));
   };
 
+  const onDeleteNode = () => {
+    dispatch(deleteNode(node_id));
+    dispatch(setActiveElement({}));
+  };
+
   let propertiesToShow = node.properties;
   if (node.type) {
     const typePropertyNames = Object.keys(nodeTypes[node.type].properties);
@@ -88,6 +93,7 @@ const ActiveNode = ({ node_id }) => {
         <button type="button" onClick={addNewProperty}>Añadir propiedad</button>
         <br />
       </div>
+      <button type="button" onClick={onDeleteNode}>Eliminar nodo</button>
     </>
   );
 };

@@ -87,11 +87,13 @@ export default function createNodeDragBehavior(
           .find((x) => x.nodeName === 'rect');
         if (targetRect !== undefined) {
           const target_node_name = targetRect.parentNode.id.slice(5);
-          dispatch(createLink({
-            source: node_id,
-            target: target_node_name,
-            type: defaultLinkType,
-          }));
+          if (target_node_name !== node_id) {
+            dispatch(createLink({
+              source: node_id,
+              target: target_node_name,
+              type: defaultLinkType,
+            }));
+          }
         }
         d3.select(myRef.current.parentNode).select('line').remove();
         setCreatingLink(false);

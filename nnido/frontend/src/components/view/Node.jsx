@@ -124,13 +124,16 @@ const Node = ({ node_id }) => {
 
   const handleNameChange = (e) => { setName(e.target.value); };
   const finishNameChange = (e) => {
+    console.log('finishNameChange');
     setEditingNode(false);
-    dispatch(updateNode({
-      id: node_id,
-      data: {
-        name,
-      },
-    }));
+    if (nodeRef.current.name !== name) {
+      dispatch(updateNode({
+        id: node_id,
+        data: {
+          name,
+        },
+      }));
+    }
   };
   const handleKeyUp = (e) => {
     if (e.keyCode === 13) {
