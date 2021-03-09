@@ -85,13 +85,17 @@ const GraphViewer = () => {
         <defs>
           <marker
             id="arrowhead"
-            markerWidth="10"
-            markerHeight="7"
+            markerWidth="11"
+            markerHeight="9"
             refX="0"
-            refY="3.5"
+            refY="4.5"
             orient="auto"
+            fill="none"
+            stroke="black"
+            strokeLinejoin="round"
+            strokeWidth="1"
           >
-            <polygon points="0 0, 10 3.5, 0 7" />
+            <polygon points="1 1, 10 4.5, 1 8" />
           </marker>
         </defs>
         <g id="nodes_and_links">

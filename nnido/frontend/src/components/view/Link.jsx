@@ -49,9 +49,7 @@ const Link = ({ link_id }) => {
       .attr('x1', source.x)
       .attr('y1', source.y)
       .attr('x2', endPoint.x)
-      .attr('y2', endPoint.y);
-    d3.select(myRef.current)
-      .select('.line_hoverarea')
+      .attr('y2', endPoint.y)
       .on('click', () => {
         d3.event.stopImmediatePropagation();
         dispatch(setActiveElement({ id: link_id, type: 'link' }));
