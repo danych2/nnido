@@ -7,7 +7,6 @@ import LinkTypes from './LinkTypes';
 
 const Model = () => (
   <div className="comp">
-    Modelo
     <NodeTypes />
     <br />
     <LinkTypes />

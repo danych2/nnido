@@ -23,10 +23,10 @@ function View() {
   if (graph_pk) {
     return (
       <>
-        <div id="graph_name">
+        <div id="graph_name" style={{ flexShrink: '0' }}>
           {graph_name}
         </div>
-        <div id="grid_container">
+        <div id="grid_container" style={{ flexGrow: '1', overflow: 'hidden' }}>
           {/* <div className="comp">
             <CreateNode />
             <DeleteNode />
@@ -34,7 +34,7 @@ function View() {
             <DeleteLink />
           </div> */}
           <GraphViewer />
-          <div>
+          <div style={{ overflowY: 'scroll' }}>
             <ActiveElement />
             <br />
             <Model />

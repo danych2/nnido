@@ -9,13 +9,11 @@
   {% endblock %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
-<body>
-  <main>
-    {% if error %}
-      <b style='color:red'>{{ error }}</b><br>
-    {% endif %}
-    {% block content %}
-    {% endblock %}
-  </main>
+<body style='overflow:hidden;height:100vh;margin:0px'>
+  {% if error %}
+    <b style='color:red'>{{ error }}</b><br>
+  {% endif %}
+  {% block content %}
+  {% endblock %}
 </body>
 </html>

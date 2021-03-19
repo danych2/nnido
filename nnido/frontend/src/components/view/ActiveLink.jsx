@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateLink } from '../../actions/graphs';
+import { updateLink, deleteLink, setActiveElement } from '../../actions/graphs';
 
 import EditableProperty from './EditableProperty';
 
@@ -35,6 +35,11 @@ const ActiveLink = ({ link_id }) => {
         },
       },
     }));
+  };
+
+  const onDeleteLink = () => {
+    dispatch(deleteLink(link_id));
+    dispatch(setActiveElement({}));
   };
 
   let propertiesToShow = link.properties;
@@ -70,6 +75,7 @@ const ActiveLink = ({ link_id }) => {
         <button type="button" onClick={addNewProperty}>Añadir propiedad</button>
         <br />
       </div>
+      <button type="button" onClick={onDeleteLink}>Eliminar enlace</button>
     </>
   );
 };

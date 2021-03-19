@@ -45,7 +45,7 @@ const GraphViewer = () => {
       && visibleNodes.indexOf(linkTargets[id]) > -1,
   );
 
-  // zoom behavior and dblclick to create node
+  // zoom behavior and dblclick to create node, updated when defaultNodeType changes
   useEffect(() => {
     const svg = d3.select('#graph_container');
     const svg_g = svg.select('#nodes_and_links');
@@ -81,7 +81,7 @@ const GraphViewer = () => {
 
   return (
     <div ref={myRef} className="comp">
-      <svg id="graph_container" width="100%" height="90vh">
+      <svg id="graph_container" width="100%">
         <defs>
           <marker
             id="arrowhead"

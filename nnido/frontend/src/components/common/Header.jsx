@@ -8,7 +8,7 @@ const Header = (props) => {
   const { isAuthenticated } = props.auth;
 
   const authLinks = (
-    <div className="comp">
+    <div className="comp" style={{ flexShrink: '0' }}>
       <div>
         <Link to="/">Inicio</Link>
         <button type="submit" style={{ float: 'right' }} onClick={props.logout}>Cerrar sesión</button>
@@ -17,7 +17,7 @@ const Header = (props) => {
   );
 
   const guestLinks = (
-    <div className="comp">
+    <div className="comp" style={{ flexShrink: '0' }}>
       <div>
         <Link to="/login">Iniciar sesión</Link>
       </div>
