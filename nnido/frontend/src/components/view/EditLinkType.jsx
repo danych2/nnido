@@ -53,7 +53,7 @@ const EditLinkType = ({ linkTypeId }) => {
       <input name="directed" type="checkbox" checked={linkType.directed} onChange={onDirectedChange} />
       {InputColor}
       <br />
-      Propiedades:
+      Atributos:
       <br />
       { Object.keys(linkType.properties).map((property) => (
         <Fragment key={property}>

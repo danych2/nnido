@@ -65,14 +65,14 @@ const ActiveLink = ({ link_id }) => {
         ))}
       </select>
       <br />
-      Propiedades:
+      Atributos:
       <br />
       { Object.keys(propertiesToShow).map((property) => (
         <EditableProperty key={property} name={property} initialValue={propertiesToShow[property]} elementType="link" elementId={link_id} />
       ))}
       <div className="comp">
         <input type="text" name="new_property" onChange={(e) => setNewProperty(e.target.value)} value={newProperty} />
-        <button type="button" onClick={addNewProperty}>Añadir propiedad</button>
+        <button type="button" onClick={addNewProperty}>Añadir atributo</button>
         <br />
       </div>
       <button type="button" onClick={onDeleteLink}>Eliminar enlace</button>

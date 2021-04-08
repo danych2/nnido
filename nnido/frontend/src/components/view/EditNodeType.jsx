@@ -40,7 +40,7 @@ const EditNodeType = ({ nodeTypeId }) => {
       <br />
       {InputColor}
       <br />
-      Propiedades:
+      Atributos:
       <br />
       { Object.keys(nodeType.properties).map((property) => (
         <Fragment key={property}>
@@ -49,7 +49,7 @@ const EditNodeType = ({ nodeTypeId }) => {
         </Fragment>
       ))}
       <input type="text" onChange={(e) => setNewProperty(e.target.value)} value={newProperty} />
-      <button type="button" onClick={addProperty}>Añadir propiedad</button>
+      <button type="button" onClick={addProperty}>Añadir atributo</button>
       <br />
     </>
   );

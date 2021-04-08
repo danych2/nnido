@@ -83,14 +83,14 @@ const ActiveNode = ({ node_id }) => {
         ))}
       </select>
       <br />
-      Propiedades:
+      Atributos:
       <br />
       { Object.keys(propertiesToShow).map((property) => (
         <EditableProperty key={property} name={property} initialValue={propertiesToShow[property]} elementType="node" elementId={node_id} />
       ))}
       <div className="comp">
         <input type="text" name="new_property" onChange={(e) => setNewProperty(e.target.value)} value={newProperty} />
-        <button type="button" onClick={addNewProperty}>Añadir propiedad</button>
+        <button type="button" onClick={addNewProperty}>Añadir atributo</button>
         <br />
       </div>
       <button type="button" onClick={onDeleteNode}>Eliminar nodo</button>
