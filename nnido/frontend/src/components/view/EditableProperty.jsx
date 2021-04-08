@@ -20,7 +20,7 @@ const EditableProperty = ({
       ...properties,
       [name]: propertyValue,
     };
-    if (propertyValue === '') {
+    if (propertyValue === 'delete') {
       delete newProperties[name];
     }
     if (elementType === 'node') {
@@ -41,12 +41,39 @@ const EditableProperty = ({
   }, initialValue);
 
   return (
-    <>
-      {name}
-      :
-      {InputProperty}
-      <br />
-    </>
+    <div style={{ display: 'flex' }}>
+      <div>
+        {name}
+        :
+      </div>
+      <div style={{ flexGrow: 4 }}>
+        {InputProperty}
+      </div>
+      <div
+        className="comp"
+        style={{ flexGrow: 4 }}
+        onClick={() => {
+          delete properties[name];
+          if (elementType === 'node') {
+            dispatch(updateNode({
+              id: elementId,
+              data: {
+                properties,
+              },
+            }));
+          } else {
+            dispatch(updateLink({
+              id: elementId,
+              data: {
+                properties,
+              },
+            }));
+          }
+        }}
+      >
+        X
+      </div>
+    </div>
   );
 };
 

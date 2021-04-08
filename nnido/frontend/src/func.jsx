@@ -39,6 +39,7 @@ export function useTextInput(saveFunction, initialValue = '') {
   const [value, setValue] = useState(initialValue);
   const input = (
     <input
+      style={{ width: '95%' }}
       type="text"
       value={value}
       onChange={(e) => setValue(e.target.value)}

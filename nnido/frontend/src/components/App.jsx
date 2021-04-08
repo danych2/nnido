@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import Home from './home/Home';
+import Info from './home/Info';
 import View from './view/View';
 import Login from './accounts/Login';
 import PrivateRoute from './common/PrivateRoute';
@@ -23,6 +24,7 @@ function App() {
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute path="/view/:graph_id" component={View} />
+            <PrivateRoute path="/info" component={Info} />
             {/*
               <Route exact path="/register" component={Register} />
               Signing up is disabled until all security concerns are dealt with

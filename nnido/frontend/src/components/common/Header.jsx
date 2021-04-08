@@ -11,6 +11,8 @@ const Header = (props) => {
     <div className="comp" style={{ flexShrink: '0' }}>
       <div>
         <Link to="/">Inicio</Link>
+        <span style={{ width: '10px' }}> </span>
+        <Link to="/info">?</Link>
         <button type="submit" style={{ float: 'right' }} onClick={props.logout}>Cerrar sesión</button>
       </div>
     </div>
