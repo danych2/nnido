@@ -54,6 +54,8 @@ const Node = ({ node_id }) => {
   nodeRef.current = node;
 
   const selection = useSelector((state) => state.graph.selection);
+  const isSelected = (selection.id && selection.id === node_id)
+    || (selection.ids && selection.ids.includes(node_id));
 
   useEffect(() => {
     const { x, y } = denormalizeCoords(position.x, position.y);
@@ -110,11 +112,26 @@ const Node = ({ node_id }) => {
   // set node rect size after render (so that text area can be computed)
   useEffect(() => {
     const dim = d3.select(myRef.current).select('text').node().getBBox();
-    d3.select(myRef.current).select('rect')
+    d3.select(myRef.current).select('.nodeBody')
       .attr('x', -(dim.width / 2 + config.PADDING_TEXT_NODE))
       .attr('y', -(dim.height / 2 + config.PADDING_TEXT_NODE))
       .attr('width', dim.width + config.PADDING_TEXT_NODE * 2)
       .attr('height', dim.height + config.PADDING_TEXT_NODE * 2);
+    if (isSelected) {
+      const shadowWidth = config.NODE_SHADOW_MARGIN + dim.width;
+      const shadowHeight = config.NODE_SHADOW_MARGIN + dim.height;
+      d3.select(myRef.current).select('.nodeShadow')
+        .attr('x', -(shadowWidth / 2 + config.PADDING_TEXT_NODE))
+        .attr('y', -(shadowHeight / 2 + config.PADDING_TEXT_NODE))
+        .attr('width', shadowWidth + config.PADDING_TEXT_NODE * 2)
+        .attr('height', shadowHeight + config.PADDING_TEXT_NODE * 2);
+    } else {
+      d3.select(myRef.current).select('.nodeShadow')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', 0)
+        .attr('height', 0);
+    }
     if (editingNode) {
       d3.select(myRef.current).select('foreignObject')
         .attr('width', dim.width)
@@ -168,13 +185,11 @@ const Node = ({ node_id }) => {
   let alt_text = '';
   if (node.type) { alt_text = node.type; }
 
-  const isSelected = (selection.id && selection.id === node_id)
-    || (selection.ids && selection.ids.includes(node_id));
-
   return (
-    <g ref={myRef} id={`node_${node_id}`} className={isSelected ? 'node selected' : 'node'}>
+    <g ref={myRef} id={`node_${node_id}`}>
       <title>{alt_text}</title>
-      <rect rx="15" ry="15" />
+      <rect className="nodeShadow" rx="19" ry="19" />
+      <rect className="nodeBody" rx="15" ry="15" />
       <text
         style={{ fontSize, transform: 'translateX(-50%)', transformBox: 'fill-box' }}
         visibility={editingNode ? 'hidden' : 'visible'}

@@ -41,7 +41,7 @@ const EditableProperty = ({
   }, initialValue);
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ height: '1.8em', display: 'flex', alignItems: 'center' }}>
       <div>
         {name}
         :

@@ -8,5 +8,6 @@ config.NODE_SIZE_Y = 50;
 config.DEFAULT_LINK_COLOR = '#aaa';
 config.DEFAULT_NODE_COLOR = '#000';
 config.PADDING_TEXT_NODE = 10;
+config.NODE_SHADOW_MARGIN = 10;
 
 export default config;

@@ -35,7 +35,7 @@ export class Login extends Component {
           <input type="text" name="username" onChange={this.onChange} value={username} />
           <br />
           <label>Contraseña:</label>
-          <input type="text" name="password" onChange={this.onChange} value={password} />
+          <input type="text" name="password" onChange={this.onChange} value={password} autoComplete="off" />
           <br />
           <button type="submit">Iniciar sesión</button>
           {/*
