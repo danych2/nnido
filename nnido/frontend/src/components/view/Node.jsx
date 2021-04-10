@@ -18,6 +18,7 @@ const Node = ({ node_id }) => {
   const myRef = useRef(null);
 
   const node = useSelector((state) => state.graph.graph.data.nodes[node_id]);
+  const nodeName = useSelector((state) => state.graph.graph.data.nodes[node_id].name, shallowEqual);
   const nodeType = useSelector((state) => (node.type ? state.graph.graph.model.node_types[node.type] : ''), shallowEqual);
   const position = (
     useSelector((state) => state.graph.graph.visualization.node_positions[node_id])
@@ -32,7 +33,7 @@ const Node = ({ node_id }) => {
   );
   const defaultLinkType = useSelector((state) => state.graph.defaultLinkType);
 
-  const [name, setName] = useState(node.name);
+  const [name, setName] = useState(nodeName);
   const [editingNode, setEditingNode] = useState(false);
   const [draggingNode, setDraggingNode] = useState(false);
   const [creatingLink, setCreatingLink] = useState(false);
@@ -98,7 +99,7 @@ const Node = ({ node_id }) => {
         setEditingNode(true);
       });
 
-    const rect = d3.select(myRef.current).select('rect');
+    const rect = d3.select(myRef.current).select('.nodeBody');
     Object.entries(rectStyle).forEach(([prop, val]) => rect.style(prop, val));
   }, [nodeType, defaultLinkType, selection]);
 
@@ -108,6 +109,11 @@ const Node = ({ node_id }) => {
         .focus();
     }
   }, [editingNode]);
+
+  // update name of node
+  useEffect(() => {
+    d3.select(myRef.current).select('text').node().textContent = nodeName;
+  }, [nodeName]);
 
   // set node rect size after render (so that text area can be computed)
   useEffect(() => {

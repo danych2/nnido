@@ -43,13 +43,14 @@ export default function createNodeDragBehavior(
       } else if (draggingNodeRef.current
                   || Math.max(Math.abs(d3.event.dx), Math.abs(d3.event.dy)) > 1) {
         if (isSelected && selection.ids) {
-          d3.selectAll('.selected').each(function translateNode(d, i) {
-            const transform = d3.select(this).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
-            const old_x = parseFloat(transform[1]);
-            const old_y = parseFloat(transform[2]);
-            d3.select(this)
-              .attr('transform', `translate(${old_x + d3.event.dx}, ${old_y + d3.event.dy})`);
-          });
+          d3.selectAll('.nodes g').select(function isSelected(d, i) { return selection.ids.includes(this.id.slice(5)) ? this : null; })
+            .each(function translateNode(d, i) {
+              const transform = d3.select(this).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
+              const old_x = parseFloat(transform[1]);
+              const old_y = parseFloat(transform[2]);
+              d3.select(this)
+                .attr('transform', `translate(${old_x + d3.event.dx}, ${old_y + d3.event.dy})`);
+            });
         } else {
           d3.select(myRef.current)
             .attr('transform', `translate(${d3.event.x}, ${d3.event.y})`);
@@ -63,7 +64,7 @@ export default function createNodeDragBehavior(
         const { x: eventX, y: eventY } = normalizeCoords(d3.event.x, d3.event.y);
         if (isSelected && selection.ids) {
           const new_positions = {};
-          d3.selectAll('.selected').each(function saveNewPosition(d, i) {
+          d3.selectAll('.nodes g').select(function isSelected(d, i) { return selection.ids.includes(this.id.slice(5)) ? this : null; }).each(function saveNewPosition(d, i) {
             const id = d3.select(this).node().id.slice(5);
             const transform = d3.select(this).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
             new_positions[id] = normalizeCoords(

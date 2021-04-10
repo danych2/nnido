@@ -32,10 +32,10 @@ export class Login extends Component {
       <div className="comp">
         <form onSubmit={this.onSubmit}>
           <label>Nombre de usuario:</label>
-          <input type="text" name="username" onChange={this.onChange} value={username} />
+          <input type="text" name="username" onChange={this.onChange} value={username} autoComplete="username" required />
           <br />
           <label>Contraseña:</label>
-          <input type="text" name="password" onChange={this.onChange} value={password} autoComplete="off" />
+          <input type="text" name="password" onChange={this.onChange} value={password} autoComplete="current-password" required />
           <br />
           <button type="submit">Iniciar sesión</button>
           {/*
