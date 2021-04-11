@@ -110,7 +110,7 @@ const Node = ({ node_id }) => {
     }
   }, [editingNode]);
 
-  // update name of node
+  // update name of node (necessary to trigger render if name is changed from a menu)
   useEffect(() => {
     d3.select(myRef.current).select('text').node().textContent = nodeName;
   }, [nodeName]);

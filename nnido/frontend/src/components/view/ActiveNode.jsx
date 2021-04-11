@@ -57,13 +57,25 @@ const ActiveNode = ({ node_id }) => {
     dispatch(setActiveElement({}));
   };
 
-  let propertiesToShow = node.properties;
+  let specificProperties = node.properties;
+  let inheritedProperties = {};
   if (node.type) {
     const typePropertyNames = Object.keys(nodeTypes[node.type].properties);
-    propertiesToShow = {
-      ...propertiesToShow,
-      ...typePropertyNames.reduce((dict, key) => (dict[key] = '', dict), {}),
-    };
+    inheritedProperties = typePropertyNames.reduce((dict, key) => (dict[key] = node.properties[key] || '', dict), {});
+    specificProperties = Object.keys(node.properties).filter((x) => !typePropertyNames.includes(x))
+      .reduce((dict, key) => (dict[key] = node.properties[key], dict), {});
+  }
+
+  let inheritedPropertiesHtml = '';
+  if (Object.keys(inheritedProperties).length > 0) {
+    inheritedPropertiesHtml = (
+      <>
+        <span style={{ fontSize: 'small' }}>Atributos del tipo:</span>
+        { Object.keys(inheritedProperties).map((property) => (
+          <EditableProperty key={property} name={property} initialValue={inheritedProperties[property]} elementType="node" elementId={node_id} inherited />
+        )) }
+      </>
+    );
   }
 
   return (
@@ -85,9 +97,10 @@ const ActiveNode = ({ node_id }) => {
       <br />
       Atributos:
       <br />
-      { Object.keys(propertiesToShow).map((property) => (
-        <EditableProperty key={property} name={property} initialValue={propertiesToShow[property]} elementType="node" elementId={node_id} />
+      { Object.keys(specificProperties).map((property) => (
+        <EditableProperty key={property} name={property} initialValue={specificProperties[property]} elementType="node" elementId={node_id} />
       ))}
+      {inheritedPropertiesHtml}
       <div className="comp">
         <input type="text" name="new_property" onChange={(e) => setNewProperty(e.target.value)} value={newProperty} />
         <button type="button" onClick={addNewProperty}>Añadir atributo</button>
