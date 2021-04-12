@@ -50,9 +50,11 @@ const GraphViewer = () => {
     const svg = d3.select('#graph_container');
     const svg_g = svg.select('#nodes_and_links');
 
-    const zoom_behavior = d3.zoom().clickDistance(5).on('zoom', () => {
-      svg_g.attr('transform', d3.event.transform);
-    });
+    const zoom_behavior = d3.zoom()
+      .scaleExtent([0.2, 5]).filter(() => d3.event.button === 1 || d3.event.type === 'wheel').clickDistance(5)
+      .on('zoom', () => {
+        svg_g.attr('transform', d3.event.transform);
+      });
     /* its probably not necessary to update the state on each zoom, this could be saved somehow else
     .on('end', () => {
       dispatch(updateZoom(d3.event.transform));

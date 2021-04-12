@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -19,7 +20,7 @@ function Info() {
       <br />
       Mover nodo: click en nodo y arrastrar
       <br />
-      Mover página: click en página y arrastrar
+      Mover página: click central en página y arrastrar
       <br />
       Zoom: rueda del ratón
       <br />
@@ -27,7 +28,7 @@ function Info() {
       <br />
       Editar nombre de nodo: doble click en nodo
       <br />
-      Seleccionar varios nodos a la vez: Shift + click en página y arrastrar
+      Seleccionar varios nodos a la vez: click y arrastrar en la página
       <br />
       Crear enlace entre nodos: Ctrl + click en nodo origen, arrastrar hasta nodo destino y soltar
       <br />
@@ -37,9 +38,9 @@ function Info() {
       <br />
       <br />
       Puedes asignar atributos tanto a nodos como a enlaces, los atributos tienen un nombre y un valor
-      (por ejemplo, un atributo podría ser 'altura' con un valor '1.70'),
+      (por ejemplo, un atributo podría ser &apos;altura&apos; con un valor &apos;1.70&apos;),
       pero tampoco pasa nada si dejas el valor en blanco.
-      Para añadir un atributo, selecciona un nodo o enlace, escribe el nombre del atributo debajo de donde pone 'Atributos' en el menú del nodo seleccionado y haz click en "Añadir atributo". Luego puedes asignarle un valor escribiéndolo a continuación del nombre.
+      Para añadir un atributo, selecciona un nodo o enlace, escribe el nombre del atributo debajo de donde pone &apos;Atributos&apos; en el menú del nodo seleccionado y haz click en &apos;Añadir atributo&apos;. Luego puedes asignarle un valor escribiéndolo a continuación del nombre.
       <br />
       <br />
       <br />

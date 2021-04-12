@@ -23,10 +23,11 @@ export default function createNodeDragBehavior(
     || (selection.ids && selection.ids.includes(node_id));
 
   return d3.drag()
+    .filter(() => !d3.event.button)
     .on('start', (d) => {
       const currentPos = positionRef.current;
       const { x: currentX, y: currentY } = denormalizeCoords(currentPos.x, currentPos.y);
-      if (d3.event.sourceEvent.shiftKey) { // if shift -> create new link
+      if (d3.event.sourceEvent.ctrlKey) { // if shift -> create new link
         d3.select(myRef.current.parentNode).insert('line', ':first-child')
           .attr('class', 'creating_link')
           .attr('x1', currentX)

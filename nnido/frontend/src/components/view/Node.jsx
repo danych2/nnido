@@ -91,7 +91,11 @@ const Node = ({ node_id }) => {
       .call(nodeDragBehavior)
       .on('click', () => {
         d3.event.stopImmediatePropagation();
-        dispatch(setActiveElement({ id: node_id, type: 'node' }));
+        if (d3.event.shiftKey) {
+          dispatch(setActiveElement({ id: node_id, type: 'node' })); //TODO: switch selection
+        } else {
+          dispatch(setActiveElement({ id: node_id, type: 'node' }));
+        }
       })
       .on('dblclick', (e) => {
         d3.event.stopImmediatePropagation();

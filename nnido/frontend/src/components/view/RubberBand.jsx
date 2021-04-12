@@ -31,7 +31,7 @@ const RubberBand = () => {
 
   useEffect(() => {
     const svg = d3.select('#graph_container');
-    const rubberband_behavior = d3.drag().filter(() => d3.event.ctrlKey && !d3.event.button)
+    const rubberband_behavior = d3.drag().filter(() => !d3.event.ctrlKey && !d3.event.button)
       .on('start', () => {
         const zoomTransform = d3.zoomTransform(svg.node());
         setVisibility(true);
