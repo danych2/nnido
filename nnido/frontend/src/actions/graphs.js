@@ -8,7 +8,7 @@ import {
   UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
   CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
-  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS,
+  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from './types';
 
 import { tokenConfig } from './auth';
@@ -160,25 +160,18 @@ export const updateNodesPositions = (nodePosition) => (dispatch) => {
   });
 };
 
-// SET single selection
-export const setActiveElement = (element) => (dispatch) => {
+// SET multiple selection
+export const selectElements = (element) => (dispatch) => {
   dispatch({
     type: SET_SELECTION,
     payload: element,
   });
 };
 
-// SET multiple selection
-export const selectMultipleNodes = (element) => (dispatch) => {
-  if (element.ids.length === 1) {
-    element.id = element.ids[0];
-    delete element.ids;
-  } else if (element.ids.length === 0) {
-    element.id = '';
-    delete element.ids;
-  }
+// SWITCH selection
+export const selectionSwitch = (element) => (dispatch) => {
   dispatch({
-    type: SET_SELECTION,
+    type: SWITCH_SELECTION,
     payload: element,
   });
 };

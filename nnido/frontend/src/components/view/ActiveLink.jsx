@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateLink, deleteLink, setActiveElement } from '../../actions/graphs';
+import { updateLink, deleteLink, selectElements } from '../../actions/graphs';
 
 import EditableProperty from './EditableProperty';
 
@@ -39,7 +39,7 @@ const ActiveLink = ({ link_id }) => {
 
   const onDeleteLink = () => {
     dispatch(deleteLink(link_id));
-    dispatch(setActiveElement({}));
+    dispatch(selectElements({ ids: [], type: 'none' }));
   };
 
   let specificProperties = link.properties;

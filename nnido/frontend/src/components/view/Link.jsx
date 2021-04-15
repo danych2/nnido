@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import * as d3 from 'd3';
 
-import { setActiveElement } from '../../actions/graphs';
+import { selectElements } from '../../actions/graphs';
 import { denormalizeCoords } from '../../func';
 import config from '../../config';
 
@@ -52,7 +52,7 @@ const Link = ({ link_id }) => {
       .attr('y2', endPoint.y)
       .on('click', () => {
         d3.event.stopImmediatePropagation();
-        dispatch(setActiveElement({ id: link_id, type: 'link' }));
+        dispatch(selectElements({ ids: [link_id], type: 'link' }));
       });
     const visibleLine = d3.select(myRef.current).select('.line_visible');
     Object.entries(visibleLineStyle).forEach(([prop, val]) => visibleLine.style(prop, val));

@@ -7,17 +7,17 @@ import ActiveLink from './ActiveLink';
 const ActiveElement = () => {
   let content = 'Ningún elemento seleccionado';
 
-  const activeElement = useSelector((state) => state.graph.selection);
+  const selection = useSelector((state) => state.graph.selection);
 
-  if (activeElement && activeElement.id) {
-    if (activeElement.type.localeCompare('node') === 0) {
-      content = <ActiveNode key={activeElement.id} node_id={activeElement.id} />;
-    } else if (activeElement.type.localeCompare('link') === 0) {
-      content = <ActiveLink key={activeElement.id} link_id={activeElement.id} />;
+  if (selection.ids.length === 1) {
+    if (selection.type.localeCompare('node') === 0) {
+      content = <ActiveNode key={selection.ids[0]} node_id={selection.ids[0]} />;
+    } else if (selection.type.localeCompare('link') === 0) {
+      content = <ActiveLink key={selection.ids[0]} link_id={selection.ids[0]} />;
     }
   }
 
-  if (activeElement && activeElement.ids) {
+  if (selection.ids.length > 1) {
     content = 'Múltiples elmentos seleccionados.';
   }
 

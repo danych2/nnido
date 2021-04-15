@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import {
-  setActiveElement, updateNode,
+  selectElements, selectionSwitch, updateNode,
 } from '../../actions/graphs';
 import {
   denormalizeCoords, dictFilter,
@@ -55,8 +55,7 @@ const Node = ({ node_id }) => {
   nodeRef.current = node;
 
   const selection = useSelector((state) => state.graph.selection);
-  const isSelected = (selection.id && selection.id === node_id)
-    || (selection.ids && selection.ids.includes(node_id));
+  const isSelected = selection.ids.includes(node_id);
 
   useEffect(() => {
     const { x, y } = denormalizeCoords(position.x, position.y);
@@ -83,7 +82,7 @@ const Node = ({ node_id }) => {
       draggingNodeRef,
       setDraggingNode,
       defaultLinkType,
-      setActiveElement,
+      selectElements,
       selection,
     );
 
@@ -92,9 +91,9 @@ const Node = ({ node_id }) => {
       .on('click', () => {
         d3.event.stopImmediatePropagation();
         if (d3.event.shiftKey) {
-          dispatch(setActiveElement({ id: node_id, type: 'node' })); //TODO: switch selection
+          dispatch(selectionSwitch({ id: node_id, type: 'node' }));
         } else {
-          dispatch(setActiveElement({ id: node_id, type: 'node' }));
+          dispatch(selectElements({ ids: [node_id], type: 'node' }));
         }
       })
       .on('dblclick', (e) => {

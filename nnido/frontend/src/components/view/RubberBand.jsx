@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as d3 from 'd3';
 
 import {
-  selectMultipleNodes,
+  selectElements,
 } from '../../actions/graphs';
 import { normalizeCoords } from '../../func';
 
@@ -140,7 +140,7 @@ const RubberBand = () => {
         const hovered_nodes = Object.entries(node_positions).filter(
           ([_, v]) => v.x > min_x && v.x < max_x && v.y > min_y && v.y < max_y,
         ).map(([k, _]) => k);
-        dispatch(selectMultipleNodes({ ids: hovered_nodes, type: 'node' }));
+        dispatch(selectElements({ ids: hovered_nodes, type: 'node' }));
       });
     svg.call(rubberband_behavior);
   }, [node_positions]);

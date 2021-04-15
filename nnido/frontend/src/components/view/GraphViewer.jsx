@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import Node from './Node';
 import Link from './Link';
 
-import { createNode, updateZoom, setActiveElement } from '../../actions/graphs';
+import { createNode, updateZoom, selectElements } from '../../actions/graphs';
 import { normalizeCoords } from '../../func';
 import RubberBand from './RubberBand';
 
@@ -63,7 +63,7 @@ const GraphViewer = () => {
     svg.call(zoom_behavior)
       .on('dblclick.zoom', null)
       .on('click', () => {
-        dispatch(setActiveElement({}));
+        dispatch(selectElements({ ids: [], type: 'none' }));
       }).on('dblclick', () => {
         const id = uuid();
         const zoomTransform = d3.zoomTransform(svg.node());

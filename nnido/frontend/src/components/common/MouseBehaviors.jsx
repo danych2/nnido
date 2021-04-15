@@ -16,11 +16,10 @@ export default function createNodeDragBehavior(
   draggingNodeRef,
   setDraggingNode,
   defaultLinkType,
-  setActiveElement,
+  selectElements,
   selection,
 ) {
-  const isSelected = (selection.id && selection.id === node_id)
-    || (selection.ids && selection.ids.includes(node_id));
+  const isSelected = selection.ids.includes(node_id);
 
   return d3.drag()
     .filter(() => !d3.event.button)
@@ -43,7 +42,7 @@ export default function createNodeDragBehavior(
           .attr('x2', d3.event.x).attr('y2', d3.event.y);
       } else if (draggingNodeRef.current
                   || Math.max(Math.abs(d3.event.dx), Math.abs(d3.event.dy)) > 1) {
-        if (isSelected && selection.ids) {
+        if (isSelected) {
           d3.selectAll('.nodes g').select(function isSelected(d, i) { return selection.ids.includes(this.id.slice(5)) ? this : null; })
             .each(function translateNode(d, i) {
               const transform = d3.select(this).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
@@ -63,7 +62,7 @@ export default function createNodeDragBehavior(
       if (draggingNodeRef.current) {
         setDraggingNode(false);
         const { x: eventX, y: eventY } = normalizeCoords(d3.event.x, d3.event.y);
-        if (isSelected && selection.ids) {
+        if (isSelected) {
           const new_positions = {};
           d3.selectAll('.nodes g').select(function isSelected(d, i) { return selection.ids.includes(this.id.slice(5)) ? this : null; }).each(function saveNewPosition(d, i) {
             const id = d3.select(this).node().id.slice(5);
@@ -80,7 +79,7 @@ export default function createNodeDragBehavior(
             x: eventX,
             y: eventY,
           }));
-          dispatch(setActiveElement({ id: node_id, type: 'node' }));
+          dispatch(selectElements({ ids: [node_id], type: 'node' }));
         }
       }
       if (creatingLinkRef.current) {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateNode, deleteNode, setActiveElement } from '../../actions/graphs';
+import { updateNode, deleteNode, selectElements } from '../../actions/graphs';
 import { useTextInput } from '../../func';
 import EditableProperty from './EditableProperty';
 
@@ -54,7 +54,7 @@ const ActiveNode = ({ node_id }) => {
 
   const onDeleteNode = () => {
     dispatch(deleteNode(node_id));
-    dispatch(setActiveElement({}));
+    dispatch(selectElements({ ids: [], type: 'none' }));
   };
 
   let specificProperties = node.properties;

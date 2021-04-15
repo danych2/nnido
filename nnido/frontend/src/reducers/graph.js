@@ -4,7 +4,7 @@ import {
   UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
   CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
-  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS,
+  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from '../actions/types';
 import { dictFilter } from '../func';
 import config from '../config';
@@ -12,7 +12,7 @@ import config from '../config';
 const initialState = {
   graphs: [],
   graph: {},
-  selection: {},
+  selection: { ids: [], type: 'none' },
 };
 
 export default function (state = initialState, action) {
@@ -30,6 +30,7 @@ export default function (state = initialState, action) {
   let newPositions;
   let newNodeTypes;
   let newLinkTypes;
+  let newSelection;
   switch (action.type) {
     case GET_GRAPHS:
       return {
@@ -195,9 +196,28 @@ export default function (state = initialState, action) {
         },
       };
     case SET_SELECTION:
+      // payload: {ids: [xxx, yyy, ...], type: "node"|"edge"}
+      // Sets the whole selection as 'action.payload'
       return {
         ...state,
         selection: action.payload,
+      };
+    case SWITCH_SELECTION:
+      // payload: {id: xxx, type: "node"|"edge"}
+      // Switches whether the element with id 'action.payload' is selected or not.
+      // Only works if currently there is no selection of a different type
+      newSelection = { ...state.selection };
+      if (state.selection.type.localeCompare('none') === 0
+        || action.payload.type.localeCompare(state.selection.type) === 0) {
+        if (state.selection.ids.includes(action.payload.id)) {
+          newSelection.ids.splice(newSelection.ids.indexOf(action.payload.id), 1);
+        } else {
+          newSelection.ids.push(action.payload.id);
+        }
+      }
+      return {
+        ...state,
+        selection: newSelection,
       };
     case UPDATE_ZOOM:
       return {

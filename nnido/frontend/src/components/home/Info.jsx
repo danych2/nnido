@@ -26,9 +26,11 @@ function Info() {
       <br />
       Seleccionar nodo o enlace: click en nodo o enlace
       <br />
-      Editar nombre de nodo: doble click en nodo
-      <br />
       Seleccionar varios nodos a la vez: click y arrastrar en la página
+      <br />
+      Añadir o quitar nodo a la selección: Shift + click en el nodo
+      <br />
+      Editar nombre de nodo: doble click en nodo
       <br />
       Crear enlace entre nodos: Ctrl + click en nodo origen, arrastrar hasta nodo destino y soltar
       <br />
