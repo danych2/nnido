@@ -95,38 +95,30 @@ export function getTextWidth(text, font) {
   return metrics.width;
 }
 
-export const CollapsibleType = (props) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div className="collapsible">
-      <details>
-        <summary>
-          <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr 1fr' }}>
-            <span
-              onClick={(e) => setOpen(!open)}
-              onKeyPress={(e) => setOpen(!open)}
-              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-            >
-              {props.title}
-            </span>
-            <button type="button" onClick={(e) => props.visibilityChange(props.id)}>
-              { props.hidden ? (
-                <img src="../../static/icons/eye_off.png" style={{ height: '10px' }} />
-              ) : (
-                <img src="../../static/icons/eye_on.png" style={{ height: '10px' }} />
-              )}
-            </button>
-            <input type="radio" name={props.group} value={props.id} onChange={props.defaultChange} />
+export const CollapsibleType = (props) => (
+  <div className="collapsible">
+    <details>
+      <summary>
+        <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr 1fr', maxWidth: 'calc(100% - 20px)' }}>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {props.title}
           </span>
-        </summary>
-        <div className="collapsibleContent">
-          {props.children}
-        </div>
-      </details>
-    </div>
-  );
-};
+          <button type="button" onClick={(e) => props.visibilityChange(props.id)}>
+            { props.hidden ? (
+              <img src="../../static/icons/eye_off.png" style={{ height: '10px' }} />
+            ) : (
+              <img src="../../static/icons/eye_on.png" style={{ height: '10px' }} />
+            )}
+          </button>
+          <input type="radio" name={props.group} value={props.id} onChange={props.defaultChange} />
+        </span>
+      </summary>
+      <div className="collapsibleContent">
+        {props.children}
+      </div>
+    </details>
+  </div>
+);
 
 CollapsibleType.propTypes = {
   title: PropTypes.string.isRequired,

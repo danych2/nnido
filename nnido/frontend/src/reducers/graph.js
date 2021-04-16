@@ -2,8 +2,8 @@ import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
   UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
-  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
-  CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
+  CREATE_NODE_TYPE, DELETE_NODE_TYPE,
+  CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
   SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from '../actions/types';
 import { dictFilter } from '../func';
@@ -25,6 +25,7 @@ export default function (state = initialState, action) {
   let model;
   let position;
   let name;
+  let element;
   let otherNodes;
   let otherLinks;
   let newPositions;
@@ -251,24 +252,6 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case UPDATE_NODE_TYPE:
-      ({ id, data } = action.payload);
-      return {
-        ...state,
-        graph: {
-          ...state.graph,
-          model: {
-            ...state.graph.model,
-            node_types: {
-              ...state.graph.model.node_types,
-              [id]: {
-                ...state.graph.model.node_types[id],
-                ...data,
-              },
-            },
-          },
-        },
-      };
     case DELETE_NODE_TYPE:
       ({ [action.payload]: value, ...newNodeTypes } = state.graph.model.node_types);
       return {
@@ -296,8 +279,26 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case UPDATE_LINK_TYPE:
-      ({ id, data } = action.payload);
+    case UPDATE_TYPE:
+      ({ id, data, element } = action.payload);
+      if (element.localeCompare('node') === 0) {
+        return {
+          ...state,
+          graph: {
+            ...state.graph,
+            model: {
+              ...state.graph.model,
+              node_types: {
+                ...state.graph.model.node_types,
+                [id]: {
+                  ...state.graph.model.node_types[id],
+                  ...data,
+                },
+              },
+            },
+          },
+        };
+      }
       return {
         ...state,
         graph: {

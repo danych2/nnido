@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { createLinkType, updateDefault, switchLinkTypeFilter } from '../../actions/graphs';
 import { CollapsibleType } from '../../func';
-import EditLinkType from './EditLinkType';
+import EditType from './EditType';
 
 const LinkTypes = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const LinkTypes = () => {
           visibilityChange={changeLinkTypeVisibility}
           group="link"
         >
-          <EditLinkType linkTypeId={linkTypeId} />
+          <EditType element="link" typeId={linkTypeId} />
         </CollapsibleType>
       ))}
       <br />

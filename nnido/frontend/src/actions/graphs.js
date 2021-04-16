@@ -6,8 +6,8 @@ import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
   UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
-  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODE_TYPE,
-  CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_LINK_TYPE,
+  CREATE_NODE_TYPE, DELETE_NODE_TYPE,
+  CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
   SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from './types';
 
@@ -214,14 +214,6 @@ export const deleteNodeType = (id) => (dispatch) => {
   });
 };
 
-// UPDATE Node type
-export const updateNodeType = (nodeType) => (dispatch) => {
-  dispatch({
-    type: UPDATE_NODE_TYPE,
-    payload: nodeType,
-  });
-};
-
 // CREATE Link type
 export const createLinkType = (linkType) => (dispatch) => {
   dispatch({
@@ -244,11 +236,11 @@ export const deleteLinkType = (id) => (dispatch) => {
   });
 };
 
-// UPDATE Link type
-export const updateLinkType = (linkType) => (dispatch) => {
+// UPDATE Type
+export const updateType = (type) => (dispatch) => {
   dispatch({
-    type: UPDATE_LINK_TYPE,
-    payload: linkType,
+    type: UPDATE_TYPE,
+    payload: type,
   });
 };
 

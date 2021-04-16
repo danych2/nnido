@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { createNodeType, updateDefault, switchNodeTypeFilter } from '../../actions/graphs';
 import { CollapsibleType } from '../../func';
-import EditNodeType from './EditNodeType';
+import EditType from './EditType';
 
 const NodeTypes = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const NodeTypes = () => {
           visibilityChange={changeNodeTypeVisibility}
           group="node"
         >
-          <EditNodeType nodeTypeId={nodeTypeId} />
+          <EditType element="node" typeId={nodeTypeId} />
         </CollapsibleType>
       ))}
       <br />
