@@ -100,27 +100,30 @@ export const CollapsibleType = (props) => {
 
   return (
     <div className="collapsible">
-      <div style={{ display: 'grid', gridTemplateColumns: '5fr 1fr 1fr' }}>
-        <span
-          onClick={(e) => setOpen(!open)}
-          onKeyPress={(e) => setOpen(!open)}
-        >
-          {props.title}
-        </span>
-        <button type="button" onClick={(e) => props.visibilityChange(props.id)}>
-          { props.hidden ? (
-            <img src="../../static/icons/eye_off.png" style={{ height: '10px' }} />
-          ) : (
-            <img src="../../static/icons/eye_on.png" style={{ height: '10px' }} />
-          )}
-        </button>
-        <input type="radio" name={props.group} value={props.id} onChange={props.defaultChange} />
-      </div>
-      {open ? (
+      <details>
+        <summary>
+          <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr 1fr' }}>
+            <span
+              onClick={(e) => setOpen(!open)}
+              onKeyPress={(e) => setOpen(!open)}
+              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {props.title}
+            </span>
+            <button type="button" onClick={(e) => props.visibilityChange(props.id)}>
+              { props.hidden ? (
+                <img src="../../static/icons/eye_off.png" style={{ height: '10px' }} />
+              ) : (
+                <img src="../../static/icons/eye_on.png" style={{ height: '10px' }} />
+              )}
+            </button>
+            <input type="radio" name={props.group} value={props.id} onChange={props.defaultChange} />
+          </span>
+        </summary>
         <div className="collapsibleContent">
           {props.children}
         </div>
-      ) : null}
+      </details>
     </div>
   );
 };

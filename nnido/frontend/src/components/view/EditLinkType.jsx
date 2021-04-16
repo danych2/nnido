@@ -57,7 +57,7 @@ const EditLinkType = ({ linkTypeId }) => {
       <br />
       { Object.keys(linkType.properties).map((property) => (
         <Fragment key={property}>
-          <span>{property}</span>
+          <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{property}</span>
           <br />
         </Fragment>
       ))}
