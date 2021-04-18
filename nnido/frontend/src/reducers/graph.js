@@ -157,7 +157,7 @@ export default function (state = initialState, action) {
         },
       };
     case DELETE_LINK:
-      ({ [action.payload]: value, ...otherLinks } = state.graph.data.nodes);
+      ({ [action.payload]: value, ...otherLinks } = state.graph.data.links);
       return {
         ...state,
         graph: {
