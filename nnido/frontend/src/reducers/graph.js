@@ -47,6 +47,19 @@ export default function (state = initialState, action) {
         visualization.node_types_filtered = {};
         visualization.link_types_filtered = {};
       }
+      if (version < 1.1) {
+        const adjacencylists = {};
+        Object.keys(data.nodes).forEach((node_id) => {
+          adjacencylists[node_id] = {};
+          Object.keys(data.links).forEach((link_id) => {
+            if (data.links[link_id].source.localeCompare(node_id) === 0
+              || data.links[link_id].target.localeCompare(node_id) === 0) {
+              adjacencylists[node_id][link_id] = true;
+            }
+          });
+        });
+        data = { ...data, adjacencylists };
+      }
       return {
         ...state,
         graph: {
@@ -79,6 +92,10 @@ export default function (state = initialState, action) {
               ...state.graph.data.nodes,
               [id]: data,
             },
+            adjacencylists: {
+              ...state.graph.data.adjacencylists,
+              [id]: {},
+            },
           },
           visualization: {
             ...state.graph.visualization,
@@ -107,9 +124,32 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case DELETE_NODE:
-      ({ [action.payload]: value, ...newPositions } = state.graph.visualization.node_positions);
-      ({ [action.payload]: value, ...otherNodes } = state.graph.data.nodes);
+    case DELETE_NODE: {
+      const node_id = action.payload;
+      ({ [node_id]: value, ...newPositions } = state.graph.visualization.node_positions);
+      ({ [node_id]: value, ...otherNodes } = state.graph.data.nodes);
+
+      const neighbour_linknodes = [];
+      const newAdjacencylists = JSON.parse(JSON.stringify(state.graph.data.adjacencylists));
+      state.graph.data.adjacencylists[node_id].forEach((link_id) => {
+        let neigh_node_id = '';
+        let found = false;
+        if (state.graph.data.links[link_id].source.localeCompare(node_id) === 0) {
+          neigh_node_id = state.graph.data.links[link_id].target;
+          found = true;
+        } else if (state.graph.data.links[link_id].target.localeCompare(node_id) === 0) {
+          neigh_node_id = state.graph.data.links[link_id].source;
+          found = true;
+        }
+        if (found) {
+          neighbour_linknodes.push([link_id, neigh_node_id]);
+        }
+      });
+      neighbour_linknodes.forEach((linknode) => {
+        delete newAdjacencylists[linknode[1]][linknode[0]];
+      });
+      delete newAdjacencylists[node_id];
+
       return {
         ...state,
         graph: {
@@ -119,12 +159,15 @@ export default function (state = initialState, action) {
             nodes: otherNodes,
             links: dictFilter(state.graph.data.links, (link) => link.source !== action.payload
               && link.target !== action.payload),
+            adjacencylists: newAdjacencylists,
           },
           visualization: { ...state.graph.visualization, newPositions },
         },
       };
-    case CREATE_LINK:
+    }
+    case CREATE_LINK: {
       ({ id, data } = action.payload);
+      const { source, target } = data;
       return {
         ...state,
         graph: {
@@ -135,9 +178,21 @@ export default function (state = initialState, action) {
               ...state.graph.data.links,
               [id]: data,
             },
+            adjacencylists: {
+              ...state.graph.data.adjacencylists,
+              [source]: {
+                ...state.graph.data.adjacencylists[source],
+                [id]: true,
+              },
+              [target]: {
+                ...state.graph.data.adjacencylists[target],
+                [id]: true,
+              },
+            },
           },
         },
       };
+    }
     case UPDATE_LINK:
       ({ id, data } = action.payload);
       return {
@@ -156,8 +211,13 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case DELETE_LINK:
-      ({ [action.payload]: value, ...otherLinks } = state.graph.data.links);
+    case DELETE_LINK: {
+      const id = action.payload;
+      ({ [id]: value, ...otherLinks } = state.graph.data.links);
+      const { source, target } = state.graph.data.links[id];
+      const newAdjacencylists = JSON.parse(JSON.stringify(state.graph.data.adjacencylists));
+      delete newAdjacencylists[source][id];
+      delete newAdjacencylists[target][id];
       return {
         ...state,
         graph: {
@@ -165,9 +225,11 @@ export default function (state = initialState, action) {
           data: {
             ...state.graph.data,
             links: otherLinks,
+            adjacencylists: newAdjacencylists,
           },
         },
       };
+    }
     case UPDATE_NODE_POSITION:
       return {
         ...state,

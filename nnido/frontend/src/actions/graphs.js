@@ -12,6 +12,7 @@ import {
 } from './types';
 
 import { tokenConfig } from './auth';
+import config from '../config';
 
 // GET GRAPHS
 export const getGraphs = () => (dispatch, getState) => {
@@ -42,6 +43,7 @@ export const createGraph = (graph) => (dispatch, getState) => {
     data: JSON.stringify({ nodes: [], links: [] }),
     visualization: JSON.stringify({ node_positions: {} }),
     model: JSON.stringify({ node_types: {}, link_types: {} }),
+    version: config.CURRENT_VERSION,
   }, tokenConfig(getState))
     .then((res) => {
       dispatch({
