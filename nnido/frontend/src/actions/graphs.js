@@ -92,6 +92,7 @@ export const createNode = (node) => (dispatch) => {
         content: '',
         type: '',
         properties: {},
+        dims: { width: -1, height: -1 },
         ...data,
       },
       ...rest,

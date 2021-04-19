@@ -19,6 +19,7 @@ const Node = ({ node_id }) => {
 
   const node = useSelector((state) => state.graph.graph.data.nodes[node_id]);
   const nodeName = useSelector((state) => state.graph.graph.data.nodes[node_id].name, shallowEqual);
+  const nodeDims = useSelector((state) => state.graph.graph.data.nodes[node_id].dims);
   const nodeType = useSelector((state) => (node.type ? state.graph.graph.model.node_types[node.type] : ''), shallowEqual);
   const position = (
     useSelector((state) => state.graph.graph.visualization.node_positions[node_id])
@@ -113,40 +114,67 @@ const Node = ({ node_id }) => {
     }
   }, [editingNode]);
 
-  // update name of node (necessary to trigger render if name is changed from a menu)
+  // set node dims on load
   useEffect(() => {
-    d3.select(myRef.current).select('text').node().textContent = nodeName;
+    const dims = d3.select(myRef.current).select('text').node().getBBox();
+    dispatch(updateNode({
+      id: node_id,
+      data: {
+        dims,
+      },
+    }));
+  }, []);
+
+  // update name of node from input
+  useEffect(() => {
+    if (nodeRef.current.name !== name) {
+      d3.select(myRef.current).select('text').node().textContent = name;
+      const dims = d3.select(myRef.current).select('text').node().getBBox();
+      dispatch(updateNode({
+        id: node_id,
+        data: {
+          dims,
+        },
+      }));
+    }
+  }, [name]);
+
+  // update name of node from outside
+  useEffect(() => {
+    if (nodeRef.current.name !== nodeName) {
+      d3.select(myRef.current).select('text').node().textContent = nodeName;
+      const dims = d3.select(myRef.current).select('text').node().getBBox();
+      dispatch(updateNode({
+        id: node_id,
+        data: {
+          dims,
+        },
+      }));
+    }
   }, [nodeName]);
 
-  // set node rect size after render (so that text area can be computed)
+  // update node size
   useEffect(() => {
-    const dim = d3.select(myRef.current).select('text').node().getBBox();
-    d3.select(myRef.current).select('.nodeBody')
-      .attr('x', -(dim.width / 2 + config.PADDING_TEXT_NODE))
-      .attr('y', -(dim.height / 2 + config.PADDING_TEXT_NODE))
-      .attr('width', dim.width + config.PADDING_TEXT_NODE * 2)
-      .attr('height', dim.height + config.PADDING_TEXT_NODE * 2);
-    if (isSelected) {
-      const shadowWidth = config.NODE_SHADOW_MARGIN + dim.width;
-      const shadowHeight = config.NODE_SHADOW_MARGIN + dim.height;
+    if (nodeDims.width > -1) {
+      d3.select(myRef.current).select('.nodeBody')
+        .attr('x', -(nodeDims.width / 2 + config.PADDING_TEXT_NODE))
+        .attr('y', -(nodeDims.height / 2 + config.PADDING_TEXT_NODE))
+        .attr('width', nodeDims.width + config.PADDING_TEXT_NODE * 2)
+        .attr('height', nodeDims.height + config.PADDING_TEXT_NODE * 2);
+      const shadowWidth = config.NODE_SHADOW_MARGIN + nodeDims.width;
+      const shadowHeight = config.NODE_SHADOW_MARGIN + nodeDims.height;
       d3.select(myRef.current).select('.nodeShadow')
         .attr('x', -(shadowWidth / 2 + config.PADDING_TEXT_NODE))
         .attr('y', -(shadowHeight / 2 + config.PADDING_TEXT_NODE))
         .attr('width', shadowWidth + config.PADDING_TEXT_NODE * 2)
         .attr('height', shadowHeight + config.PADDING_TEXT_NODE * 2);
-    } else {
-      d3.select(myRef.current).select('.nodeShadow')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', 0)
-        .attr('height', 0);
+      if (editingNode) {
+        d3.select(myRef.current).select('foreignObject')
+          .attr('width', nodeDims.width)
+          .attr('height', nodeDims.height);
+      }
     }
-    if (editingNode) {
-      d3.select(myRef.current).select('foreignObject')
-        .attr('width', dim.width)
-        .attr('height', dim.height);
-    }
-  });
+  }, [nodeDims, editingNode]);
 
   const handleNameChange = (e) => { setName(e.target.value); };
   const finishNameChange = (e) => {
@@ -197,7 +225,7 @@ const Node = ({ node_id }) => {
   return (
     <g ref={myRef} id={`node_${node_id}`}>
       <title>{alt_text}</title>
-      <rect className="nodeShadow" rx="19" ry="19" />
+      <rect className="nodeShadow" rx="19" ry="19" visibility={isSelected ? 'visible' : 'hidden'} />
       <rect className="nodeBody" rx="15" ry="15" />
       <text
         style={{ fontSize, transform: 'translateX(-50%)', transformBox: 'fill-box' }}

@@ -60,6 +60,11 @@ export default function (state = initialState, action) {
         });
         data = { ...data, adjacencylists };
       }
+      if (version < 1.2) {
+        Object.keys(data.nodes).forEach((node_id) => {
+          data.nodes[node_id].dims = { width: -1, height: -1 };
+        });
+      }
       return {
         ...state,
         graph: {
