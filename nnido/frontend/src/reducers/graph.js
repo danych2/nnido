@@ -43,7 +43,7 @@ export default function (state = initialState, action) {
       data = JSON.parse(action.payload.data);
       visualization = JSON.parse(action.payload.visualization);
       model = JSON.parse(action.payload.model);
-      if (version < 1) {
+      if (visualization.node_types_filtered === undefined) {
         visualization.node_types_filtered = {};
         visualization.link_types_filtered = {};
       }

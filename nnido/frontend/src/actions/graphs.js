@@ -41,7 +41,11 @@ export const createGraph = (graph) => (dispatch, getState) => {
   axios.post('/api/graphs/', {
     ...graph,
     data: JSON.stringify({ nodes: [], links: [] }),
-    visualization: JSON.stringify({ node_positions: {} }),
+    visualization: JSON.stringify({
+      node_positions: {},
+      node_types_filtered: {},
+      link_types_filtered: {},
+    }),
     model: JSON.stringify({ node_types: {}, link_types: {} }),
     version: config.CURRENT_VERSION,
   }, tokenConfig(getState))
