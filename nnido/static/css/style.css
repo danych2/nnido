@@ -1,7 +1,10 @@
 :root {
   --hover-color: limegreen;
   --creating-link-color: blue;
-  --selected-color: brown;
+  --link-shadow-selected: gray;
+  --link-shadow-adjacent: silver;
+  --node-shadow-selected: gray;
+  --node-shadow-adjacent: gainsboro;
 }
 
 body {
@@ -19,6 +22,18 @@ svg {
   stroke: var(--creating-link-color);
   stroke-opacity: 1;
   stroke-width: 3;
+}
+
+.line_adjacent_shadow {
+  stroke: var(--link-shadow-adjacent);
+  stroke-opacity: 1;
+  stroke-width: 4;
+}
+
+.line_shadow {
+  stroke: var(--link-shadow-selected);
+  stroke-opacity: 1;
+  stroke-width: 4;
 }
 
 .line_visible {
@@ -58,21 +73,27 @@ svg {
   stroke-dasharray: 5, 5;
 }
 
-.nodes g .nodeBody {
+.nodes g .node_body {
   pointer-events: all;
   fill: white;
   stroke: black;
   stroke-width: 2px;
 }
 
-.nodes g:hover .nodeBody{
+.nodes g:hover .node_body{
   stroke: var(--hover-color);
   stroke-width: 3px;
 }
 
-.nodes g .nodeShadow {
+.nodes g .node_adjacent_shadow {
   pointer-events: all;
-  fill: lightgrey;
+  fill: var(--node-shadow-adjacent);
+  stroke-width: 0px;
+}
+
+.nodes g .node_shadow {
+  pointer-events: all;
+  fill: var(--node-shadow-selected);
   stroke-width: 0px;
 }
 

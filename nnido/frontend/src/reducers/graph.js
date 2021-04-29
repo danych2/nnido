@@ -13,6 +13,7 @@ const initialState = {
   graphs: [],
   graph: {},
   selection: { ids: [], type: 'none' },
+  selectionAdjacent: { node_ids: [], link_ids: [] },
 };
 
 export default function (state = initialState, action) {
@@ -263,17 +264,43 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case SET_SELECTION:
+    case SET_SELECTION: {
       // payload: {ids: [xxx, yyy, ...], type: "node"|"edge"}
-      // Sets the whole selection as 'action.payload'
+      // Sets the whole selection as 'action.payload', updates selectionAdjacent
+      const selectionAdjacent = { node_ids: [], link_ids: [] };
+      if (action.payload.type.localeCompare('node') === 0) {
+        // If nodes are selected, their neighboring link are nodes are set as selectionAdjacent
+        // CAUTION some nodes can be at the same time in selection and in selectionAdjacent
+        action.payload.ids.forEach((node_id) => {
+          const links = Object.keys(state.graph.data.adjacencylists[node_id]);
+          links.forEach((link_neighbour_id) => {
+            const link_neighbour = state.graph.data.links[link_neighbour_id];
+            const node_neighbour_id = link_neighbour.target.localeCompare(node_id) === 0
+              ? link_neighbour.source : link_neighbour.target;
+            selectionAdjacent.node_ids.push(node_neighbour_id);
+            selectionAdjacent.link_ids.push(link_neighbour_id);
+          });
+        });
+      } else {
+        // If links are selected, their source and target nodes are set as selectionAdjacent
+        action.payload.ids.forEach((link_id) => {
+          const link = state.graph.data.links[link_id];
+          selectionAdjacent.node_ids.push(link.source);
+          selectionAdjacent.node_ids.push(link.target);
+        });
+      }
+
       return {
         ...state,
         selection: action.payload,
+        selectionAdjacent,
       };
+    }
     case SWITCH_SELECTION:
       // payload: {id: xxx, type: "node"|"edge"}
       // Switches whether the element with id 'action.payload' is selected or not.
       // Only works if currently there is no selection of a different type
+      // TODO update selectionAdjacent
       newSelection = { ...state.selection };
       if (state.selection.type.localeCompare('none') === 0
         || action.payload.type.localeCompare(state.selection.type) === 0) {

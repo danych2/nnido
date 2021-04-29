@@ -58,6 +58,9 @@ const Node = ({ node_id }) => {
   const selection = useSelector((state) => state.graph.selection);
   const isSelected = selection.ids.includes(node_id);
 
+  const selectionAdjacent = useSelector((state) => state.graph.selectionAdjacent);
+  const isAdjacentToSelected = selectionAdjacent.node_ids.includes(node_id);
+
   useEffect(() => {
     const { x, y } = denormalizeCoords(position.x, position.y);
 
@@ -103,7 +106,7 @@ const Node = ({ node_id }) => {
         setEditingNode(true);
       });
 
-    const rect = d3.select(myRef.current).select('.nodeBody');
+    const rect = d3.select(myRef.current).select('.node_body');
     Object.entries(rectStyle).forEach(([prop, val]) => rect.style(prop, val));
   }, [nodeType, defaultLinkType, selection]);
 
@@ -156,14 +159,19 @@ const Node = ({ node_id }) => {
   // update node size
   useEffect(() => {
     if (nodeDims.width > -1) {
-      d3.select(myRef.current).select('.nodeBody')
+      d3.select(myRef.current).select('.node_body')
         .attr('x', -(nodeDims.width / 2 + config.PADDING_TEXT_NODE))
         .attr('y', -(nodeDims.height / 2 + config.PADDING_TEXT_NODE))
         .attr('width', nodeDims.width + config.PADDING_TEXT_NODE * 2)
         .attr('height', nodeDims.height + config.PADDING_TEXT_NODE * 2);
       const shadowWidth = config.NODE_SHADOW_MARGIN + nodeDims.width;
       const shadowHeight = config.NODE_SHADOW_MARGIN + nodeDims.height;
-      d3.select(myRef.current).select('.nodeShadow')
+      d3.select(myRef.current).select('.node_shadow')
+        .attr('x', -(shadowWidth / 2 + config.PADDING_TEXT_NODE))
+        .attr('y', -(shadowHeight / 2 + config.PADDING_TEXT_NODE))
+        .attr('width', shadowWidth + config.PADDING_TEXT_NODE * 2)
+        .attr('height', shadowHeight + config.PADDING_TEXT_NODE * 2);
+      d3.select(myRef.current).select('.node_adjacent_shadow')
         .attr('x', -(shadowWidth / 2 + config.PADDING_TEXT_NODE))
         .attr('y', -(shadowHeight / 2 + config.PADDING_TEXT_NODE))
         .attr('width', shadowWidth + config.PADDING_TEXT_NODE * 2)
@@ -225,8 +233,9 @@ const Node = ({ node_id }) => {
   return (
     <g ref={myRef} id={`node_${node_id}`}>
       <title>{alt_text}</title>
-      <rect className="nodeShadow" rx="19" ry="19" visibility={isSelected ? 'visible' : 'hidden'} />
-      <rect className="nodeBody" rx="15" ry="15" />
+      <rect className="node_adjacent_shadow" rx="19" ry="19" visibility={isAdjacentToSelected ? 'visible' : 'hidden'} />
+      <rect className="node_shadow" rx="19" ry="19" visibility={isSelected ? 'visible' : 'hidden'} />
+      <rect className="node_body" rx="15" ry="15" />
       <text
         style={{ fontSize, transform: 'translateX(-50%)', transformBox: 'fill-box' }}
         visibility={editingNode ? 'hidden' : 'visible'}

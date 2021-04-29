@@ -22,6 +22,12 @@ const Link = ({ link_id }) => {
 
   const myRef = useRef(null);
 
+  const selection = useSelector((state) => state.graph.selection);
+  const isSelected = selection.ids.includes(link_id);
+
+  const selectionAdjacent = useSelector((state) => state.graph.selectionAdjacent);
+  const isAdjacentToSelected = selectionAdjacent.link_ids.includes(link_id);
+
   useEffect(() => {
     const source = denormalizeCoords(positionSource.x, positionSource.y);
     const target = denormalizeCoords(positionTarget.x, positionTarget.y);
@@ -62,6 +68,8 @@ const Link = ({ link_id }) => {
     <g ref={myRef} id={`link_${link_id}`}>
       <line className="line_hoverarea" />
       <line className="line_visible" />
+      <line className="line_adjacent_shadow" visibility={isAdjacentToSelected ? 'visible' : 'hidden'} />
+      <line className="line_shadow" visibility={isSelected ? 'visible' : 'hidden'} />
     </g>
   );
 };
