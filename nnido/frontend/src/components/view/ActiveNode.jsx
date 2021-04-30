@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { updateNode, deleteNode, selectElements } from '../../actions/graphs';
-import { useTextInput } from '../../func';
+import { useTextInput, useColorChooser, getSystemProperty } from '../../func';
 import EditableProperty from './EditableProperty';
+import config from '../../config';
 
 const ActiveNode = ({ node_id }) => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const ActiveNode = ({ node_id }) => {
   const node = useSelector((state) => state.graph.graph.data.nodes[node_id]);
 
   const nodeTypes = useSelector((state) => state.graph.graph.model.node_types);
+  const color = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'color', 'node'), shallowEqual);
 
   const [newProperty, setNewProperty] = useState('');
   const [name, InputName] = useTextInput(() => {
@@ -30,6 +32,17 @@ const ActiveNode = ({ node_id }) => {
       },
     }));
   }, node.content);
+
+  const defaultColor = config.DEFAULT_NODE_COLOR;
+
+  const [selected_color, InputColor] = useColorChooser((selected_color) => {
+    dispatch(updateNode({
+      id: node_id,
+      data: {
+        color: selected_color.hex,
+      },
+    }));
+  }, color || defaultColor);
 
   const onTypeChange = (e) => {
     dispatch(updateNode({
@@ -94,6 +107,8 @@ const ActiveNode = ({ node_id }) => {
           <option key={nodeTypeId} value={nodeTypeId}>{nodeTypes[nodeTypeId].name}</option>
         ))}
       </select>
+      <br />
+      {InputColor}
       <br />
       Atributos:
       <br />

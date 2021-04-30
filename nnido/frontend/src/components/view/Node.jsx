@@ -8,7 +8,7 @@ import {
   selectElements, selectionSwitch, updateNode,
 } from '../../actions/graphs';
 import {
-  denormalizeCoords, dictFilter,
+  denormalizeCoords, dictFilter, getSystemProperty,
 } from '../../func';
 import config from '../../config';
 import createNodeDragBehavior from '../common/MouseBehaviors';
@@ -20,7 +20,7 @@ const Node = ({ node_id }) => {
   const node = useSelector((state) => state.graph.graph.data.nodes[node_id]);
   const nodeName = useSelector((state) => state.graph.graph.data.nodes[node_id].name, shallowEqual);
   const nodeDims = useSelector((state) => state.graph.graph.data.nodes[node_id].dims);
-  const nodeType = useSelector((state) => (node.type ? state.graph.graph.model.node_types[node.type] : ''), shallowEqual);
+  const color = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'color', 'node'), shallowEqual);
   const position = (
     useSelector((state) => state.graph.graph.visualization.node_positions[node_id])
   );
@@ -68,10 +68,8 @@ const Node = ({ node_id }) => {
       stroke: config.DEFAULT_NODE_COLOR,
     };
 
-    if (nodeType) {
-      if (nodeType.color) {
-        rectStyle.stroke = nodeType.color;
-      }
+    if (color) {
+      rectStyle.stroke = color;
     }
 
     const g = d3.select(myRef.current);
@@ -108,7 +106,7 @@ const Node = ({ node_id }) => {
 
     const rect = d3.select(myRef.current).select('.node_body');
     Object.entries(rectStyle).forEach(([prop, val]) => rect.style(prop, val));
-  }, [nodeType, defaultLinkType, selection]);
+  }, [color, defaultLinkType, selection]);
 
   useEffect(() => {
     if (editingNode) {

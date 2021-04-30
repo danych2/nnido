@@ -3,6 +3,38 @@ import PropTypes from 'prop-types';
 
 import { SketchPicker } from 'react-color';
 
+export function getUserProperty(graph, id, property_name, type) {
+  let value;
+  if (type.localeCompare('node') === 0) {
+    if (graph.data.nodes[id].type) {
+      value = graph.model.node_types[graph.data.nodes[id].type].properties[property_name] || value;
+    }
+    value = graph.data.nodes[id].properties[property_name] || value;
+  } else {
+    if (graph.data.links[id].type) {
+      value = graph.model.link_types[graph.data.links[id].type].properties[property_name] || value;
+    }
+    value = graph.data.links[id].properties[property_name] || value;
+  }
+  return value;
+}
+
+export function getSystemProperty(graph, id, property_name, type) {
+  let value = '';
+  if (type.localeCompare('node') === 0) {
+    if (graph.data.nodes[id].type) {
+      value = graph.model.node_types[graph.data.nodes[id].type][property_name] || value;
+    }
+    value = graph.data.nodes[id][property_name] || value;
+  } else {
+    if (graph.data.links[id].type) {
+      value = graph.model.link_types[graph.data.links[id].type][property_name] || value;
+    }
+    value = graph.data.links[id][property_name] || value;
+  }
+  return value;
+}
+
 export const dictFilter = (obj, predicate) => Object.keys(obj)
   .filter((key) => predicate(obj[key]))
   .reduce((res, key) => (res[key] = obj[key], res), {});

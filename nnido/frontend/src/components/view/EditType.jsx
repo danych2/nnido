@@ -23,6 +23,7 @@ const EditType = ({ typeId, element }) => {
 
   const [color, InputColor] = useColorChooser((color) => {
     dispatch(updateType({
+      element,
       id: typeId,
       data: {
         color: color.hex,
