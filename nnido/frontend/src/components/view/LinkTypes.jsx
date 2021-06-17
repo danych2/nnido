@@ -52,10 +52,20 @@ const LinkTypes = () => {
           <EditType element="link" typeId={linkTypeId} />
         </CollapsibleType>
       ))}
-      <br />
-      <div className="comp">
-        <input autoComplete="off" type="text" onChange={(e) => setNewLinkType(e.target.value)} value={newLinkType} />
-        <button type="button" onClick={createNewType}>+</button>
+      <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
+        <input
+          type="text"
+          name="new_property"
+          onKeyUp={(e) => {
+            if (e.keyCode === 13) {
+              createNewType();
+            }
+          }}
+          onChange={(e) => setNewLinkType(e.target.value)}
+          value={newLinkType}
+          style={{ flexGrow: 1 }}
+        />
+        <div className="comp button" onClick={createNewType} style={{ minWidth: '1ch' }}>+</div>
       </div>
     </div>
   );

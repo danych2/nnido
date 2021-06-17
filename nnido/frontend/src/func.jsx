@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { SketchPicker } from 'react-color';
+import TextInput from './components/view/TextInput';
+import DropdownInput from './components/view/DropdownInput';
 
 export function getUserProperty(graph, id, property_name, type) {
   let value;
@@ -16,6 +18,15 @@ export function getUserProperty(graph, id, property_name, type) {
     }
     value = graph.data.links[id].properties[property_name] || value;
   }
+  return value;
+}
+
+export function getUserPropertyMini(types, element, property_name) {
+  let value = '';
+  if (element.type) {
+    value = types[element.type].properties[property_name] || value;
+  }
+  value = element.properties[property_name] || value;
   return value;
 }
 
@@ -67,24 +78,6 @@ export function denormalizeCoords(x, y) {
   return { x: denormX, y: denormY };
 }
 
-export function useTextInput(saveFunction, initialValue = '') {
-  const [value, setValue] = useState(initialValue);
-  const input = (
-    <input
-      style={{ width: '90%' }}
-      type="text"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onKeyUp={(e) => { if (e.keyCode === 13) { e.target.blur(); } }}
-      onBlur={saveFunction}
-    />
-  );
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-  return [value, input];
-}
-
 export function useColorChooser(saveFunction, initialValue = '#FFF') {
   const [displayColorChooser, setDisplayColorChooser] = useState(false);
   const [value, setValue] = useState(initialValue);
@@ -130,12 +123,12 @@ export function getTextWidth(text, font) {
 export const CollapsibleType = (props) => (
   <div className="collapsible">
     <details>
-      <summary>
+      <summary className="button">
         <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr 1fr', maxWidth: 'calc(100% - 20px)' }}>
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {props.title}
           </span>
-          <button type="button" onClick={(e) => props.visibilityChange(props.id)}>
+          <button type="button" className="button" onClick={(e) => props.visibilityChange(props.id)}>
             { props.hidden ? (
               <img src="../../static/icons/eye_off.png" style={{ height: '10px' }} />
             ) : (

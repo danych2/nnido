@@ -10,8 +10,8 @@ const SaveGraph = () => {
   const graph = useSelector((state) => state.graph.graph);
 
   return (
-    <div className="comp">
-      <button type="button" onClick={() => dispatch(updateGraph(graph))}>Guardar grafo</button>
+    <div className="comp button" onClick={() => dispatch(updateGraph(graph))}>
+      Guardar grafo
     </div>
   );
 };

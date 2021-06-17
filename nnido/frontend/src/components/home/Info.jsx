@@ -1,18 +1,15 @@
 /* eslint-disable max-len */
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-
-import { getGraph } from '../../actions/graphs';
-
-import GraphViewer from '../view/GraphViewer';
-import ActiveElement from '../view/ActiveElement';
-import SaveGraph from '../view/SaveGraph';
-import Model from '../view/Model';
+import React from 'react';
 
 function Info() {
   return (
-    <>
+    <div style={{ margin: '5px' }}>
+      <br />
+      <span>
+        <b>nnido</b> será un gestor de conocimiento no linear colaborativo y multiparadigma, por el momento es una sencilla herramienta para crear mapas mentales/diagramas</span>
+      <br />
+      <br />
+      <br />
       Controles básicos
       <br />
       <br />
@@ -36,22 +33,26 @@ function Info() {
       <br />
       <br />
       <br />
-      Atributos
+      Propiedades de los elementos
       <br />
       <br />
-      Puedes asignar atributos tanto a nodos como a enlaces, los atributos tienen un nombre y un valor
-      (por ejemplo, un atributo podría ser &apos;altura&apos; con un valor &apos;1.70&apos;),
-      pero tampoco pasa nada si dejas el valor en blanco.
-      Para añadir un atributo, selecciona un nodo o enlace, escribe el nombre del atributo debajo de donde pone &apos;Atributos&apos; en el menú del nodo seleccionado y haz click en &apos;Añadir atributo&apos;. Luego puedes asignarle un valor escribiéndolo a continuación del nombre.
+      Al seleccionar uno o varios elementos (nodos o enlaces), verás y podrás editar sus propiedades en el menú lateral.
+      <br />
+      Puedes asignar atributos personalizados tanto a nodos como a enlaces, los atributos tienen un nombre y un valor
+      (por ejemplo, un atributo podría ser &apos;estatura&apos; con un valor &apos;1.70&apos;),
+      pero también puedes dejar el valor en blanco.
+      Para añadir un atributo, selecciona un nodo o enlace, escribe el nombre del atributo debajo de donde pone &apos;Atributos&apos; en el menú del nodo seleccionado y presiona Enter o haz click en el botón &apos;+&apos;. Luego puedes asignarle un valor escribiéndolo a continuación del nombre.
       <br />
       <br />
       <br />
       Tipos de nodos y enlaces
       <br />
+      También puedes definir tipos de nodos o enlaces para poder crear fácilmente elementos que compartan los mismos atributos blablabla
+      <br />
       <br />
       <br />
 
-    </>
+    </div>
   );
 }
 

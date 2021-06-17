@@ -2,7 +2,7 @@ import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
   UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
-  CREATE_NODE_TYPE, DELETE_NODE_TYPE,
+  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODES, UPDATE_LINKS, UPDATE_PROPERTY_NODES,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
   SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from '../actions/types';
@@ -32,7 +32,6 @@ export default function (state = initialState, action) {
   let newPositions;
   let newNodeTypes;
   let newLinkTypes;
-  let newSelection;
   switch (action.type) {
     case GET_GRAPHS:
       return {
@@ -130,6 +129,59 @@ export default function (state = initialState, action) {
           },
         },
       };
+    case UPDATE_NODES: {
+      // payload: {ids: [xxx, yyy, ...], data: {properties to be changed....}}
+      const newNodes = {};
+      const { ids, data } = action.payload;
+      ids.forEach((id) => {
+        newNodes[id] = {
+          ...state.graph.data.nodes[id],
+          ...data,
+        };
+      });
+
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          data: {
+            ...state.graph.data,
+            nodes: {
+              ...state.graph.data.nodes,
+              ...newNodes,
+            },
+          },
+        },
+      };
+    }
+    case UPDATE_PROPERTY_NODES: {
+      // payload: {ids: [xxx, yyy, ...], data: {properties: { properties to be changed }}}
+      const newNodes = {};
+      const { ids, data } = action.payload;
+      ids.forEach((id) => {
+        newNodes[id] = {
+          ...state.graph.data.nodes[id],
+          properties: {
+            ...state.graph.data.nodes[id].properties,
+            ...data.properties,
+          }
+        };
+      });
+
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          data: {
+            ...state.graph.data,
+            nodes: {
+              ...state.graph.data.nodes,
+              ...newNodes,
+            },
+          },
+        },
+      };
+    }
     case DELETE_NODE: {
       const node_id = action.payload;
       ({ [node_id]: value, ...newPositions } = state.graph.visualization.node_positions);
@@ -296,12 +348,12 @@ export default function (state = initialState, action) {
         selectionAdjacent,
       };
     }
-    case SWITCH_SELECTION:
+    case SWITCH_SELECTION: {
       // payload: {id: xxx, type: "node"|"edge"}
       // Switches whether the element with id 'action.payload' is selected or not.
       // Only works if currently there is no selection of a different type
-      // TODO update selectionAdjacent
-      newSelection = { ...state.selection };
+      const newSelection = { ...state.selection };
+      let selectionAdjacent = { ...state.selectionAdjacent };
       if (state.selection.type.localeCompare('none') === 0
         || action.payload.type.localeCompare(state.selection.type) === 0) {
         if (state.selection.ids.includes(action.payload.id)) {
@@ -309,11 +361,36 @@ export default function (state = initialState, action) {
         } else {
           newSelection.ids.push(action.payload.id);
         }
+
+        selectionAdjacent = { node_ids: [], link_ids: [] };
+        if (newSelection.type.localeCompare('node') === 0) {
+          // If nodes are selected, their neighboring link are nodes are set as selectionAdjacent
+          // CAUTION some nodes can be at the same time in selection and in selectionAdjacent
+          newSelection.ids.forEach((node_id) => {
+            const links = Object.keys(state.graph.data.adjacencylists[node_id]);
+            links.forEach((link_neighbour_id) => {
+              const link_neighbour = state.graph.data.links[link_neighbour_id];
+              const node_neighbour_id = link_neighbour.target.localeCompare(node_id) === 0
+                ? link_neighbour.source : link_neighbour.target;
+              selectionAdjacent.node_ids.push(node_neighbour_id);
+              selectionAdjacent.link_ids.push(link_neighbour_id);
+            });
+          });
+        } else {
+          // If links are selected, their source and target nodes are set as selectionAdjacent
+          newSelection.ids.forEach((link_id) => {
+            const link = state.graph.data.links[link_id];
+            selectionAdjacent.node_ids.push(link.source);
+            selectionAdjacent.node_ids.push(link.target);
+          });
+        }
       }
       return {
         ...state,
         selection: newSelection,
+        selectionAdjacent,
       };
+    }
     case UPDATE_ZOOM:
       return {
         ...state,

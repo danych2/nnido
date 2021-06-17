@@ -71,13 +71,31 @@ const EditType = ({ typeId, element }) => {
       Atributos:
       <br />
       { Object.keys(type.properties).map((property) => (
-        <Fragment key={property}>
+        <div key={property} style={{ display: 'flex', alignItems: 'center' }}>
           <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{property}</span>
+          <div
+            className="comp button"
+            style={{ minWidth: '1ch' }}
+            onClick={() => {
+              delete type.properties[property];
+              dispatch(updateType({
+                element,
+                id: typeId,
+                data: {
+                  properties: {
+                    ...type.properties,
+                  },
+                },
+              }));
+            }}
+          >
+            X
+          </div>
           <br />
-        </Fragment>
+        </div>
       ))}
       <input type="text" onChange={(e) => setNewProperty(e.target.value)} value={newProperty} />
-      <button type="button" onClick={addProperty}>+</button>
+      <button className="button" type="button" onClick={addProperty}>+</button>
       <br />
     </>
   );

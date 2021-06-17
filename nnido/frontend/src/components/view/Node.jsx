@@ -89,7 +89,6 @@ const Node = ({ node_id }) => {
     );
 
     g.attr('transform', `translate(${x}, ${y})`)
-      .call(nodeDragBehavior)
       .on('click', () => {
         d3.event.stopImmediatePropagation();
         if (d3.event.shiftKey) {
@@ -102,7 +101,8 @@ const Node = ({ node_id }) => {
         d3.event.stopImmediatePropagation();
         setName(nodeRef.current.name);
         setEditingNode(true);
-      });
+      })
+      .call(nodeDragBehavior);
 
     const rect = d3.select(myRef.current).select('.node_body');
     Object.entries(rectStyle).forEach(([prop, val]) => rect.style(prop, val));
@@ -142,7 +142,7 @@ const Node = ({ node_id }) => {
 
   // update name of node from outside
   useEffect(() => {
-    if (nodeRef.current.name !== nodeName) {
+    if (d3.select(myRef.current).select('text').node().textContent !== nodeName) {
       d3.select(myRef.current).select('text').node().textContent = nodeName;
       const dims = d3.select(myRef.current).select('text').node().getBBox();
       dispatch(updateNode({

@@ -52,10 +52,20 @@ const NodeTypes = () => {
           <EditType element="node" typeId={nodeTypeId} />
         </CollapsibleType>
       ))}
-      <br />
-      <div className="comp">
-        <input autoComplete="off" type="text" onChange={(e) => setNewNodeType(e.target.value)} value={newNodeType} />
-        <button type="button" onClick={createNewType}>+</button>
+      <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
+        <input
+          type="text"
+          name="new_property"
+          onKeyUp={(e) => {
+            if (e.keyCode === 13) {
+              createNewType();
+            }
+          }}
+          onChange={(e) => setNewNodeType(e.target.value)}
+          value={newNodeType}
+          style={{ flexGrow: 1 }}
+        />
+        <div className="comp button" onClick={createNewType} style={{ minWidth: '1ch' }}>+</div>
       </div>
     </div>
   );

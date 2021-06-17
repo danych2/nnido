@@ -5,8 +5,8 @@ import { v4 as uuid } from 'uuid';
 import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
-  UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
-  CREATE_NODE_TYPE, DELETE_NODE_TYPE,
+  UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT, UPDATE_PROPERTY_NODES,
+  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODES, UPDATE_LINKS,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
   SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from './types';
@@ -120,6 +120,22 @@ export const updateNode = (node) => (dispatch) => {
   });
 };
 
+// UPDATE Nodes
+export const updateMultipleNodes = (nodes) => (dispatch) => {
+  dispatch({
+    type: UPDATE_NODES,
+    payload: nodes,
+  });
+};
+
+// UPDATE (or add) property of multiple nodes
+export const updatePropertyMultipleNodes = (nodes) => (dispatch) => {
+  dispatch({
+    type: UPDATE_PROPERTY_NODES,
+    payload: nodes,
+  });
+};
+
 // CREATE Link
 export const createLink = (link) => (dispatch) => {
   dispatch({
@@ -148,6 +164,14 @@ export const updateLink = (link) => (dispatch) => {
   dispatch({
     type: UPDATE_LINK,
     payload: link,
+  });
+};
+
+// UPDATE Links
+export const updateLinks = (links) => (dispatch) => {
+  dispatch({
+    type: UPDATE_LINKS,
+    payload: links,
   });
 };
 

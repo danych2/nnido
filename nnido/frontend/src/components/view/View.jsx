@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getGraph } from '../../actions/graphs';
 
 import GraphViewer from './GraphViewer';
-import ActiveElement from './ActiveElement';
+import Selection from './Selection';
 import SaveGraph from './SaveGraph';
 import Model from './Model';
 
@@ -35,7 +35,7 @@ function View() {
           </div> */}
           <GraphViewer />
           <div style={{ overflowY: 'scroll' }}>
-            <ActiveElement />
+            <Selection />
             <br />
             <Model />
             <br />

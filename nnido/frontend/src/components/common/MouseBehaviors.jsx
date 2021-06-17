@@ -40,8 +40,7 @@ export default function createNodeDragBehavior(
       if (creatingLinkRef.current) {
         d3.select(myRef.current.parentNode).select('line')
           .attr('x2', d3.event.x).attr('y2', d3.event.y);
-      } else if (draggingNodeRef.current
-                  || Math.max(Math.abs(d3.event.dx), Math.abs(d3.event.dy)) > 1) {
+      } else {
         if (isSelected) {
           d3.selectAll('.nodes g').select(function isSelected(d, i) { return selection.ids.includes(this.id.slice(5)) ? this : null; })
             .each(function translateNode(d, i) {
@@ -52,8 +51,11 @@ export default function createNodeDragBehavior(
                 .attr('transform', `translate(${old_x + d3.event.dx}, ${old_y + d3.event.dy})`);
             });
         } else {
+          const transform = d3.select(myRef.current).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
+          const old_x = parseFloat(transform[1]);
+          const old_y = parseFloat(transform[2]);
           d3.select(myRef.current)
-            .attr('transform', `translate(${d3.event.x}, ${d3.event.y})`);
+            .attr('transform', `translate(${old_x + d3.event.dx}, ${old_y + d3.event.dy})`);
         }
         if (!draggingNodeRef.current) { setDraggingNode(true); }
       }
@@ -74,10 +76,12 @@ export default function createNodeDragBehavior(
           });
           dispatch(updateNodesPositions(new_positions));
         } else {
+          const transform = d3.select(myRef.current).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
+          const new_position = normalizeCoords(parseFloat(transform[1]) + d3.event.dx, parseFloat(transform[2]) + d3.event.dy);
           dispatch(updateNodePosition({
             id: node_id,
-            x: eventX,
-            y: eventY,
+            x: new_position.x,
+            y: new_position.y,
           }));
           dispatch(selectElements({ ids: [node_id], type: 'node' }));
         }
