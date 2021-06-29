@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { SketchPicker } from 'react-color';
-import TextInput from './components/view/TextInput';
-import DropdownInput from './components/view/DropdownInput';
+import { CompactPicker } from 'react-color';
 
 export function getUserProperty(graph, id, property_name, type) {
   let value;
@@ -81,9 +79,37 @@ export function denormalizeCoords(x, y) {
 export function useColorChooser(saveFunction, initialValue = '#FFF') {
   const [displayColorChooser, setDisplayColorChooser] = useState(false);
   const [value, setValue] = useState(initialValue);
+  const randomId = Math.random().toString(36).slice(2);
+  useEffect(() => {
+    function loseFocusEvent(e) {
+      // TODO: make lose focus work also when moving cursor (like when creating a rubber band)
+      const flyoutElement = document.getElementById('colorChooser');
+      let targetElement = e.target; // clicked element
+      do {
+        if (targetElement === flyoutElement) {
+          console.log('click inside');
+          // This is a click inside. Do nothing, just return.
+          return;
+        }
+        // Go up the DOM
+        targetElement = targetElement.parentNode;
+      } while (targetElement);
+      // This is a click outside.
+      setDisplayColorChooser(false);
+      console.log('click outside');
+    }
+    if (displayColorChooser) {
+      document.addEventListener('click', loseFocusEvent);
+    }
+    return () => { document.removeEventListener('click', loseFocusEvent); };
+  });
+
   const input = (
     <div>
-      <div onClick={(e) => setDisplayColorChooser(!displayColorChooser)}>
+      <div onClick={(e) => {
+        setDisplayColorChooser(!displayColorChooser);
+      }}
+      >
         <div style={{
           width: '36px',
           height: '14px',
@@ -93,9 +119,12 @@ export function useColorChooser(saveFunction, initialValue = '#FFF') {
         />
       </div>
       { displayColorChooser ? (
-        <div>
+        <div
+          id="colorChooser"
+          style={{ position: 'absolute' }}
+        >
           <div onClick={() => setDisplayColorChooser(false)} />
-          <SketchPicker
+          <CompactPicker
             color={initialValue}
             onChange={saveFunction}
           />
