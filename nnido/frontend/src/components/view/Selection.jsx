@@ -12,7 +12,7 @@ const Selection = () => {
     content = (
       <SelectedElement
         element_ids={selection.ids}
-        element_type={selection.type}
+        element_class={selection.type}
         key={selection.ids[0]}
       />
     );

@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { createNodeType, updateDefault, switchNodeTypeFilter } from '../../actions/graphs';
+import { createNodeType, updateDefault, switchTypeFilter } from '../../actions/graphs';
 import { CollapsibleType } from '../../func';
 import EditType from './EditType';
 
@@ -30,7 +30,7 @@ const NodeTypes = () => {
   };
 
   const changeNodeTypeVisibility = (id) => {
-    dispatch(switchNodeTypeFilter({ id }));
+    dispatch(switchTypeFilter({ isNode: true, id }));
   };
 
   return (
@@ -49,13 +49,13 @@ const NodeTypes = () => {
           visibilityChange={changeNodeTypeVisibility}
           group="node"
         >
-          <EditType element="node" typeId={nodeTypeId} />
+          <EditType element_class="node" typeId={nodeTypeId} />
         </CollapsibleType>
       ))}
       <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
         <input
           type="text"
-          name="new_property"
+          name="new_nodetype"
           onKeyUp={(e) => {
             if (e.keyCode === 13) {
               createNewType();

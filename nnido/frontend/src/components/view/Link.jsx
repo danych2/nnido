@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import { selectElements } from '../../actions/graphs';
-import { denormalizeCoords } from '../../func';
+import { denormalizeCoords, getSystemProperty } from '../../func';
 import config from '../../config';
 
 const Link = ({ link_id }) => {
@@ -28,28 +28,30 @@ const Link = ({ link_id }) => {
   const selectionAdjacent = useSelector((state) => state.graph.selectionAdjacent);
   const isAdjacentToSelected = selectionAdjacent.link_ids.includes(link_id);
 
+  const color = useSelector((state) => getSystemProperty(state.graph.graph, link_id, 'color_link', 'link'), shallowEqual);
+
   useEffect(() => {
     const source = denormalizeCoords(positionSource.x, positionSource.y);
     const target = denormalizeCoords(positionTarget.x, positionTarget.y);
 
     let endPoint = target;
     const visibleLineStyle = {
-      stroke: config.DEFAULT_LINK_COLOR,
       'marker-end': 'none',
+      stroke: config.DEFAULT_NODE_COLOR,
     };
 
-    if (link.type) {
-      if (linkType.directed) {
-        const difference = { x: target.x - source.x, y: target.y - source.y };
-        const distance = Math.sqrt(difference.x ** 2 + difference.y ** 2);
-        const scaling = (distance - config.DISTANCE_FROM_ARROW_END_TO_NODE_CENTER) / distance;
-        visibleLineStyle['marker-end'] = 'url(#arrowhead)';
-        endPoint = { x: source.x + difference.x * scaling, y: source.y + difference.y * scaling };
-      }
-      if (linkType.color) {
-        visibleLineStyle.stroke = linkType.color;
-      }
+    if (link.type && linkType.directed) {
+      const difference = { x: target.x - source.x, y: target.y - source.y };
+      const distance = Math.sqrt(difference.x ** 2 + difference.y ** 2);
+      const scaling = (distance - config.DISTANCE_FROM_ARROW_END_TO_NODE_CENTER) / distance;
+      visibleLineStyle['marker-end'] = 'url(#arrowhead)';
+      endPoint = { x: source.x + difference.x * scaling, y: source.y + difference.y * scaling };
     }
+
+    if (color) {
+      visibleLineStyle.stroke = color;
+    }
+
     d3.select(myRef.current)
       .selectAll('line')
       .attr('x1', source.x)
@@ -66,10 +68,10 @@ const Link = ({ link_id }) => {
 
   return (
     <g ref={myRef} id={`link_${link_id}`}>
+      <line className="line_shadow" visibility={isSelected ? 'visible' : 'hidden'} />
       <line className="line_hoverarea" />
       <line className="line_visible" />
       <line className="line_adjacent_shadow" visibility={isAdjacentToSelected ? 'visible' : 'hidden'} />
-      <line className="line_shadow" visibility={isSelected ? 'visible' : 'hidden'} />
     </g>
   );
 };

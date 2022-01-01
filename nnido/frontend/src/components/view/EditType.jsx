@@ -3,52 +3,77 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { updateType } from '../../actions/graphs';
-import { useColorChooser } from '../../func';
+import ColorInput from './ColorInput';
 import config from '../../config';
+import properties from '../../properties';
+import PropertyRow from './PropertyRow';
 
-const EditType = ({ typeId, element }) => {
+const EditType = ({ typeId, element_class }) => {
   // typeId: ID of the type
   // element: either "node" or "link"
 
   const dispatch = useDispatch();
+  const isNode = element_class.localeCompare('node') === 0;
 
   const type = useSelector((state) => {
-    if (element.localeCompare('node') === 0) {
+    if (isNode) {
       return state.graph.graph.model.node_types[typeId];
     }
     return state.graph.graph.model.link_types[typeId];
   });
 
-  const defaultColor = element.localeCompare('node') === 0 ? config.DEFAULT_NODE_COLOR : config.DEFAULT_LINK_COLOR;
+  const defaultColor = isNode ? config.DEFAULT_NODE_COLOR : config.DEFAULT_LINK_COLOR;
+  const colorindex = isNode ? 'color_node' : 'color_link';
+  const typecolor = type[colorindex] || defaultColor;
 
-  const [color, InputColor] = useColorChooser((color) => {
+  const systemProperties = [];
+  Object.entries(properties).forEach(([key, property]) => {
+    if (property.active && (isNode ? property.nodeProperty : property.linkProperty)) {
+      const Input = (
+        <PropertyRow
+          key={key}
+          property_id={key}
+          element_class={element_class}
+          element_ids={[typeId]}
+          selectedElements={[type]}
+          is_type
+        />
+      );
+      systemProperties.push(Input);
+    }
+  });
+
+  const InputColor = (
+    <ColorInput
+      initialValue={typecolor}
+      saveFunction={(color) => {
+        dispatch(updateType({
+          element_class,
+          id: typeId,
+          data: isNode ? { color_node: color.hex } : { color_link: color.hex },
+        }));
+      }}
+    />
+  );
+
+  const [newAttribute, setNewAttribute] = useState('');
+  const addAttribute = () => {
     dispatch(updateType({
-      element,
+      element_class,
       id: typeId,
       data: {
-        color: color.hex,
-      },
-    }));
-  }, type.color ? type.color : defaultColor);
-
-  const [newProperty, setNewProperty] = useState('');
-  const addProperty = () => {
-    dispatch(updateType({
-      element,
-      id: typeId,
-      data: {
-        properties: {
-          ...type.properties,
-          [newProperty]: {},
+        attributes: {
+          ...type.attributes,
+          [newAttribute]: {},
         },
       },
     }));
-    setNewProperty('');
+    setNewAttribute('');
   };
 
   const onDirectedChange = (e) => {
     dispatch(updateType({
-      element,
+      element_class,
       id: typeId,
       data: {
         directed: e.target.checked,
@@ -60,30 +85,32 @@ const EditType = ({ typeId, element }) => {
     <>
       <span style={{ fontSize: 'x-small' }}>{typeId}</span>
       <br />
-      {element.localeCompare('link') === 0 && (
+      {element_class.localeCompare('link') === 0 && (
         <>
-          Dirigido
-          <input name="directed" type="checkbox" checked={type.directed} onChange={onDirectedChange} />
+          <span>Dirigido: </span>
+          <input name="directed" type="checkbox" checked={type.directed} onChange={onDirectedChange} style={{ cursor: 'pointer' }} />
+          <br />
         </>
       )}
-      {InputColor}
+      <br />
+      {systemProperties}
       <br />
       Atributos:
       <br />
-      { Object.keys(type.properties).map((property) => (
-        <div key={property} style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{property}</span>
+      { Object.keys(type.attributes).map((attribute) => (
+        <div key={attribute} style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{attribute}</span>
           <div
             className="comp button"
             style={{ minWidth: '1ch' }}
             onClick={() => {
-              delete type.properties[property];
+              delete type.attributes[attribute];
               dispatch(updateType({
-                element,
+                element_class,
                 id: typeId,
                 data: {
-                  properties: {
-                    ...type.properties,
+                  attributes: {
+                    ...type.attributes,
                   },
                 },
               }));
@@ -94,8 +121,8 @@ const EditType = ({ typeId, element }) => {
           <br />
         </div>
       ))}
-      <input type="text" onChange={(e) => setNewProperty(e.target.value)} value={newProperty} />
-      <button className="button" type="button" onClick={addProperty}>+</button>
+      <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} />
+      <button className="button" type="button" onClick={addAttribute}>+</button>
       <br />
     </>
   );
@@ -103,7 +130,7 @@ const EditType = ({ typeId, element }) => {
 
 EditType.propTypes = {
   typeId: PropTypes.string.isRequired,
-  element: PropTypes.string.isRequired,
+  element_class: PropTypes.string.isRequired,
 };
 
 export default EditType;

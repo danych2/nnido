@@ -2,9 +2,10 @@ import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
   UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
-  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODES, UPDATE_LINKS, UPDATE_PROPERTY_NODES,
+  CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODES, UPDATE_LINKS,
+  UPDATE_ATTRIBUTE, DELETE_ATTRIBUTE, UPDATE_PROPERTY, DELETE_PROPERTY,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
-  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
+  SWITCH_TYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from '../actions/types';
 import { dictFilter } from '../func';
 import config from '../config';
@@ -26,7 +27,7 @@ export default function (state = initialState, action) {
   let model;
   let position;
   let name;
-  let element;
+  let element_class;
   let otherNodes;
   let otherLinks;
   let newPositions;
@@ -63,6 +64,28 @@ export default function (state = initialState, action) {
       if (version < 1.2) {
         Object.keys(data.nodes).forEach((node_id) => {
           data.nodes[node_id].dims = { width: -1, height: -1 };
+        });
+
+        // Change element and types 'properties' to 'attributes'
+        Object.keys(data.nodes).forEach((node_id) => {
+          const attributes = data.nodes[node_id].properties;
+          delete data.nodes[node_id].properties;
+          data.nodes[node_id].attributes = attributes;
+        });
+        Object.keys(data.links).forEach((link_id) => {
+          const attributes = data.links[link_id].properties;
+          delete data.links[link_id].properties;
+          data.links[link_id].attributes = attributes;
+        });
+        Object.keys(model.node_types).forEach((node_type_id) => {
+          const attributes = model.node_types[node_type_id].properties;
+          delete model.node_types[node_type_id].properties;
+          model.node_types[node_type_id].attributes = attributes;
+        });
+        Object.keys(model.link_types).forEach((link_type_id) => {
+          const attributes = model.link_types[link_type_id].properties;
+          delete model.link_types[link_type_id].properties;
+          model.link_types[link_type_id].attributes = attributes;
         });
       }
       return {
@@ -130,7 +153,7 @@ export default function (state = initialState, action) {
         },
       };
     case UPDATE_NODES: {
-      // payload: {ids: [xxx, yyy, ...], data: {properties to be changed....}}
+      // payload: {ids: [xxx, yyy, ...], data: {data to be changed....}}
       const newNodes = {};
       const { ids, data } = action.payload;
       ids.forEach((id) => {
@@ -139,35 +162,6 @@ export default function (state = initialState, action) {
           ...data,
         };
       });
-
-      return {
-        ...state,
-        graph: {
-          ...state.graph,
-          data: {
-            ...state.graph.data,
-            nodes: {
-              ...state.graph.data.nodes,
-              ...newNodes,
-            },
-          },
-        },
-      };
-    }
-    case UPDATE_PROPERTY_NODES: {
-      // payload: {ids: [xxx, yyy, ...], data: {properties: { properties to be changed }}}
-      const newNodes = {};
-      const { ids, data } = action.payload;
-      ids.forEach((id) => {
-        newNodes[id] = {
-          ...state.graph.data.nodes[id],
-          properties: {
-            ...state.graph.data.nodes[id].properties,
-            ...data.properties,
-          }
-        };
-      });
-
       return {
         ...state,
         graph: {
@@ -189,7 +183,7 @@ export default function (state = initialState, action) {
 
       const neighbour_linknodes = [];
       const newAdjacencylists = JSON.parse(JSON.stringify(state.graph.data.adjacencylists));
-      state.graph.data.adjacencylists[node_id].forEach((link_id) => {
+      Object.keys(state.graph.data.adjacencylists[node_id]).forEach((link_id) => {
         let neigh_node_id = '';
         let found = false;
         if (state.graph.data.links[link_id].source.localeCompare(node_id) === 0) {
@@ -321,7 +315,7 @@ export default function (state = initialState, action) {
       // Sets the whole selection as 'action.payload', updates selectionAdjacent
       const selectionAdjacent = { node_ids: [], link_ids: [] };
       if (action.payload.type.localeCompare('node') === 0) {
-        // If nodes are selected, their neighboring link are nodes are set as selectionAdjacent
+        // If nodes are selected, their neighboring nodes are set as selectionAdjacent
         // CAUTION some nodes can be at the same time in selection and in selectionAdjacent
         action.payload.ids.forEach((node_id) => {
           const links = Object.keys(state.graph.data.adjacencylists[node_id]);
@@ -451,8 +445,8 @@ export default function (state = initialState, action) {
         },
       };
     case UPDATE_TYPE:
-      ({ id, data, element } = action.payload);
-      if (element.localeCompare('node') === 0) {
+      ({ id, data, element_class } = action.payload);
+      if (element_class.localeCompare('node') === 0) {
         return {
           ...state,
           graph: {
@@ -498,38 +492,145 @@ export default function (state = initialState, action) {
           },
         },
       };
-    case SWITCH_NODETYPE_FILTER:
+    case SWITCH_TYPE_FILTER: {
+      // payload: {isNode: true|false, id: xxx}
       // 1 if visible (filtered), 0 (or undefined) if visible
-      value = state.graph.visualization.node_types_filtered[action.payload.id];
+      const { isNode, id } = action.payload;
+      const classSelector = isNode ? 'node_types_filtered' : 'link_types_filtered';
+
+      value = state.graph.visualization[classSelector][id];
       return {
         ...state,
         graph: {
           ...state.graph,
           visualization: {
             ...state.graph.visualization,
-            node_types_filtered: {
-              ...state.graph.visualization.node_types_filtered,
+            [classSelector]: {
+              ...state.graph.visualization[classSelector],
               [action.payload.id]: !value,
             },
           },
         },
       };
-    case SWITCH_LINKTYPE_FILTER:
-      // 1 if visible (filtered), 0 (or undefined) if visible
-      value = state.graph.visualization.link_types_filtered[action.payload.id];
+    }
+    case UPDATE_ATTRIBUTE: {
+      // payload: {isNode: true|false, ids: [xxx, yyy, ...],
+      //           attribute: attribute_name, value: attribute_value }
+      const { isNode, ids, attribute } = action.payload;
+      const classSelector = isNode ? 'nodes' : 'links';
+
+      const updatedElements = {};
+      ids.forEach((id) => {
+        updatedElements[id] = {
+          ...state.graph.data[classSelector][id],
+          attributes: {
+            ...state.graph.data[classSelector][id].attributes,
+            [attribute]: value,
+          },
+        };
+      });
       return {
         ...state,
         graph: {
           ...state.graph,
-          visualization: {
-            ...state.graph.visualization,
-            link_types_filtered: {
-              ...state.graph.visualization.link_types_filtered,
-              [action.payload.id]: !value,
+          data: {
+            ...state.graph.data,
+            [classSelector]: {
+              ...state.graph.data[classSelector],
+              ...updatedElements,
             },
           },
         },
       };
+    }
+    case DELETE_ATTRIBUTE: {
+      // payload: {isNode: true|false, ids: [xxx, yyy, ...], attribute: attribute_name }
+      const { isNode, ids, attribute } = action.payload;
+      const classSelector = isNode ? 'nodes' : 'links';
+
+      const updatedElements = {};
+      ids.forEach((id) => {
+        const { [attribute]: value, ...remains } = state.graph.data[classSelector][id].attributes;
+        updatedElements[id] = {
+          ...state.graph.data[classSelector][id],
+          attributes: remains,
+        };
+      });
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          data: {
+            ...state.graph.data,
+            [classSelector]: {
+              ...state.graph.data[classSelector],
+              ...updatedElements,
+            },
+          },
+        },
+      };
+    }
+    case UPDATE_PROPERTY: {
+      // payload: {isType: true|false, isNode: true|false,
+      //           ids: [xxx, yyy, ...], property: propertyID, value: propertyValue}
+      const {
+        isType, isNode, ids, property, value,
+      } = action.payload;
+      const mainSelector = isType ? 'model' : 'data';
+      let classSelector = isNode ? 'node' : 'link';
+      classSelector += (isType ? '_types' : 's');
+
+      const updatedObjects = {};
+      ids.forEach((id) => {
+        updatedObjects[id] = {
+          ...state.graph[mainSelector][classSelector][id],
+          [property]: value,
+        };
+      });
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          [mainSelector]: {
+            ...state.graph[mainSelector],
+            [classSelector]: {
+              ...state.graph[mainSelector][classSelector],
+              ...updatedObjects,
+            },
+          },
+        },
+      };
+    }
+    case DELETE_PROPERTY: {
+      // payload: {isType: true|false, isNode: true|false,
+      //           ids: [xxx, yyy, ...], property: propertyID}
+      const {
+        isType, isNode, ids, property,
+      } = action.payload;
+      const mainSelector = isType ? 'model' : 'data';
+      let classSelector = isNode ? 'node' : 'link';
+      classSelector += (isType ? '_types' : 's');
+
+      const updatedObjects = {};
+      ids.forEach((id) => {
+        const { [property]: value, ...remains } = state.graph[mainSelector][classSelector][id];
+        updatedObjects[id] = remains;
+      });
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          [mainSelector]: {
+            ...state.graph[mainSelector],
+            [classSelector]: {
+              ...state.graph[mainSelector][classSelector],
+              ...updatedObjects,
+            },
+          },
+        },
+      };
+    }
+
     case UPDATE_GRAPH:
     default:
       return state;

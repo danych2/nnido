@@ -3,19 +3,21 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
-  updateNode, updateLink,
-  deleteNode, deleteLink,
-  updateMultipleNodes, updatePropertyMultipleNodes,
+  updateElement,
+  deleteNode, deleteLink, updateNode,
+  updateMultipleNodes, updateAttribute, deleteAttribute,
   selectElements,
 } from '../../actions/graphs';
 
-import { getUserPropertyMini } from '../../func';
+import { getAttributeMini } from '../../func';
+import properties from '../../properties';
 import TextInput from './TextInput';
 import DropdownInput from './DropdownInput';
-import EditableProperty from './EditableProperty';
+import EditableAttribute from './EditableAttribute';
+import PropertyRow from './PropertyRow';
 
-const SelectedElement = ({ element_ids, element_type }) => {
-  const isNode = element_type.localeCompare('node') === 0;
+const SelectedElement = ({ element_ids, element_class }) => {
+  const isNode = element_class.localeCompare('node') === 0;
   // ^ 0 -> link, 1 -> node
 
   const isMultiple = element_ids.length > 1;
@@ -34,11 +36,9 @@ const SelectedElement = ({ element_ids, element_type }) => {
       : state.graph.graph.model.link_types
   ));
 
-  const updateElement = isNode ? updateNode : updateLink;
   const deleteElement = isNode ? deleteNode : deleteLink;
 
-  const [newProperty, setNewProperty] = useState('');
-
+  const [newAttribute, setNewAttribute] = useState('');
 
   const InputType = (
     <DropdownInput
@@ -47,48 +47,49 @@ const SelectedElement = ({ element_ids, element_type }) => {
         Object.keys(types).reduce((dict, key) => (dict[key] = types[key].name, dict), {})
       }
       saveFunction={(type) => {
-        if (isMultiple) {
-          dispatch(updateElement({
-            id: firstId,
-            data: {
-              type,
-            },
-          }));
-        } else {
-          dispatch(updateMultipleNodes({
-            ids: element_ids,
-            data: {
-              type,
-            },
-          }));
-        }
+        dispatch(updateElement({
+          element_class,
+          multiple: isMultiple,
+          id: firstId,
+          ids: element_ids,
+          data: {
+            type,
+          },
+        }));
       }}
       multipleValues={isMultiple && new Set(selectedElements.map((node) => node.type)).size > 1}
     />
   );
 
-  const addNewProperty = () => {
-    setNewProperty('');
-    if (isMultiple) {
-      dispatch(updatePropertyMultipleNodes({
-        ids: element_ids,
-        data: {
-          properties: {
-            [newProperty]: '',
-          },
-        },
-      }));
-    } else {
-      dispatch(updateElement({
-        id: firstId,
-        data: {
-          properties: {
-            ...firstElement.properties,
-            [newProperty]: '',
-          },
-        },
-      }));
+  const systemActiveProperties = [];
+  const systemInactiveProperties = [];
+  Object.entries(properties).forEach(([key, property]) => {
+    if (property.active && (isNode ? property.nodeProperty : property.linkProperty)) {
+      const active = key in firstElement;
+      const Input = (
+        <PropertyRow
+          key={key}
+          property_id={key}
+          element_class={element_class}
+          element_ids={element_ids}
+          selectedElements={selectedElements}
+          is_type={false}
+          is_active={active}
+        />
+      );
+      if (active) systemActiveProperties.push(Input);
+      else systemInactiveProperties.push(Input);
     }
+  });
+
+  const addNewAttribute = () => {
+    setNewAttribute('');
+    dispatch(updateAttribute({
+      isNode,
+      ids: element_ids,
+      attribute: newAttribute,
+      value: '',
+    }));
   };
 
   const onDelete = () => {
@@ -100,44 +101,51 @@ const SelectedElement = ({ element_ids, element_type }) => {
   let atributesComponent;
 
   if (isMultiple) {
-    const allProperties = new Set(Object.keys(firstElement.properties));
-    // ^ names of properties of first element
+    const allAttributes = new Set(Object.keys(firstElement.attributes));
+    // ^ names of attributes of first element
 
     if (firstElement.type) {
-      allProperties.add(Object.keys(types[firstElement.type].properties));
-      // ^ now also including properties inherited by type
+      allAttributes.add(Object.keys(types[firstElement.type].attributes));
+      // ^ now also including attributes inherited by type
     }
 
-    const sharedProperties = [...allProperties].filter(
-      (property) => selectedElements.every(
-        (node) => Object.keys(node.properties).includes(property)
-          || (node.type && Object.keys(types[node.type].properties).includes(property)),
+    const sharedAttributes = [...allAttributes].filter(
+      (attribute) => selectedElements.every(
+        (node) => Object.keys(node.attributes).includes(attribute)
+          || (node.type && Object.keys(types[node.type].attributes).includes(attribute)),
       ),
     );
-    // ^ names of properties of first element
+    // ^ names of attributes of first element
 
     atributesComponent = (
       <>
         Atributos en común:
         <br />
-        { sharedProperties.map((property) => (
-          <EditableProperty
-            key={property}
-            name={property}
-            initialValue={getUserPropertyMini(types, firstElement, property)}
-            elementType="node"
+        { sharedAttributes.map((attribute) => (
+          <EditableAttribute
+            key={attribute}
+            name={attribute}
+            initialValue={getAttributeMini(types, firstElement, attribute)}
+            elementClass="node"
             elementId={firstId}
-            updateFunction={(properties) => {
-              dispatch(updatePropertyMultipleNodes({
+            updateFunction={(attributeValue) => {
+              dispatch(updateAttribute({
+                isNode,
                 ids: element_ids,
-                data: {
-                  properties,
-                },
+                attribute,
+                value: attributeValue,
+              }));
+            }}
+            deleteFunction={() => {
+              dispatch(deleteAttribute({
+                isNode,
+                ids: element_ids,
+                attribute,
               }));
             }}
             multipleValues={
               new Set(selectedElements.map(
-                (element) => getUserPropertyMini(types, element, property),
+                (element) => getAttributeMini(types, element, attribute),
               )).size > 1
             }
           />
@@ -145,35 +153,35 @@ const SelectedElement = ({ element_ids, element_type }) => {
       </>
     );
   } else {
-    let specificProperties = firstElement.properties;
-    let inheritedProperties = {};
+    let specificAttributes = firstElement.attributes;
+    let inheritedAttributes = {};
     if (firstElement.type) {
-      const typePropertyNames = Object.keys(types[firstElement.type].properties);
-      inheritedProperties = typePropertyNames.reduce((dict, key) => (dict[key] = firstElement.properties[key] || '', dict), {});
-      specificProperties = Object.keys(firstElement.properties)
-        .filter((x) => !typePropertyNames.includes(x))
-        .reduce((dict, key) => (dict[key] = firstElement.properties[key], dict), {});
+      const typeAttributeNames = Object.keys(types[firstElement.type].attributes);
+      inheritedAttributes = typeAttributeNames.reduce((dict, key) => (dict[key] = firstElement.attributes[key] || '', dict), {});
+      specificAttributes = Object.keys(firstElement.attributes)
+        .filter((x) => !typeAttributeNames.includes(x))
+        .reduce((dict, key) => (dict[key] = firstElement.attributes[key], dict), {});
     }
 
-    let inheritedPropertiesHtml = '';
-    if (Object.keys(inheritedProperties).length > 0) {
-      inheritedPropertiesHtml = (
+    let inheritedAttributesHtml = '';
+    if (Object.keys(inheritedAttributes).length > 0) {
+      inheritedAttributesHtml = (
         <>
           <span style={{ fontSize: 'small' }}>Atributos del tipo:</span>
-          { Object.keys(inheritedProperties).map((property) => (
-            <EditableProperty
-              key={property}
-              name={property}
-              initialValue={inheritedProperties[property]}
-              elementType={element_type}
+          { Object.keys(inheritedAttributes).map((attribute) => (
+            <EditableAttribute
+              key={attribute}
+              name={attribute}
+              initialValue={inheritedAttributes[attribute]}
+              elementClass={element_class}
               elementId={firstId}
               inherited
-              updateFunction={(properties) => {
-                dispatch(updateElement({
-                  id: firstId,
-                  data: {
-                    properties,
-                  },
+              updateFunction={(attributeValue) => {
+                dispatch(updateAttribute({
+                  isNode,
+                  ids: element_ids,
+                  attribute,
+                  value: attributeValue,
                 }));
               }}
             />
@@ -185,38 +193,45 @@ const SelectedElement = ({ element_ids, element_type }) => {
       <>
         Atributos:
         <br />
-        { Object.keys(specificProperties).map((property) => (
-          <EditableProperty
-            key={property}
-            name={property}
-            initialValue={specificProperties[property]}
-            elementType={element_type}
+        { Object.keys(specificAttributes).map((attribute) => (
+          <EditableAttribute
+            key={attribute}
+            name={attribute}
+            initialValue={specificAttributes[attribute]}
+            elementClass={element_class}
             elementId={firstId}
-            updateFunction={(properties) => {
-              dispatch(updateElement({
-                id: firstId,
-                data: {
-                  properties,
-                },
+            updateFunction={(attributeValue) => {
+              dispatch(updateAttribute({
+                isNode,
+                ids: element_ids,
+                attribute,
+                value: attributeValue,
+              }));
+            }}
+            deleteFunction={() => {
+              dispatch(deleteAttribute({
+                isNode,
+                ids: element_ids,
+                attribute,
               }));
             }}
           />
         ))}
-        {inheritedPropertiesHtml}
+        {inheritedAttributesHtml}
         <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
           <input
             type="text"
-            name="new_property"
+            name="new_attribute"
             onKeyUp={(e) => {
               if (e.keyCode === 13) {
-                addNewProperty();
+                addNewAttribute();
               }
             }}
-            onChange={(e) => setNewProperty(e.target.value)}
-            value={newProperty}
+            onChange={(e) => setNewAttribute(e.target.value)}
+            value={newAttribute}
             style={{ flexGrow: 1 }}
           />
-          <div className="comp" onClick={addNewProperty} style={{ minWidth: '1ch' }}>+</div>
+          <div className="comp" onClick={addNewAttribute} style={{ minWidth: '1ch' }}>+</div>
         </div>
       </>
     );
@@ -282,6 +297,10 @@ const SelectedElement = ({ element_ids, element_type }) => {
       Tipo:
       {InputType}
       <br />
+      {systemActiveProperties}
+      <hr />
+      {systemInactiveProperties}
+      <br />
       {atributesComponent}
       <button type="button" onClick={onDelete}>{isNode ? 'Eliminar nodo' : 'Eliminar enlace'}</button>
     </>
@@ -290,7 +309,7 @@ const SelectedElement = ({ element_ids, element_type }) => {
 
 SelectedElement.propTypes = {
   element_ids: PropTypes.array.isRequired,
-  element_type: PropTypes.string.isRequired,
+  element_class: PropTypes.string.isRequired,
 };
 
 export default SelectedElement;

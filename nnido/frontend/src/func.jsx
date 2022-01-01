@@ -1,46 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { CompactPicker } from 'react-color';
+import properties from './properties';
 
-export function getUserProperty(graph, id, property_name, type) {
+export function getAttribute(graph, id, attribute_name, type) {
   let value;
   if (type.localeCompare('node') === 0) {
     if (graph.data.nodes[id].type) {
-      value = graph.model.node_types[graph.data.nodes[id].type].properties[property_name] || value;
+      value = graph.model.node_types[graph.data.nodes[id].type].attributes[attribute_name] || value;
     }
-    value = graph.data.nodes[id].properties[property_name] || value;
+    value = graph.data.nodes[id].attributes[attribute_name] || value;
   } else {
     if (graph.data.links[id].type) {
-      value = graph.model.link_types[graph.data.links[id].type].properties[property_name] || value;
+      value = graph.model.link_types[graph.data.links[id].type].attributes[attribute_name] || value;
     }
-    value = graph.data.links[id].properties[property_name] || value;
+    value = graph.data.links[id].attributes[attribute_name] || value;
   }
   return value;
 }
 
-export function getUserPropertyMini(types, element, property_name) {
+export function getAttributeMini(types, element, attribute_name) {
   let value = '';
   if (element.type) {
-    value = types[element.type].properties[property_name] || value;
+    value = types[element.type].attributes[attribute_name] || value;
   }
-  value = element.properties[property_name] || value;
+  value = element.attributes[attribute_name] || value;
   return value;
 }
 
-export function getSystemProperty(graph, id, property_name, type) {
-  let value = '';
-  if (type.localeCompare('node') === 0) {
-    if (graph.data.nodes[id].type) {
-      value = graph.model.node_types[graph.data.nodes[id].type][property_name] || value;
-    }
-    value = graph.data.nodes[id][property_name] || value;
-  } else {
-    if (graph.data.links[id].type) {
-      value = graph.model.link_types[graph.data.links[id].type][property_name] || value;
-    }
-    value = graph.data.links[id][property_name] || value;
-  }
+export function getSystemProperty(graph, element_id, property_id, element_class) {
+  let value;
+  const isNode = element_class.localeCompare('node') === 0;
+  const element = isNode ? graph.data.nodes[element_id] : graph.data.links[element_id];
+  const types = isNode ? graph.model.node_types : graph.model.link_types;
+  if (element[property_id]) {
+    value = element[property_id];
+  } else if (element.type && types[element.type][property_id]) {
+    value = types[element.type][property_id];
+  } else value = properties[property_id].default;
   return value;
 }
 
@@ -74,68 +71,6 @@ export function denormalizeCoords(x, y) {
     denormY = y * width + (height - width) / 2;
   }
   return { x: denormX, y: denormY };
-}
-
-export function useColorChooser(saveFunction, initialValue = '#FFF') {
-  const [displayColorChooser, setDisplayColorChooser] = useState(false);
-  const [value, setValue] = useState(initialValue);
-  const randomId = Math.random().toString(36).slice(2);
-  useEffect(() => {
-    function loseFocusEvent(e) {
-      // TODO: make lose focus work also when moving cursor (like when creating a rubber band)
-      const flyoutElement = document.getElementById('colorChooser');
-      let targetElement = e.target; // clicked element
-      do {
-        if (targetElement === flyoutElement) {
-          console.log('click inside');
-          // This is a click inside. Do nothing, just return.
-          return;
-        }
-        // Go up the DOM
-        targetElement = targetElement.parentNode;
-      } while (targetElement);
-      // This is a click outside.
-      setDisplayColorChooser(false);
-      console.log('click outside');
-    }
-    if (displayColorChooser) {
-      document.addEventListener('click', loseFocusEvent);
-    }
-    return () => { document.removeEventListener('click', loseFocusEvent); };
-  });
-
-  const input = (
-    <div>
-      <div onClick={(e) => {
-        setDisplayColorChooser(!displayColorChooser);
-      }}
-      >
-        <div style={{
-          width: '36px',
-          height: '14px',
-          borderRadius: '2px',
-          background: initialValue,
-        }}
-        />
-      </div>
-      { displayColorChooser ? (
-        <div
-          id="colorChooser"
-          style={{ position: 'absolute' }}
-        >
-          <div onClick={() => setDisplayColorChooser(false)} />
-          <CompactPicker
-            color={initialValue}
-            onChange={saveFunction}
-          />
-        </div>
-      ) : null }
-    </div>
-  );
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-  return [value, input];
 }
 
 export function getTextWidth(text, font) {

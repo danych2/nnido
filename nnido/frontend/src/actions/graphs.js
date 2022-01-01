@@ -5,10 +5,12 @@ import { v4 as uuid } from 'uuid';
 import {
   GET_GRAPHS, GET_GRAPH, DELETE_GRAPH, CREATE_GRAPH, UPDATE_GRAPH,
   CREATE_NODE, DELETE_NODE, UPDATE_NODE, CREATE_LINK, DELETE_LINK, UPDATE_LINK,
-  UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT, UPDATE_PROPERTY_NODES,
+  UPDATE_NODE_POSITION, SET_SELECTION, UPDATE_ZOOM, UPDATE_DEFAULT,
+  UPDATE_ATTRIBUTE, DELETE_ATTRIBUTE,
+  UPDATE_PROPERTY, DELETE_PROPERTY,
   CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODES, UPDATE_LINKS,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
-  SWITCH_NODETYPE_FILTER, SWITCH_LINKTYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
+  SWITCH_TYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
 } from './types';
 
 import { tokenConfig } from './auth';
@@ -95,7 +97,7 @@ export const createNode = (node) => (dispatch) => {
         name: '',
         content: '',
         type: '',
-        properties: {},
+        attributes: {},
         dims: { width: -1, height: -1 },
         ...data,
       },
@@ -121,19 +123,28 @@ export const updateNode = (node) => (dispatch) => {
 };
 
 // UPDATE Nodes
-export const updateMultipleNodes = (nodes) => (dispatch) => {
-  dispatch({
-    type: UPDATE_NODES,
-    payload: nodes,
-  });
+export const updateMultipleNodes = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_NODES, payload });
 };
 
-// UPDATE (or add) property of multiple nodes
-export const updatePropertyMultipleNodes = (nodes) => (dispatch) => {
-  dispatch({
-    type: UPDATE_PROPERTY_NODES,
-    payload: nodes,
-  });
+// UPDATE (or add) an attribute of one or more elements
+export const updateAttribute = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_ATTRIBUTE, payload });
+};
+
+// DELETE an attribute from one or more elements
+export const deleteAttribute = (payload) => (dispatch) => {
+  dispatch({ type: DELETE_ATTRIBUTE, payload });
+};
+
+// UPDATE a property of a type or one or more elements
+export const updateProperty = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_PROPERTY, payload });
+};
+
+// DELETE a property from a type or one or more elements
+export const deleteProperty = (payload) => (dispatch) => {
+  dispatch({ type: DELETE_PROPERTY, payload });
 };
 
 // CREATE Link
@@ -144,7 +155,7 @@ export const createLink = (link) => (dispatch) => {
       id: uuid(),
       data: {
         type: '',
-        properties: {},
+        attributes: {},
         ...link,
       },
     },
@@ -152,75 +163,65 @@ export const createLink = (link) => (dispatch) => {
 };
 
 // DELETE Link
-export const deleteLink = (id) => (dispatch) => {
-  dispatch({
-    type: DELETE_LINK,
-    payload: id,
-  });
+export const deleteLink = (payload) => (dispatch) => {
+  dispatch({ type: DELETE_LINK, payload });
 };
 
+// UPDATE Element
+export const updateElement = (payload) => (dispatch) => {
+  const { multiple, element_class, ...rest } = payload;
+  if (element_class.localeCompare('node') === 0) {
+    dispatch({
+      type: multiple ? UPDATE_NODES : UPDATE_NODE,
+      payload: rest,
+    });
+  } else {
+    dispatch({
+      type: multiple ? UPDATE_LINKS : UPDATE_LINK,
+      payload: rest,
+    });
+  }
+};
+
+
 // UPDATE Link
-export const updateLink = (link) => (dispatch) => {
-  dispatch({
-    type: UPDATE_LINK,
-    payload: link,
-  });
+export const updateLink = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_LINK, payload });
 };
 
 // UPDATE Links
-export const updateLinks = (links) => (dispatch) => {
-  dispatch({
-    type: UPDATE_LINKS,
-    payload: links,
-  });
+export const updateLinks = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_LINKS, payload });
 };
 
 // UPDATE Node position
-export const updateNodePosition = (nodePosition) => (dispatch) => {
-  dispatch({
-    type: UPDATE_NODE_POSITION,
-    payload: nodePosition,
-  });
+export const updateNodePosition = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_NODE_POSITION, payload });
 };
 
 // UPDATE Nodes positions
-export const updateNodesPositions = (nodePosition) => (dispatch) => {
-  dispatch({
-    type: UPDATE_NODES_POSITIONS,
-    payload: nodePosition,
-  });
+export const updateNodesPositions = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_NODES_POSITIONS, payload });
 };
 
 // SET multiple selection
-export const selectElements = (element) => (dispatch) => {
-  dispatch({
-    type: SET_SELECTION,
-    payload: element,
-  });
+export const selectElements = (payload) => (dispatch) => {
+  dispatch({ type: SET_SELECTION, payload });
 };
 
 // SWITCH selection
-export const selectionSwitch = (element) => (dispatch) => {
-  dispatch({
-    type: SWITCH_SELECTION,
-    payload: element,
-  });
+export const selectionSwitch = (payload) => (dispatch) => {
+  dispatch({ type: SWITCH_SELECTION, payload });
 };
 
 // Update zoom
-export const updateZoom = (transform) => (dispatch) => {
-  dispatch({
-    type: UPDATE_ZOOM,
-    payload: transform,
-  });
+export const updateZoom = (payload) => (dispatch) => {
+  dispatch({ type: UPDATE_ZOOM, payload });
 };
 
 // Update default
 export const updateDefault = (payload) => (dispatch) => {
-  dispatch({
-    type: UPDATE_DEFAULT,
-    payload,
-  });
+  dispatch({ type: UPDATE_DEFAULT, payload });
 };
 
 // CREATE Node type
@@ -230,7 +231,7 @@ export const createNodeType = (nodeType) => (dispatch) => {
     payload: {
       id: uuid(),
       data: {
-        properties: {},
+        attributes: {},
         ...nodeType,
       },
     },
@@ -238,11 +239,8 @@ export const createNodeType = (nodeType) => (dispatch) => {
 };
 
 // DELETE Node type
-export const deleteNodeType = (id) => (dispatch) => {
-  dispatch({
-    type: DELETE_NODE_TYPE,
-    payload: id,
-  });
+export const deleteNodeType = (payload) => (dispatch) => {
+  dispatch({ type: DELETE_NODE_TYPE, payload });
 };
 
 // CREATE Link type
@@ -252,7 +250,7 @@ export const createLinkType = (linkType) => (dispatch) => {
     payload: {
       id: uuid(),
       data: {
-        properties: {},
+        attributes: {},
         ...linkType,
       },
     },
@@ -260,11 +258,8 @@ export const createLinkType = (linkType) => (dispatch) => {
 };
 
 // DELETE Link type
-export const deleteLinkType = (id) => (dispatch) => {
-  dispatch({
-    type: DELETE_LINK_TYPE,
-    payload: id,
-  });
+export const deleteLinkType = (payload) => (dispatch) => {
+  dispatch({ type: DELETE_LINK_TYPE, payload });
 };
 
 // UPDATE Type
@@ -275,18 +270,7 @@ export const updateType = (type) => (dispatch) => {
   });
 };
 
-// SWITCH Node type visibility
-export const switchNodeTypeFilter = (id) => (dispatch) => {
-  dispatch({
-    type: SWITCH_NODETYPE_FILTER,
-    payload: id,
-  });
-};
-
-// SWITCH Link type visibility
-export const switchLinkTypeFilter = (id) => (dispatch) => {
-  dispatch({
-    type: SWITCH_LINKTYPE_FILTER,
-    payload: id,
-  });
+// SWITCH type visibility
+export const switchTypeFilter = (payload) => (dispatch) => {
+  dispatch({ type: SWITCH_TYPE_FILTER, payload });
 };

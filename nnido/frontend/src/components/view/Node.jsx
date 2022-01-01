@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 
 import {
-  selectElements, selectionSwitch, updateNode,
+  selectElements, selectionSwitch, updateNode, updateProperty,
 } from '../../actions/graphs';
 import {
   denormalizeCoords, dictFilter, getSystemProperty,
@@ -18,9 +18,9 @@ const Node = ({ node_id }) => {
   const myRef = useRef(null);
 
   const node = useSelector((state) => state.graph.graph.data.nodes[node_id]);
-  const nodeName = useSelector((state) => state.graph.graph.data.nodes[node_id].name, shallowEqual);
   const nodeDims = useSelector((state) => state.graph.graph.data.nodes[node_id].dims);
-  const color = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'color', 'node'), shallowEqual);
+  const nodeName = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'name', 'node'), shallowEqual);
+  const color = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'color_node', 'node'), shallowEqual);
   const position = (
     useSelector((state) => state.graph.graph.visualization.node_positions[node_id])
   );
@@ -186,11 +186,11 @@ const Node = ({ node_id }) => {
   const finishNameChange = (e) => {
     setEditingNode(false);
     if (nodeRef.current.name !== name) {
-      dispatch(updateNode({
-        id: node_id,
-        data: {
-          name,
-        },
+      dispatch(updateProperty({
+        isNode: true,
+        ids: [node_id],
+        property: 'name',
+        value: name,
       }));
     }
   };

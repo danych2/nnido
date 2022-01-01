@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 
-import { createLinkType, updateDefault, switchLinkTypeFilter } from '../../actions/graphs';
+import { createLinkType, updateDefault, switchTypeFilter } from '../../actions/graphs';
 import { CollapsibleType } from '../../func';
 import EditType from './EditType';
 
@@ -30,7 +29,7 @@ const LinkTypes = () => {
   };
 
   const changeLinkTypeVisibility = (id) => {
-    dispatch(switchLinkTypeFilter({ id }));
+    dispatch(switchTypeFilter({ isNode: false, id }));
   };
 
   return (
@@ -49,13 +48,13 @@ const LinkTypes = () => {
           visibilityChange={changeLinkTypeVisibility}
           group="link"
         >
-          <EditType element="link" typeId={linkTypeId} />
+          <EditType element_class="link" typeId={linkTypeId} />
         </CollapsibleType>
       ))}
       <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
         <input
           type="text"
-          name="new_property"
+          name="new_linktype"
           onKeyUp={(e) => {
             if (e.keyCode === 13) {
               createNewType();

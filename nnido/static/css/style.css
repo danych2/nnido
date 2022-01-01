@@ -7,6 +7,10 @@
   --node-shadow-adjacent: gainsboro;
 }
 
+html {
+  font-size: 14px;
+}
+
 body {
   font-family: monospace;
 }
@@ -53,7 +57,7 @@ svg {
 
 .line_hoverarea:hover + .line_visible,
 .line_visible:hover{
-  stroke: var(--hover-color);
+  /*stroke: var(--hover-color);*/
   stroke-width: 3;
   stroke-opacity: 1;
 }
