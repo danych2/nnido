@@ -14,6 +14,7 @@ const PropertyRow = ({
   element_ids,
   selectedElements, // TODO: is this argument (selectedElements) really necessary?
   is_type,
+  is_active,
 }) => {
   const dispatch = useDispatch();
 
@@ -87,6 +88,7 @@ PropertyRow.propTypes = {
   element_ids: PropTypes.array.isRequired,
   selectedElements: PropTypes.array.isRequired,
   is_type: PropTypes.bool.isRequired,
+  is_active: PropTypes.bool.isRequired,
 };
 
 export default PropertyRow;
