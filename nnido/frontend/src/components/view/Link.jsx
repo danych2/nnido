@@ -29,6 +29,7 @@ const Link = ({ link_id }) => {
   const isAdjacentToSelected = selectionAdjacent.link_ids.includes(link_id);
 
   const color = useSelector((state) => getSystemProperty(state.graph.graph, link_id, 'color_link', 'link'), shallowEqual);
+  const directed = useSelector((state) => getSystemProperty(state.graph.graph, link_id, 'directed', 'link'), shallowEqual);
 
   useEffect(() => {
     const source = denormalizeCoords(positionSource.x, positionSource.y);
@@ -40,7 +41,7 @@ const Link = ({ link_id }) => {
       stroke: config.DEFAULT_NODE_COLOR,
     };
 
-    if (link.type && linkType.directed) {
+    if (directed) {
       const difference = { x: target.x - source.x, y: target.y - source.y };
       const distance = Math.sqrt(difference.x ** 2 + difference.y ** 2);
       const scaling = (distance - config.DISTANCE_FROM_ARROW_END_TO_NODE_CENTER) / distance;

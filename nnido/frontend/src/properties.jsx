@@ -1,4 +1,13 @@
 const properties = {
+  directed: {
+    active: true,
+    name: 'Dirigido',
+    type: 'checkbox',
+    default: false,
+    nodeProperty: false,
+    linkProperty: true,
+    individualProperty: false,
+  },
   name: {
     active: true,
     name: 'Name',
@@ -6,6 +15,7 @@ const properties = {
     default: '',
     nodeProperty: true,
     linkProperty: false,
+    individualProperty: true,
   },
   color_node: {
     active: true,
@@ -14,6 +24,7 @@ const properties = {
     default: '#000',
     nodeProperty: true,
     linkProperty: false,
+    individualProperty: false,
   },
   color_link: {
     active: true,
@@ -22,6 +33,7 @@ const properties = {
     default: 'lightgray',
     nodeProperty: false,
     linkProperty: true,
+    individualProperty: false,
   },
   contenido: {
     active: false,
@@ -30,14 +42,7 @@ const properties = {
     default: '',
     nodeProperty: true,
     linkProperty: true,
-  },
-  directed: {
-    active: false,
-    name: 'Dirigido',
-    type: 'checkbox',
-    default: false,
-    nodeProperty: false,
-    linkProperty: true,
+    individualProperty: true,
   },
 };
 

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import TextInput from './TextInput';
 import ColorInput from './ColorInput';
+import CheckboxInput from './CheckboxInput';
 import { updateProperty, deleteProperty } from '../../actions/graphs';
 import properties from '../../properties';
 
@@ -64,6 +65,17 @@ const PropertyRow = ({
           initialValue={initialValue}
           saveFunction={(value) => {
             updateFunction(value.hex);
+          }}
+          multipleValues={multipleValues}
+        />
+      );
+      break;
+    case 'checkbox':
+      Input = (
+        <CheckboxInput
+          initialValue={initialValue}
+          saveFunction={(value) => {
+            updateFunction(value);
           }}
           multipleValues={multipleValues}
         />

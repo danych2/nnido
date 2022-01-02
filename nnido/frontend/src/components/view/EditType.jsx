@@ -37,24 +37,12 @@ const EditType = ({ typeId, element_class }) => {
           element_ids={[typeId]}
           selectedElements={[type]}
           is_type
+          is_active
         />
       );
       systemProperties.push(Input);
     }
   });
-
-  const InputColor = (
-    <ColorInput
-      initialValue={typecolor}
-      saveFunction={(color) => {
-        dispatch(updateType({
-          element_class,
-          id: typeId,
-          data: isNode ? { color_node: color.hex } : { color_link: color.hex },
-        }));
-      }}
-    />
-  );
 
   const [newAttribute, setNewAttribute] = useState('');
   const addAttribute = () => {
@@ -71,27 +59,9 @@ const EditType = ({ typeId, element_class }) => {
     setNewAttribute('');
   };
 
-  const onDirectedChange = (e) => {
-    dispatch(updateType({
-      element_class,
-      id: typeId,
-      data: {
-        directed: e.target.checked,
-      },
-    }));
-  };
-
   return (
     <>
       <span style={{ fontSize: 'x-small' }}>{typeId}</span>
-      <br />
-      {element_class.localeCompare('link') === 0 && (
-        <>
-          <span>Dirigido: </span>
-          <input name="directed" type="checkbox" checked={type.directed} onChange={onDirectedChange} style={{ cursor: 'pointer' }} />
-          <br />
-        </>
-      )}
       <br />
       {systemProperties}
       <br />
