@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import TextInput from './TextInput';
 import ColorInput from './ColorInput';
 import CheckboxInput from './CheckboxInput';
+import DropdownInput from './DropdownInput';
 import { updateProperty, deleteProperty } from '../../actions/graphs';
 import properties from '../../properties';
 
@@ -15,7 +16,7 @@ const PropertyRow = ({
   element_ids,
   selectedElements, // TODO: is this argument (selectedElements) really necessary?
   is_type,
-  is_active,
+  isActive,
 }) => {
   const dispatch = useDispatch();
 
@@ -23,7 +24,6 @@ const PropertyRow = ({
   const isMultiple = element_ids.length > 1;
   const multipleValues = isMultiple
     && new Set(selectedElements.map((object) => object[property_id])).size > 1;
-  const propertyIsActive = property_id in selectedElements[0];
   const initialValue = selectedElements[0][property_id] || propertyConfig.default;
 
   let Input;
@@ -81,6 +81,19 @@ const PropertyRow = ({
         />
       );
       break;
+    case 'dropdown':
+      Input = (
+        <DropdownInput
+          initialValue={initialValue}
+          options={propertyConfig.options}
+          saveFunction={(value) => {
+            updateFunction(value);
+          }}
+          multipleValues={multipleValues}
+          isActive={isActive}
+        />
+      );
+      break;
     default:
       Input = 'ERROR';
   }
@@ -89,7 +102,7 @@ const PropertyRow = ({
     <div style={{ display: 'grid', gridTemplateColumns: '2fr 5fr 1fr' }}>
       <span>{`${propertyConfig.name}:`}</span>
       {Input}
-      <span>{propertyIsActive && !isMultiple ? <button className="button" type="button" onClick={deleteFunction}>X</button> : ''}</span>
+      <span>{isActive && !isMultiple ? <button className="button" type="button" onClick={deleteFunction}>X</button> : ''}</span>
     </div>
   );
 };
@@ -100,7 +113,7 @@ PropertyRow.propTypes = {
   element_ids: PropTypes.array.isRequired,
   selectedElements: PropTypes.array.isRequired,
   is_type: PropTypes.bool.isRequired,
-  is_active: PropTypes.bool.isRequired,
+  isActive: PropTypes.bool.isRequired,
 };
 
 export default PropertyRow;

@@ -28,7 +28,8 @@ const EditType = ({ typeId, element_class }) => {
 
   const systemProperties = [];
   Object.entries(properties).forEach(([key, property]) => {
-    if (property.active && (isNode ? property.nodeProperty : property.linkProperty)) {
+    if (property.active && !property.individualProperty
+      && (isNode ? property.nodeProperty : property.linkProperty)) {
       const Input = (
         <PropertyRow
           key={key}
@@ -37,7 +38,7 @@ const EditType = ({ typeId, element_class }) => {
           element_ids={[typeId]}
           selectedElements={[type]}
           is_type
-          is_active
+          isActive={key in type}
         />
       );
       systemProperties.push(Input);

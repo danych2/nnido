@@ -10,7 +10,7 @@ const properties = {
   },
   name: {
     active: true,
-    name: 'Name',
+    name: 'Nombre',
     type: 'text',
     default: '',
     nodeProperty: true,
@@ -43,6 +43,19 @@ const properties = {
     nodeProperty: true,
     linkProperty: true,
     individualProperty: true,
+  },
+  shape_node: {
+    active: true,
+    name: 'Forma',
+    type: 'dropdown',
+    options: {
+      square: 'cuadrado',
+      round: 'redondeado',
+    },
+    default: '',
+    nodeProperty: true,
+    linkProperty: false,
+    individualProperty: false,
   },
 };
 

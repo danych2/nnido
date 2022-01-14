@@ -42,7 +42,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
 
   const InputType = (
     <DropdownInput
-      value={firstElement.type || ''}
+      initialValue={firstElement.type || ''}
       options={
         Object.keys(types).reduce((dict, key) => (dict[key] = types[key].name, dict), {})
       }
@@ -58,6 +58,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
         }));
       }}
       multipleValues={isMultiple && new Set(selectedElements.map((node) => node.type)).size > 1}
+      isActive={false}
     />
   );
 
@@ -74,7 +75,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
           element_ids={element_ids}
           selectedElements={selectedElements}
           is_type={false}
-          is_active={active}
+          isActive={active}
         />
       );
       if (active) systemActiveProperties.push(Input);
