@@ -52,7 +52,7 @@ const properties = {
       square: 'cuadrado',
       round: 'redondeado',
     },
-    default: '',
+    default: 'round',
     nodeProperty: true,
     linkProperty: false,
     individualProperty: false,

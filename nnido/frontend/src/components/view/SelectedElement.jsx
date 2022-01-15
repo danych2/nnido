@@ -43,9 +43,10 @@ const SelectedElement = ({ element_ids, element_class }) => {
   const InputType = (
     <DropdownInput
       initialValue={firstElement.type || ''}
-      options={
-        Object.keys(types).reduce((dict, key) => (dict[key] = types[key].name, dict), {})
-      }
+      options={{
+        '': '--',
+        ...Object.keys(types).reduce((dict, key) => (dict[key] = types[key].name, dict), {}),
+      }}
       saveFunction={(type) => {
         dispatch(updateElement({
           element_class,

@@ -10,7 +10,6 @@ const DropdownInput = ({
     value={initialValue}
     onChange={(e) => saveFunction(e.target.value)}
   >
-    {isActive ? '' : <option value=""> -- </option>}
     { Object.keys(options).map((optionKey) => (
       <option key={optionKey} value={optionKey}>{options[optionKey]}</option>
     ))}

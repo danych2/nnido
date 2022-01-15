@@ -21,6 +21,7 @@ const Node = ({ node_id }) => {
   const nodeDims = useSelector((state) => state.graph.graph.data.nodes[node_id].dims);
   const nodeName = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'name', 'node'), shallowEqual);
   const color = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'color_node', 'node'), shallowEqual);
+  const shape = useSelector((state) => getSystemProperty(state.graph.graph, node_id, 'shape_node', 'node'), shallowEqual);
   const position = (
     useSelector((state) => state.graph.graph.visualization.node_positions[node_id])
   );
@@ -64,14 +65,6 @@ const Node = ({ node_id }) => {
   useEffect(() => {
     const { x, y } = denormalizeCoords(position.x, position.y);
 
-    const rectStyle = {
-      stroke: config.DEFAULT_NODE_COLOR,
-    };
-
-    if (color) {
-      rectStyle.stroke = color;
-    }
-
     const g = d3.select(myRef.current);
 
     const nodeDragBehavior = createNodeDragBehavior(
@@ -103,11 +96,29 @@ const Node = ({ node_id }) => {
         setEditingNode(true);
       })
       .call(nodeDragBehavior);
+  }, [defaultLinkType, selection]);
 
+  // color change
+  useEffect(() => {
+    const rectStyle = {
+      stroke: color,
+    };
     const rect = d3.select(myRef.current).select('.node_body');
     Object.entries(rectStyle).forEach(([prop, val]) => rect.style(prop, val));
-  }, [color, defaultLinkType, selection]);
+  }, [color]);
 
+  // shape change
+  useEffect(() => {
+    const radius = shape.localeCompare('round') === 0 ? 15 : 0;
+    d3.select(myRef.current).selectAll('.node_adjacent_shadow,.node_shadow')
+      .attr('rx', radius * 1.3)
+      .attr('ry', radius * 1.3);
+    d3.select(myRef.current).select('.node_body')
+      .attr('rx', radius)
+      .attr('ry', radius);
+  }, [shape]);
+
+  // change focus while editing
   useEffect(() => {
     if (editingNode) {
       d3.select(myRef.current).select('foreignObject').select('input').node()

@@ -33,11 +33,12 @@ export function getSystemProperty(graph, element_id, property_id, element_class)
   const isNode = element_class.localeCompare('node') === 0;
   const element = isNode ? graph.data.nodes[element_id] : graph.data.links[element_id];
   const types = isNode ? graph.model.node_types : graph.model.link_types;
+  const property = properties[property_id];
   if (element[property_id]) {
     value = element[property_id];
-  } else if (element.type && types[element.type][property_id]) {
+  } else if (!property.individualProperty && element.type && types[element.type][property_id]) {
     value = types[element.type][property_id];
-  } else value = properties[property_id].default;
+  } else value = property.default;
   return value;
 }
 
