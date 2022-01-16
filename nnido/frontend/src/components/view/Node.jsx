@@ -62,6 +62,7 @@ const Node = ({ node_id }) => {
   const selectionAdjacent = useSelector((state) => state.graph.selectionAdjacent);
   const isAdjacentToSelected = selectionAdjacent.node_ids.includes(node_id);
 
+  // update drag behaviour
   useEffect(() => {
     const { x, y } = denormalizeCoords(position.x, position.y);
 

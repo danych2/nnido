@@ -77,7 +77,10 @@ export default function createNodeDragBehavior(
           dispatch(updateNodesPositions(new_positions));
         } else {
           const transform = d3.select(myRef.current).attr('transform').match(/\((\S+)\s*,\s*(\S+)\)/);
-          const new_position = normalizeCoords(parseFloat(transform[1]) + d3.event.dx, parseFloat(transform[2]) + d3.event.dy);
+          const new_position = normalizeCoords(
+            parseFloat(transform[1]) + d3.event.dx,
+            parseFloat(transform[2]) + d3.event.dy,
+          );
           dispatch(updateNodePosition({
             id: node_id,
             x: new_position.x,

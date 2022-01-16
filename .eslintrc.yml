@@ -15,7 +15,7 @@ parserOptions:
 plugins:
   - react
 parser:
-  babel-eslint
+  '@babel/eslint-parser'
 rules:
   react/jsx-props-no-spreading: off
   react/forbid-prop-types: off
