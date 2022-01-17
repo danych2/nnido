@@ -8,14 +8,12 @@ at the moment it is just a mind-mapping/diagramming tool
 You'll first need [Python 3](https://www.python.org/downloads/). You can use a [virtual environment](https://virtualenv.pypa.io/en/latest/#) if you don't want this installation to conflicts with other Python projects you might have.
 Then you'll need [Django](https://www.djangoproject.com/) and a few other packages ([Django REST framework](https://www.django-rest-framework.org/), [django-cors-headers](https://github.com/adamchainz/django-cors-headers), [django-rest-knox](https://github.com/James1345/django-rest-knox) and [NetworkX](https://networkx.org/)). I used Django 2.2.2, it will probably also work with other versions but I recommend using this one just to be sure.
 
-You can install those packages using pip:
+You can install those packages using the following command from within the virtual environment you created earlier:
+
 ```bash
-pip install django==2.2.2
-pip install djangorestframework
-pip install django-cors-headers
-pip install django-rest-knox
-pip install networkx
+(venv)$ pip install -r requirements.txt
 ```
+
 Then to setup the Django database you'll need to run the following:
 ```bash
 python nnido/manage.py makemigrations
