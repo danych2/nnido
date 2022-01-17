@@ -1,14 +1,14 @@
 import React from 'react';
 
-import GraphsList from './GraphsList';
-import NewGraph from './NewGraph';
+import GraphsListComponent from './GraphsList';
+import NewGraphComponent from './NewGraph';
 
 function Home() {
   return (
     <>
-      <NewGraph />
+      <NewGraphComponent />
       <br />
-      <GraphsList />
+      <GraphsListComponent />
     </>
   );
 }
