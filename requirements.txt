@@ -1,0 +1,5 @@
+django==2.2.2
+djangorestframework
+django-cors-headers
+django-rest-knox
+networkx
