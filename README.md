@@ -11,7 +11,7 @@ Then you'll need [Django](https://www.djangoproject.com/) and a few other packag
 You can install those packages using the following command from within the virtual environment you created earlier:
 
 ```bash
-(venv)$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Then to setup the Django database you'll need to run the following:
