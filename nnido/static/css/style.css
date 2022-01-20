@@ -192,3 +192,65 @@ input.seamless {
 .collapsibleContent {
   border-top: 1px solid black;
 }
+
+.buttonOutside {
+  display: inline-block;
+  position: relative;
+  width: auto;
+  height: 30px;
+  border: 1px solid black;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;
+  z-index: 1;
+  background: white;
+  padding-left: 7px;
+  padding-bottom: 7px;
+}
+
+.buttonMiddle{
+  box-sizing: border-box;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 4px;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  z-index: 3;
+  background: white;
+}
+
+.buttonOutside:active .buttonMiddle {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+
+.buttonCorner{
+  height: 1px;
+  width: 20px;
+  border-bottom: 1px solid black;
+  transform: rotate(-45deg);
+  transform-origin: bottom left;
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  z-index: -1;
+}
+
+.buttonOutside:active .buttonCorner {
+  visibility: hidden;
+}
+
+.buttonInside {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.buttonOutside:hover {
+  text-shadow: 0px 0.5px 0px black;
+}

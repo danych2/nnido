@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import Button from './Button';
 
 const Header = (props) => {
   const { isAuthenticated } = props.auth;
@@ -10,10 +11,21 @@ const Header = (props) => {
   const authLinks = (
     <div className="comp" style={{ flexShrink: '0' }}>
       <div>
-        <Link to="/">Inicio</Link>
+        <Button
+          text="Inicio"
+          onClick={() => { window.location.href = '/'; }}
+        />
         <span style={{ width: '10px' }}> </span>
-        <Link to="/info">?</Link>
-        <button type="submit" style={{ float: 'right' }} onClick={props.logout}>Cerrar sesión</button>
+        <Button
+          text="?"
+          onClick={() => { window.location.href = '/info'; }}
+        />
+        <span style={{ float: 'right' }}>
+          <Button
+            text="Cerrar sesión"
+            onClick={props.logout}
+          />
+        </span>
       </div>
     </div>
   );
