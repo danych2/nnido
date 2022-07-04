@@ -2,7 +2,7 @@ const config = {};
 
 config.CURRENT_VERSION = 1.2;
 
-config.DISTANCE_FROM_ARROW_END_TO_NODE_CENTER = 60;
+config.DISTANCE_FROM_ARROW_END_TO_NODE_CENTER = 16;
 config.NODE_SIZE_X = 70;
 config.NODE_SIZE_Y = 50;
 config.DEFAULT_LINK_COLOR = 'lightgray';

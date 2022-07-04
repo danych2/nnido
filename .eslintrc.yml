@@ -38,3 +38,4 @@ rules:
   jsx-a11y/control-has-associated-label: off
   jsx-a11y/alt-text: off
   linebreak-style: off
+  no-use-before-define: off

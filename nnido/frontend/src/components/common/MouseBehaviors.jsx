@@ -1,10 +1,11 @@
 import * as d3 from 'd3';
 import {
-  normalizeCoords, denormalizeCoords,
+  normalizeCoords, denormalizeCoords, dictFilter,
 } from '../../func';
 import {
   updateNodePosition, updateNodesPositions, createLink,
 } from '../../actions/graphs';
+import store from '../../store';
 
 export default function createNodeDragBehavior(
   node_id,
@@ -56,6 +57,7 @@ export default function createNodeDragBehavior(
           const old_y = parseFloat(transform[2]);
           d3.select(myRef.current)
             .attr('transform', `translate(${old_x + d3.event.dx}, ${old_y + d3.event.dy})`);
+          updateLinksConnectedToNode(node_id);
         }
         if (!draggingNodeRef.current) { setDraggingNode(true); }
       }
@@ -108,3 +110,9 @@ export default function createNodeDragBehavior(
       }
     });
 }
+
+const updateLinksConnectedToNode = (node_id) => {
+  const state = store.getState();
+  const linksIn = dictFilter(state.graph.graph.data.links, (x) => x.target === node_id);
+  const linksOut = dictFilter(state.graph.graph.data.links, (x) => x.source === node_id);
+};

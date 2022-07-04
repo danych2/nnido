@@ -133,7 +133,10 @@ const Node = ({ node_id }) => {
     dispatch(updateNode({
       id: node_id,
       data: {
-        dims,
+        dims: {
+          width: dims.width,
+          height: dims.height,
+        },
       },
     }));
   }, []);
@@ -146,7 +149,10 @@ const Node = ({ node_id }) => {
       dispatch(updateNode({
         id: node_id,
         data: {
-          dims,
+          dims: {
+            width: dims.width,
+            height: dims.height,
+          },
         },
       }));
     }

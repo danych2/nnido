@@ -51,7 +51,7 @@ svg {
 
 .line_hoverarea{
   stroke: white;
-  stroke-width: 15;
+  stroke-width: 10;
   stroke-opacity: 0;
 }
 

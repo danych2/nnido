@@ -89,7 +89,7 @@ const GraphViewer = () => {
           <defs>
             <marker
               id="arrowhead"
-              markerWidth="11"
+              markerWidth="16"
               markerHeight="9"
               refX="0"
               refY="4.5"
@@ -98,19 +98,20 @@ const GraphViewer = () => {
               stroke="black"
               strokeLinejoin="round"
               strokeWidth="1"
+              markerUnits="userSpaceOnUse"
             >
-              <polygon points="1 1, 10 4.5, 1 8" />
+              <polygon points="1 1, 15 4.5, 1 8" />
             </marker>
           </defs>
           <g id="nodes_and_links">
-            <g className="links">
-              { visibleLinks.map((link_id) => (
-                <Link key={link_id} link_id={link_id} />
-              ))}
-            </g>
             <g className="nodes">
               { visibleNodes.map((node_id) => (
                 <Node key={node_id} node_id={node_id} />
+              ))}
+            </g>
+            <g className="links">
+              { visibleLinks.map((link_id) => (
+                <Link key={link_id} link_id={link_id} />
               ))}
             </g>
           </g>
