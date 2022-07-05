@@ -49,7 +49,7 @@ function Info() {
       <br />
       Tipos de nodos y enlaces
       <br />
-      También puedes definir tipos de nodos o enlaces para poder crear fácilmente elementos que compartan los mismos atributos blablabla
+      [TODO]
       <br />
       <br />
       <br />

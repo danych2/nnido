@@ -183,7 +183,6 @@ export const updateElement = (payload) => (dispatch) => {
   }
 };
 
-
 // UPDATE Link
 export const updateLink = (payload) => (dispatch) => {
   dispatch({ type: UPDATE_LINK, payload });
