@@ -48,7 +48,9 @@ export const dictFilter = (obj, predicate) => Object.keys(obj)
 
 export function normalizeCoords(x, y) {
   const boundRect = document.getElementById('graph_container').getBoundingClientRect();
-  const { width, height } = boundRect;
+  let { width, height } = boundRect;
+  width = 1000;
+  height = 1000;
   let normX, normY;
   if (width > height) {
     normX = (x - (width - height) / 2) / height;
@@ -62,7 +64,9 @@ export function normalizeCoords(x, y) {
 
 export function denormalizeCoords(x, y) {
   const boundRect = document.getElementById('graph_container').getBoundingClientRect();
-  const { width, height } = boundRect;
+  let { width, height } = boundRect;
+  width = 1000;
+  height = 1000;
   let denormX, denormY;
   if (width > height) {
     denormX = x * height + (width - height) / 2;

@@ -22,6 +22,10 @@ svg {
     -ms-user-select: none; /* IE10+ */
 }
 
+line {
+  stroke-linecap: round;
+}
+
 .multiple_values {
   background-color:lightgray;
 }

@@ -81,11 +81,11 @@ Link.propTypes = {
   link_id: PropTypes.string.isRequired,
 };
 
-export const updateLinkPositionSimple = (link_id) => {
+export const updateLinkPositionSimple = (link_id, new_source, new_target) => {
   const state = store.getState();
   const link = state.graph.graph.data.links[link_id];
-  const positionSource = state.graph.graph.visualization.node_positions[link.source];
-  const positionTarget = state.graph.graph.visualization.node_positions[link.target];
+  const positionSource = new_source || state.graph.graph.visualization.node_positions[link.source];
+  const positionTarget = new_target || state.graph.graph.visualization.node_positions[link.target];
   const sourceSize = state.graph.graph.data.nodes[link.source].dims;
   const targetSize = state.graph.graph.data.nodes[link.target].dims;
   const source = denormalizeCoords(positionSource.x, positionSource.y);
@@ -95,28 +95,13 @@ export const updateLinkPositionSimple = (link_id) => {
 };
 
 const updateLinkPosition = (link_id, source, target, sourceSize, targetSize, directed) => {
-  // calculate link direction
-  const difference = { x: target.x - source.x, y: target.y - source.y };
-  const angle = Math.atan2(difference.y, difference.x);
-  const offset = [0, 0]; // HORIZONTAL, VERTICAL
-  if (Math.abs(angle) < Math.PI * 0.25) {
-    offset[0] = -1;
-  } else if (Math.abs(angle) > Math.PI * 0.75) {
-    offset[0] = 1;
-  } else if (angle > 0) {
-    offset[1] = -1;
-  } else {
-    offset[1] = 1;
-  }
+  const startPoint = getCrossPoint(source, target,
+    (sourceSize.width / 2 + config.PADDING_TEXT_NODE),
+    (sourceSize.height / 2 + config.PADDING_TEXT_NODE));
 
-  const startPoint = {
-    x: source.x + offset[0] * -(sourceSize.width / 2 + config.PADDING_TEXT_NODE),
-    y: source.y + offset[1] * -(sourceSize.height / 2 + config.PADDING_TEXT_NODE),
-  };
-  let endPoint = {
-    x: target.x + offset[0] * (targetSize.width / 2 + config.PADDING_TEXT_NODE),
-    y: target.y + offset[1] * (targetSize.height / 2 + config.PADDING_TEXT_NODE),
-  };
+  let endPoint = getCrossPoint(target, source,
+    (targetSize.width / 2 + config.PADDING_TEXT_NODE),
+    (targetSize.height / 2 + config.PADDING_TEXT_NODE));
 
   if (directed) {
     const difference = { x: endPoint.x - source.x, y: endPoint.y - source.y };
@@ -131,6 +116,35 @@ const updateLinkPosition = (link_id, source, target, sourceSize, targetSize, dir
     .attr('y1', startPoint.y)
     .attr('x2', endPoint.x)
     .attr('y2', endPoint.y);
+};
+
+const getCrossPoint = (thisCenter, thatCenter, halfWidth, halfHeight) => {
+  const difference = { x: thatCenter.x - thisCenter.x, y: thatCenter.y - thisCenter.y };
+
+  // Compute line between centers of nodes and its quadrant y = mx+c
+  const m = difference.y / difference.x;
+  const c = thisCenter.y - thisCenter.x * m;
+  const angle = Math.atan2(difference.y, difference.x);
+  const quadrant = [1, 1];
+  // (+,+)->quadrant I, (-,+)-> quadrant II, (-,-)-> quadrant III, (+,-)->quadrant IV
+  if (Math.abs(angle) < Math.PI / 2) quadrant[0] = -1;
+  if (angle < 0) quadrant[1] = -1;
+
+  // Find source cross point
+  // Which corner is the closest to the crossing?
+  const vertiEdge = thisCenter.x + quadrant[0] * -halfWidth;
+  const horiEdge = thisCenter.y + quadrant[1] * halfHeight;
+  const angleStartCorner = Math.atan2(horiEdge - thisCenter.y, vertiEdge - thisCenter.x);
+
+  // whichSide: true -> vertical side, false -> horizontal side
+  const halfPI = Math.PI / 2;
+  const whichSide = Math.abs(Math.abs(angle) - halfPI)
+    > Math.abs(Math.abs(angleStartCorner) - halfPI);
+
+  return {
+    x: whichSide * vertiEdge + !whichSide * ((horiEdge - c) / m),
+    y: whichSide * (vertiEdge * m + c) + !whichSide * horiEdge,
+  };
 };
 
 export default Link;

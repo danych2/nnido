@@ -25,34 +25,11 @@ const Node = ({ node_id }) => {
   const position = (
     useSelector((state) => state.graph.graph.visualization.node_positions[node_id])
   );
-  const linksIn = useSelector(
-    (state) => dictFilter(state.graph.graph.data.links, (x) => x.target === node_id),
-    shallowEqual,
-  );
-  const linksOut = useSelector(
-    (state) => dictFilter(state.graph.graph.data.links, (x) => x.source === node_id),
-    shallowEqual,
-  );
-  const defaultLinkType = useSelector((state) => state.graph.defaultLinkType);
 
   const [name, setName] = useState(nodeName);
   const [editingNode, setEditingNode] = useState(false);
-  const [draggingNode, setDraggingNode] = useState(false);
-  const [creatingLink, setCreatingLink] = useState(false);
 
   // References for variables that need to be accessed inside callbacks
-  const editingNodeRef = useRef();
-  editingNodeRef.current = editingNode;
-  const draggingNodeRef = useRef();
-  draggingNodeRef.current = draggingNode;
-  const creatingLinkRef = useRef();
-  creatingLinkRef.current = creatingLink;
-  const positionRef = useRef();
-  positionRef.current = position;
-  const linksInRef = useRef();
-  linksInRef.current = linksIn;
-  const linksOutRef = useRef();
-  linksOutRef.current = linksOut;
   const nodeRef = useRef();
   nodeRef.current = node;
 
@@ -71,15 +48,7 @@ const Node = ({ node_id }) => {
     const nodeDragBehavior = createNodeDragBehavior(
       node_id,
       dispatch,
-      positionRef,
       myRef,
-      creatingLinkRef,
-      setCreatingLink,
-      draggingNodeRef,
-      setDraggingNode,
-      defaultLinkType,
-      selectElements,
-      selection,
     );
 
     g.attr('transform', `translate(${x}, ${y})`)
@@ -93,11 +62,11 @@ const Node = ({ node_id }) => {
       })
       .on('dblclick', (e) => {
         d3.event.stopImmediatePropagation();
-        setName(nodeRef.current.name);
+        // setName(nodeRef.current.name);
         setEditingNode(true);
       })
       .call(nodeDragBehavior);
-  }, [defaultLinkType, selection]);
+  }, []);
 
   // color change
   useEffect(() => {
@@ -166,7 +135,10 @@ const Node = ({ node_id }) => {
       dispatch(updateNode({
         id: node_id,
         data: {
-          dims,
+          dims: {
+            width: dims.width,
+            height: dims.height,
+          },
         },
       }));
     }
