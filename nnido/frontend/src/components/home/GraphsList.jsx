@@ -23,8 +23,7 @@ export class GraphsList extends Component {
           <div className="comp" key={graph.pk}>
             <Link to={`/view/${graph.pk}`}>{ graph.name }</Link>
             <br />
-            Creado el
-            { new Date(graph.date).toLocaleDateString() }
+            { `Creado el ${new Date(graph.date).toLocaleDateString()}` }
             <br />
             <button type="button" onClick={this.props.deleteGraph.bind(this, graph.pk)}>Eliminar grafo</button>
           </div>
