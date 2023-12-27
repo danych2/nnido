@@ -16,13 +16,13 @@ pip install -r requirements.txt
 
 Then to setup the Django database you'll need to run the following:
 ```bash
-python nnido/manage.py makemigrations
-python nnido/manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 ```
 
 And you will also need to at least create an admin user in order to be able to [create other users](https://docs.djangoproject.com/en/3.1/topics/auth/default/#managing-users-in-the-admin), since regular signing up through the app is currently disabled:
 ```bash
-python nnido/manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
 If you want to make changes to the interface you'll also need to install [nodejs/npm](https://nodejs.org/en/download/). To automatically install all dependencies that are required run:
@@ -36,7 +36,7 @@ If any of this doesn't work please let me know!
 
 To run the server:
 ```bash
-python nnido/manage.py runserver
+python manage.py runserver
 ```
 
 To run npm/webpack so that it autocompiles while modifying the code:
