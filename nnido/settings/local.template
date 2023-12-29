@@ -1,0 +1,13 @@
+from .base import *
+import os
+
+SECRET_KEY = '*********'
+
+ALLOWED_HOSTS = ['your_server_domain_or_IP', 'second_domain_or_IP', . . ., 'localhost']
+
+DATABASES = {
+  default: {
+    ...
+  }
+}
+
