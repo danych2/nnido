@@ -1,4 +1,6 @@
 node_modules
+*.bat
+*.sh
 
 ### Django ###
 *.log
