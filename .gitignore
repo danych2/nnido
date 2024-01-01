@@ -2,6 +2,9 @@ node_modules
 *.bat
 *.sh
 
+#webpack output
+frontend/static/frontend/
+
 ### Django ###
 *.log
 *.pot
