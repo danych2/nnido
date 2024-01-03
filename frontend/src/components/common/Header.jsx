@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useState, useSelector } from 'react';
+import { useDispatch } from 'react-redux';
 import { login, logout } from '../../actions/auth';
 import Button from './Button';
 
-const Header = (props) => {
-  const { isAuthenticated } = props.auth;
+const Header = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const [signInData, setSignInData] = useState({
     username: '',
@@ -36,7 +34,7 @@ const Header = (props) => {
         <span style={{ float: 'right' }}>
           <Button
             text="Cerrar sesión"
-            onClick={props.logout}
+            onClick={logout}
           />
         </span>
       </div>
@@ -60,13 +58,4 @@ const Header = (props) => {
   return isAuthenticated ? authLinks : guestLinks;
 };
 
-Header.propTypes = {
-  auth: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default connect(mapStateToProps, { logout })(Header);
+export default Header;
