@@ -1,43 +1,29 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { createGraph } from '../../actions/graphs';
 
-export class NewGraph extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-    };
-  }
+const NewGraph = () => {
+  const [name, setName] = useState('');
+  const dispatch = useDispatch();
 
-  static propTypes = {
-    createGraph: PropTypes.func.isRequired,
-  };
+  const onChange = (e) => setName(e.target.value);
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
-
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    const { name } = this.state;
     const graph = { name };
-    this.props.createGraph(graph);
+    dispatch(createGraph(graph));
   };
 
-  render() {
-    const { name } = this.state;
-    return (
-      <div className="comp">
-        <form onSubmit={this.onSubmit}>
-          <label>Nombre</label>
-          <input type="text" name="name" onChange={this.onChange} value={name} />
-          <br />
-          <button type="submit">Crear grafo nuevo</button>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="comp">
+      <form onSubmit={onSubmit}>
+        <label>Nombre</label>
+        <input type="text" name="name" onChange={onChange} value={name} />
+        <br />
+        <button type="submit">Crear grafo nuevo</button>
+      </form>
+    </div>
+  );
+};
 
-export default connect(null, { createGraph })(NewGraph);
+export default NewGraph;

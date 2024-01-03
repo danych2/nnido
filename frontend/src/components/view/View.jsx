@@ -9,7 +9,7 @@ import Selection from './Selection';
 import SaveGraph from './SaveGraph';
 import Model from './Model';
 
-function View() {
+const View = () => {
   const dispatch = useDispatch();
 
   const urlParams = useParams();
@@ -54,6 +54,6 @@ function View() {
       </h1>
     </div>
   );
-}
+};
 
 export default View;

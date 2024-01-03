@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import GraphsListComponent from './GraphsList';
 import NewGraphComponent from './NewGraph';
 
-function Home() {
+const Home = () => {
   const user = useSelector((state) => state.auth.user);
   return (
     <>
@@ -13,6 +13,6 @@ function Home() {
       <GraphsListComponent />
     </>
   );
-}
+};
 
 export default Home;
