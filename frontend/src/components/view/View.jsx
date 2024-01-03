@@ -15,12 +15,13 @@ function View() {
   const urlParams = useParams();
   const graph_pk = useSelector((state) => state.graph.graph.pk);
   const graph_name = useSelector((state) => state.graph.graph.name);
+  const error = useSelector((state) => state.graph.error);
 
   useEffect(() => {
     dispatch(getGraph(urlParams.graph_id));
   }, [urlParams.graph_id]);
 
-  if (graph_pk) {
+  if (!error && graph_pk) {
     return (
       <>
         <div id="graph_name" style={{ flexShrink: '0' }}>
@@ -45,7 +46,14 @@ function View() {
       </>
     );
   }
-  return '';
+  return (
+    <div>
+      <h1>
+        Grafo no encontrado:
+        o bien no existe o no tiene permisos para verlo
+      </h1>
+    </div>
+  );
 }
 
 export default View;

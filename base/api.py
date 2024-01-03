@@ -5,14 +5,14 @@ from django.db.models import Q
 
 class GraphViewSet(viewsets.ModelViewSet):
     permission_classes = [
-        permissions.IsAuthenticated
+        permissions.IsAuthenticatedOrReadOnly
     ]
     serializer_class = GraphSerializer
 
     def get_queryset(self):
-        return Graph.objects.filter(
-            Q(owner=self.request.user) | Q(owner=None)
-            )
+        if (self.request.user.is_authenticated):
+            return Graph.objects.filter(owner=self.request.user)
+        return Graph.objects.filter(owner=None)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

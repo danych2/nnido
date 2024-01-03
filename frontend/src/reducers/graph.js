@@ -6,6 +6,7 @@ import {
   UPDATE_ATTRIBUTE, DELETE_ATTRIBUTE, UPDATE_PROPERTY, DELETE_PROPERTY,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
   SWITCH_TYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
+  ACCESS_ERROR,
 } from '../actions/types';
 import { dictFilter } from '../func';
 import config from '../config';
@@ -15,6 +16,7 @@ const initialState = {
   graph: {},
   selection: { ids: [], type: 'none' },
   selectionAdjacent: { node_ids: [], link_ids: [] },
+  error: false,
 };
 
 export default function (state = initialState, action) {
@@ -38,6 +40,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         graphs: action.payload,
+        error: false,
       };
     case GET_GRAPH:
       version = action.payload.version;
@@ -97,6 +100,7 @@ export default function (state = initialState, action) {
           model,
           version: config.CURRENT_VERSION,
         },
+        error: false,
       };
     case CREATE_GRAPH:
       return {
@@ -630,6 +634,12 @@ export default function (state = initialState, action) {
         },
       };
     }
+    case ACCESS_ERROR:
+      return {
+        ...state,
+        graph: {},
+        error: true,
+      };
 
     case UPDATE_GRAPH:
     default:

@@ -1,12 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import GraphsListComponent from './GraphsList';
 import NewGraphComponent from './NewGraph';
 
 function Home() {
+  const user = useSelector((state) => state.auth.user);
   return (
     <>
-      <NewGraphComponent />
+      {user && <NewGraphComponent /> }
       <br />
       <GraphsListComponent />
     </>

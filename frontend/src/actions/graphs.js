@@ -11,6 +11,7 @@ import {
   CREATE_NODE_TYPE, DELETE_NODE_TYPE, UPDATE_NODES, UPDATE_LINKS,
   CREATE_LINK_TYPE, DELETE_LINK_TYPE, UPDATE_TYPE,
   SWITCH_TYPE_FILTER, UPDATE_NODES_POSITIONS, SWITCH_SELECTION,
+  ACCESS_ERROR,
 } from './types';
 
 import { tokenConfig } from './auth';
@@ -35,7 +36,9 @@ export const getGraph = (id) => (dispatch, getState) => {
         type: GET_GRAPH,
         payload: res.data,
       });
-    }).catch((err) => console.log(err));
+    }).catch((err) => dispatch({
+      type: ACCESS_ERROR,
+    }));
 };
 
 // CREATE Graph

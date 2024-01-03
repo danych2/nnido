@@ -1,40 +1,35 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import { getGraphs, deleteGraph } from '../../actions/graphs';
 
-export class GraphsList extends Component {
-  static propTypes = {
-    graphs: PropTypes.array.isRequired,
-    getGraphs: PropTypes.func.isRequired,
-    deleteGraph: PropTypes.func.isRequired,
-  };
+const GraphsList = () => {
+  const graphs = useSelector((state) => state.graph.graphs);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.props.getGraphs();
-  }
+  useEffect(() => {
+    dispatch(getGraphs());
+  }, [dispatch, getGraphs, user]);
 
-  render() {
-    return (
+  return (
+    <>
+      {!user && (
+        <h4>Grafos públicos:</h4>
+      )}
       <div className="container">
-        { this.props.graphs.map((graph) => (
+        {graphs.map((graph) => (
           <div className="comp" key={graph.pk}>
-            <Link to={`/view/${graph.pk}`}>{ graph.name }</Link>
+            <Link to={`/view/${graph.pk}`}>{graph.name}</Link>
             <br />
-            { `Creado el ${new Date(graph.date).toLocaleDateString()}` }
+            {`Creado el ${new Date(graph.date).toLocaleDateString()}`}
             <br />
-            <button type="button" onClick={this.props.deleteGraph.bind(this, graph.pk)}>Eliminar grafo</button>
+            <button type="button" onClick={() => deleteGraph(graph.pk)}>Eliminar grafo</button>
           </div>
         ))}
       </div>
-    );
-  }
-}
+    </>
+  );
+};
 
-const mapStateToProps = (state) => ({
-  graphs: state.graph.graphs,
-});
-
-export default connect(mapStateToProps, { getGraphs, deleteGraph })(GraphsList);
+export default GraphsList;

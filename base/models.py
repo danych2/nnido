@@ -10,6 +10,6 @@ class Graph(models.Model):
     version = models.CharField(max_length=10)
     visualization = models.TextField(null=True)
     model = models.TextField(null=True)
-    owner = models.ForeignKey(User, related_name="graphs", on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(User, related_name="graphs", on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return self.name

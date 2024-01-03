@@ -22,8 +22,8 @@ function App() {
         <div style={{ display: 'flex', flexFlow: 'column nowrap', height: '100%' }}>
           <Header />
           <Switch>
-            <PrivateRoute exact path="/" component={Home} />
-            <PrivateRoute path="/view/:graph_id" component={View} />
+            <Route exact path="/" component={Home} />
+            <Route path="/view/:graph_id" component={View} />
             <PrivateRoute path="/info" component={Info} />
             {/*
               <Route exact path="/register" component={Register} />
