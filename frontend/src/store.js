@@ -1,15 +1,13 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers';
+import { configureStore } from '@reduxjs/toolkit';
+import graphReducer from './reducers/graph';
+import authReducer from './reducers/auth';
 
-const initialState = {};
-
-const middleware = [thunk];
-
-const store = createStore(
-  rootReducer,
-  initialState,
-  applyMiddleware(...middleware),
-);
+const store = configureStore({
+  // Automatically calls `combineReducers`
+  reducer: {
+    graph: graphReducer,
+    auth: authReducer,
+  },
+});
 
 export default store;
