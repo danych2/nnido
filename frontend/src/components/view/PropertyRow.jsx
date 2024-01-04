@@ -7,7 +7,7 @@ import TextInput from './TextInput';
 import ColorInput from './ColorInput';
 import CheckboxInput from './CheckboxInput';
 import DropdownInput from './DropdownInput';
-import { updateProperty, deleteProperty } from '../../actions/graphs';
+import { updateProperty, deleteProperty } from '../../slices/graphSlice';
 import properties from '../../properties';
 
 const PropertyRow = ({

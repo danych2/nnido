@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import graphReducer from './reducers/graph';
+import graphReducer from './slices/graphSlice';
 import authReducer from './reducers/auth';
 
 const store = configureStore({

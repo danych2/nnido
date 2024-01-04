@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createGraph } from '../../actions/graphs';
+import { createGraph } from '../../slices/graphSlice';
 
 const NewGraph = () => {
   const [name, setName] = useState('');

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { createLinkType, updateDefault, switchTypeFilter } from '../../actions/graphs';
+import { createLinkType, updateDefault, switchTypeFilter } from '../../slices/graphSlice';
 import { CollapsibleType } from '../../func';
 import EditType from './EditType';
 

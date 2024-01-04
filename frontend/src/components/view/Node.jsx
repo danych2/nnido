@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 
 import {
   selectElements, selectionSwitch, updateNode, updateProperty,
-} from '../../actions/graphs';
+} from '../../slices/graphSlice';
 import {
   denormalizeCoords, dictFilter, getSystemProperty,
 } from '../../func';

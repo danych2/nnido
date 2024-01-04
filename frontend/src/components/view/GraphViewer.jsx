@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import Node from './Node';
 import Link from './Link';
 
-import { createNode, updateZoom, selectElements } from '../../actions/graphs';
+import { createNode, updateZoom, selectElements } from '../../slices/graphSlice';
 import { normalizeCoords } from '../../func';
 import RubberBand from './RubberBand';
 import Toolbar from '../common/Toolbar';

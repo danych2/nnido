@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { deleteLink } from '../../actions/graphs';
+import { deleteLink } from '../../slices/graphSlice';
 
 const DeleteLink = () => {
   const dispatch = useDispatch();

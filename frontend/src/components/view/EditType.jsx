@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateType } from '../../actions/graphs';
+import { updateType } from '../../slices/graphSlice';
 import ColorInput from './ColorInput';
 import config from '../../config';
 import properties from '../../properties';

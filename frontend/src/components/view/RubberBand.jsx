@@ -5,7 +5,7 @@ import * as d3 from 'd3';
 
 import {
   selectElements,
-} from '../../actions/graphs';
+} from '../../slices/graphSlice';
 import { normalizeCoords } from '../../func';
 
 const RubberBand = () => {

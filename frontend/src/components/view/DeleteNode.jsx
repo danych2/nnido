@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { deleteNode } from '../../actions/graphs';
+import { deleteNode } from '../../slices/graphSlice';
 
 const DeleteNode = () => {
   const dispatch = useDispatch();

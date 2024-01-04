@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getGraphs, deleteGraph } from '../../actions/graphs';
+import { getGraphs, deleteGraph } from '../../slices/graphSlice';
 
 const GraphsList = () => {
   const graphs = useSelector((state) => state.graph.graphs);

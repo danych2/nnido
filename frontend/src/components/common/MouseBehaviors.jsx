@@ -4,7 +4,7 @@ import {
 } from '../../func';
 import {
   updateNodePosition, updateNodesPositions, createLink,
-} from '../../actions/graphs';
+} from '../../slices/graphSlice';
 import store from '../../store';
 import { updateLinkPositionSimple } from '../view/Link';
 

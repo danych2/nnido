@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import * as d3 from 'd3';
 
-import { selectElements } from '../../actions/graphs';
+import { selectElements } from '../../slices/graphSlice';
 import { denormalizeCoords, getSystemProperty } from '../../func';
 import config from '../../config';
 import store from '../../store';

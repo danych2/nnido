@@ -7,7 +7,7 @@ import {
   deleteNode, deleteLink, updateNode,
   updateMultipleNodes, updateAttribute, deleteAttribute,
   selectElements,
-} from '../../actions/graphs';
+} from '../../slices/graphSlice';
 
 import { getAttributeMini } from '../../func';
 import properties from '../../properties';
