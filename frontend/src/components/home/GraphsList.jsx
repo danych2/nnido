@@ -24,7 +24,7 @@ const GraphsList = () => {
             <br />
             {`Creado el ${new Date(graph.date).toLocaleDateString()}`}
             <br />
-            <button type="button" onClick={() => deleteGraph(graph.pk)}>Eliminar grafo</button>
+            <button type="button" onClick={() => dispatch(deleteGraph(graph.pk))}>Eliminar grafo</button>
           </div>
         ))}
       </div>

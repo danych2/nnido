@@ -64,7 +64,7 @@ const GraphViewer = () => {
     svg.call(zoom_behavior)
       .on('dblclick.zoom', null)
       .on('click', () => {
-        dispatch(selectElements({ ids: [], type: 'none' }));
+        // dispatch(selectElements({ ids: [], type: 'none' }));
       }).on('dblclick', () => {
         const id = uuid();
         const zoomTransform = d3.zoomTransform(svg.node());

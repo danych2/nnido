@@ -15,7 +15,7 @@ const initialState = {
 };
 
 export const getGraphs = createAsyncThunk('graph/getAll', async (_, { getState }) => {
-  const res = await axios.get('/api/graphs', tokenConfig(getState));
+  const res = await axios.get('/api/graphs/', tokenConfig(getState));
   return res.data;
 });
 
@@ -25,9 +25,9 @@ export const getGraph = createAsyncThunk('graph/get', async (graphId, { getState
 });
 
 export const createGraph = createAsyncThunk('graph/create', async (graph, { getState }) => {
-  const res = await axios.post('/api/graphs', {
+  const res = await axios.post('/api/graphs/', {
     ...graph,
-    data: JSON.stringify({ nodes: [], links: [] }),
+    data: JSON.stringify({ nodes: {}, links: {}, adjacencylists: {} }),
     visualization: JSON.stringify({
       node_positions: {},
       node_types_filtered: {},
