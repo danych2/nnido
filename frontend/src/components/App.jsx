@@ -11,7 +11,7 @@ import PrivateRoute from './common/PrivateRoute';
 import Header from './common/Header';
 
 import store from '../store';
-import { loadUser } from '../actions/auth';
+import { loadUser } from '../slices/authSlice';
 
 function App() {
   store.dispatch(loadUser());

@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import graphReducer from './slices/graphSlice';
-import authReducer from './reducers/auth';
+import authReducer from './slices/authSlice';
 
 const store = configureStore({
   // Automatically calls `combineReducers`

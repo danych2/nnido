@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { login } from '../../actions/auth';
+import { login } from '../../slices/authSlice';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -17,7 +17,7 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(username, password));
+    dispatch(login({ username, password }));
   };
 
   if (isAuthenticated) {

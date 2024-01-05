@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../../actions/auth';
+import { login, logout } from '../../slices/authSlice';
 import Button from './Button';
 
 const Header = () => {
@@ -16,7 +16,7 @@ const Header = () => {
   const onChange = (e) => setSignInData({ ...signInData, [e.target.name]: e.target.value });
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(username, password));
+    dispatch(login({ username, password }));
   };
 
   const authLinks = (
@@ -34,7 +34,7 @@ const Header = () => {
         <span style={{ float: 'right' }}>
           <Button
             text="Cerrar sesión"
-            onClick={logout}
+            onClick={() => dispatch(logout())}
           />
         </span>
       </div>

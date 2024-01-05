@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 
-import { tokenConfig } from '../actions/auth';
+import { tokenConfig } from './authSlice';
 import config from '../config';
 import { dictFilter } from '../func';
 
