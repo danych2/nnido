@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import eye_off from './images/eye_off.png';
+import eye_on from './images/eye_on.png';
 
 import properties from './properties';
 
@@ -99,9 +101,9 @@ export const CollapsibleType = (props) => (
           </span>
           <button type="button" className="button" onClick={(e) => props.visibilityChange(props.id)}>
             { props.hidden ? (
-              <img src="../../static/icons/eye_off.png" style={{ height: '10px' }} />
+              <img src={eye_off} style={{ height: '10px' }} />
             ) : (
-              <img src="../../static/icons/eye_on.png" style={{ height: '10px' }} />
+              <img src={eye_on} style={{ height: '10px' }} />
             )}
           </button>
           <input type="radio" name={props.group} value={props.id} onChange={props.defaultChange} />
