@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getGraphs, deleteGraph } from '../../slices/graphSlice';
+import { getGraphs } from '../../slices/graphSlice';
+import GraphCard from './GraphCard';
 
 const GraphsList = () => {
   const graphs = useSelector((state) => state.graph.graphs);
@@ -19,13 +19,12 @@ const GraphsList = () => {
       )}
       <div className="container">
         {graphs.map((graph) => (
-          <div className="comp" key={graph.pk}>
-            <Link to={`/view/${graph.pk}`}>{graph.name}</Link>
-            <br />
-            {`Creado el ${new Date(graph.date).toLocaleDateString()}`}
-            <br />
-            <button type="button" onClick={() => dispatch(deleteGraph(graph.pk))}>Eliminar grafo</button>
-          </div>
+          <GraphCard
+            key={graph.id}
+            id={graph.id}
+            name={graph.name}
+            date={graph.date}
+          />
         ))}
       </div>
     </>

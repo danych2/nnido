@@ -1,19 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Button.css';
 
 const Button = ({
   text, onClick,
 }) => (
   <div
-    className="buttonOutside"
+    className="button"
     onClick={onClick}
   >
-    <div className="buttonMiddle">
-      <div className="buttonInside">
-        {text}
-      </div>
-    </div>
-    <div className="buttonCorner" />
+    {text}
   </div>
 );
 

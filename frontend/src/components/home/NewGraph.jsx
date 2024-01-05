@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createGraph } from '../../slices/graphSlice';
+import Button from '../common/Button';
 
 const NewGraph = () => {
   const [name, setName] = useState('');
@@ -8,20 +9,15 @@ const NewGraph = () => {
 
   const onChange = (e) => setName(e.target.value);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const graph = { name };
-    dispatch(createGraph(graph));
-  };
-
   return (
     <div className="comp">
-      <form onSubmit={onSubmit}>
-        <label>Nombre</label>
-        <input type="text" name="name" onChange={onChange} value={name} />
-        <br />
-        <button type="submit">Crear grafo nuevo</button>
-      </form>
+      <label>Nombre</label>
+      <input type="text" name="name" onChange={onChange} value={name} />
+      <br />
+      <Button
+        text="Crear grafo nuevo"
+        onClick={() => dispatch(createGraph({ name }))}
+      />
     </div>
   );
 };

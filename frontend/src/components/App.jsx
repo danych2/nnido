@@ -10,6 +10,7 @@ import Login from './accounts/Login';
 import PrivateRoute from './common/PrivateRoute';
 import Header from './common/Header';
 import '../style.css';
+import './App.css';
 
 import store from '../store';
 import { loadUser } from '../slices/authSlice';
@@ -20,7 +21,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div style={{ display: 'flex', flexFlow: 'column nowrap', height: '100%' }}>
+        <div id="main">
           <Header />
           <Switch>
             <Route exact path="/" component={Home} />

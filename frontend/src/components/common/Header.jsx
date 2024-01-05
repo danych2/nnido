@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../../slices/authSlice';
 import Button from './Button';
+import './Header.css';
+import logo from '../../images/logo_nnido_trans.png';
 
 const Header = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -19,43 +21,46 @@ const Header = () => {
     dispatch(login({ username, password }));
   };
 
-  const authLinks = (
-    <div className="comp" style={{ flexShrink: '0' }}>
-      <div>
-        <Button
-          text="Inicio"
-          onClick={() => { window.location.href = '/'; }}
-        />
-        <span style={{ width: '10px' }}> </span>
-        <Button
-          text="?"
-          onClick={() => { window.location.href = '/info'; }}
-        />
-        <span style={{ float: 'right' }}>
-          <Button
-            text="Cerrar sesión"
-            onClick={() => dispatch(logout())}
-          />
-        </span>
-      </div>
-    </div>
+  const headerLeft = isAuthenticated ? (
+    <span>
+      <Button
+        text="Inicio"
+        onClick={() => { window.location.href = '/'; }}
+      />
+      <span style={{ width: '10px' }}> </span>
+      <Button
+        text="?"
+        onClick={() => { window.location.href = '/info'; }}
+      />
+    </span>
+  ) : <span />;
+
+  const headerRight = isAuthenticated ? (
+    <span>
+      <Button
+        text="Cerrar sesión"
+        onClick={() => dispatch(logout())}
+      />
+    </span>
+  ) : (
+    <span>
+      <label>Nombre de usuario:</label>
+      <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
+      <br />
+      <label>Contraseña:</label>
+      <input type="text" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
+      <br />
+      <Button text="Iniciar sesión" onClick={() => dispatch(login({ username, password }))} />
+    </span>
   );
 
-  const guestLinks = (
-    <div className="comp" style={{ flexShrink: '0' }}>
-      <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'row' }}>
-        <label>Nombre de usuario:</label>
-        <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
-        <br />
-        <label>Contraseña:</label>
-        <input type="text" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
-        <br />
-        <button type="submit">Iniciar sesión</button>
-      </form>
+  return (
+    <div id="header" className="comp">
+      { headerLeft }
+      <img src={logo} style={{ height: '50px' }} />
+      { headerRight }
     </div>
   );
-
-  return isAuthenticated ? authLinks : guestLinks;
 };
 
 export default Header;

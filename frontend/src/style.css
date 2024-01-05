@@ -5,6 +5,10 @@
   --link-shadow-adjacent: silver;
   --node-shadow-selected: gray;
   --node-shadow-adjacent: gainsboro;
+
+  --background-color: #F9F6EE;
+
+  --margin: 5px;
 }
 
 html {
@@ -13,6 +17,7 @@ html {
 
 body {
   font-family: monospace;
+  background-color: var(--background-color);
 }
 
 svg {
@@ -116,10 +121,6 @@ line {
   overflow: hidden; /* this is to create a new float context */
 }
 
-div.comp {
-    font-size: 1rem;
-}
-
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr
@@ -139,17 +140,9 @@ button {
   margin: 2px;
 }
 
-button:hover {
-  text-shadow: 0px 0.5px 0px black;
-}
-
 .button {
   cursor: pointer;
   text-align: center;
-}
-
-.button:hover {
-  text-shadow: 0px 0.5px 0px black;
 }
 
 select {
@@ -172,7 +165,10 @@ input {
 input[type=text] {
   border-style: solid;
   border-width: 1px 1px;
-  border-color: white black black black;
+  border-color: black;
+  border-radius: 3px;
+  box-shadow: inset 1px 1px 4px -2px black,
+  inset -1px -1px 4px -4px white;
   margin: 2px 3px;
 }
 
@@ -195,66 +191,4 @@ input.seamless {
 
 .collapsibleContent {
   border-top: 1px solid black;
-}
-
-.buttonOutside {
-  display: inline-block;
-  position: relative;
-  width: auto;
-  height: 30px;
-  border: 1px solid black;
-  margin: 0px;
-  padding: 0px;
-  cursor: pointer;
-  z-index: 1;
-  background: white;
-  padding-left: 7px;
-  padding-bottom: 7px;
-}
-
-.buttonMiddle{
-  box-sizing: border-box;
-  border-left: 1px solid black;
-  border-bottom: 1px solid black;
-  padding: 4px;
-  height: 100%;
-  width: 100%;
-  text-align: center;
-  z-index: 3;
-  background: white;
-}
-
-.buttonOutside:active .buttonMiddle {
-  height: 100%;
-  width: 100%;
-  border: none;
-}
-
-.buttonCorner{
-  height: 1px;
-  width: 20px;
-  border-bottom: 1px solid black;
-  transform: rotate(-45deg);
-  transform-origin: bottom left;
-  position: absolute;
-  bottom: -1px;
-  left: 0px;
-  z-index: -1;
-}
-
-.buttonOutside:active .buttonCorner {
-  visibility: hidden;
-}
-
-.buttonInside {
-  text-align: center;
-  position: relative;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-.buttonOutside:hover {
-  text-shadow: 0px 0.5px 0px black;
 }
