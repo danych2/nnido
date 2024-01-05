@@ -124,6 +124,7 @@ export const graphSlice = createSlice({
       };
     },
     updateMultipleNodes(state, action) {
+      // payload: {ids: [xxx, yyy, ...], data: {data to be changed....}}
       const newNodes = {};
       const { ids, data } = action.payload;
       ids.forEach((id) => {
