@@ -17,6 +17,8 @@ const View = () => {
   const graph_name = useSelector((state) => state.graph.graph.name);
   const error = useSelector((state) => state.graph.error);
 
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   useEffect(() => {
     dispatch(getGraph(urlParams.graph_id));
   }, [urlParams.graph_id]);
@@ -40,7 +42,7 @@ const View = () => {
             <br />
             <Model />
             <br />
-            <SaveGraph />
+            {isAuthenticated && <SaveGraph />}
           </div>
         </div>
       </>
