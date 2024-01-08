@@ -1,0 +1,48 @@
+.card {
+  position: relative;
+  margin: var(--margin);
+  border-radius: 5px;
+  border: 1px solid rgba(125,125,125,.3);
+  box-shadow: -1px -1px 4px -1px white,
+    1px 1px 6px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
+}
+
+.card_info:hover {
+  background-color: rgba(125,125,125,.1);
+  box-shadow: -1px -1px 2px -1px white,
+    1px 1px 4px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
+}
+
+.card_info {
+  cursor: pointer;
+  padding: var(--margin);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: calc(1em + 3*var(--margin));
+}
+
+.card_delete_button {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: var(--margin);
+  background-color: var(--background-color);
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top: 1px solid rgba(125,125,125,.3);
+  border-left: 1px solid rgba(125,125,125,.3);
+}
+
+.card_delete_button:hover {
+  background-color: rgba(125,125,125,.1);
+  box-shadow: -1px -1px 2px -1px white,
+    1px 1px 4px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
+}

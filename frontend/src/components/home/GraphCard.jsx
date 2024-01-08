@@ -4,16 +4,21 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { deleteGraph } from '../../slices/graphSlice';
 import Button from '../common/Button';
+import './GraphCard.css';
 
 const GraphCard = ({ id, name, date }) => {
   const dispatch = useDispatch();
   return (
-    <div className="comp" key={id}>
-      <Link to={`/view/${id}`}>{name}</Link>
-      <br />
-      {`Creado el ${new Date(date).toLocaleDateString()}`}
-      <br />
-      <Button text="Eliminar grafo" onClick={() => dispatch(deleteGraph(id))} />
+    <div className="card" key={id}>
+      <div className="card_info">
+        <Link to={`/view/${id}`}>
+          {name}
+          <br />
+          <br />
+          <small>{`Creado el ${new Date(date).toLocaleDateString()}`}</small>
+        </Link>
+      </div>
+      <Button text="Eliminar grafo" onClick={() => dispatch(deleteGraph(id))} styleClass="card_delete_button" />
     </div>
   );
 };

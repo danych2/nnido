@@ -20,8 +20,8 @@ const GraphsList = () => {
       <div className="container">
         {graphs.map((graph) => (
           <GraphCard
-            key={graph.id}
-            id={graph.id}
+            key={graph.pk}
+            id={graph.pk}
             name={graph.name}
             date={graph.date}
           />
