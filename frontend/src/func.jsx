@@ -94,9 +94,9 @@ export function getTextWidth(text, font) {
 export const CollapsibleType = (props) => (
   <div className="collapsible">
     <details>
-      <summary className="button">
+      <summary className="collapsible_button">
         <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr 1fr', maxWidth: 'calc(100% - 20px)' }}>
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {props.title}
           </span>
           <button type="button" className="button" onClick={(e) => props.visibilityChange(props.id)}>

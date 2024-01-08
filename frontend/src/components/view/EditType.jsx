@@ -92,7 +92,7 @@ const EditType = ({ typeId, element_class }) => {
           <br />
         </div>
       ))}
-      <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} />
+      <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} style={{ width: '80%' }} />
       <button className="button" type="button" onClick={addAttribute}>+</button>
       <br />
     </>

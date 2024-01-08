@@ -190,8 +190,29 @@ input.seamless {
 }
 
 .collapsible {
-  border: 1px solid black;
-  margin-bottom: 2px;
+  margin: var(--margin);
+  padding: var(--margin);
+  border-radius: 5px;
+  border: 1px solid rgba(125,125,125,.3);
+  box-shadow: -1px -1px 4px -1px white,
+    1px 1px 6px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
+}
+
+.collapsible_button {
+  position: relative;
+  width: auto;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.collapsible_button:hover {
+  background-color: rgba(125,125,125,.1);
+  box-shadow: -1px -1px 2px -1px white,
+    1px 1px 4px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
 }
 
 .collapsibleContent {
