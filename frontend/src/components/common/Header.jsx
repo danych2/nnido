@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { login, logout } from '../../slices/authSlice';
 import Button from './Button';
 import './Header.css';
@@ -16,24 +17,23 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const onChange = (e) => setSignInData({ ...signInData, [e.target.name]: e.target.value });
-  const onSubmit = (e) => {
-    e.preventDefault();
-    dispatch(login({ username, password }));
-  };
+  const location = useLocation();
 
-  const headerLeft = isAuthenticated ? (
+  const headerLeft = (
     <span>
-      <Button
-        text="Inicio"
-        onClick={() => { window.location.href = '/'; }}
-      />
+      { location.pathname !== '/' && (
+        <Button
+          text="Inicio"
+          onClick={() => { window.location.href = '/'; }}
+        />
+      )}
       <span style={{ width: '10px' }}> </span>
       <Button
         text="?"
         onClick={() => { window.location.href = '/info'; }}
       />
     </span>
-  ) : <span />;
+  );
 
   const headerRight = isAuthenticated ? (
     <span>
@@ -44,10 +44,10 @@ const Header = () => {
     </span>
   ) : (
     <span>
-      <label>Nombre de usuario:</label>
+      <label><small>Nombre de usuario:</small></label>
       <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
       <br />
-      <label>Contraseña:</label>
+      <label><small>Contraseña:</small></label>
       <input type="text" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
       <br />
       <Button text="Iniciar sesión" onClick={() => dispatch(login({ username, password }))} />
@@ -57,7 +57,15 @@ const Header = () => {
   return (
     <div id="header" className="comp">
       { headerLeft }
-      <img src={logo} style={{ height: '50px' }} />
+      <img
+        src={logo}
+        style={{
+          height: '50px',
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
+        }}
+      />
       { headerRight }
     </div>
   );
