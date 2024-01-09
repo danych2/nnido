@@ -26,7 +26,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/view/:graph_id" component={View} />
-            <PrivateRoute path="/info" component={Info} />
+            <Route path="/info" component={Info} />
             {/*
               <Route exact path="/register" component={Register} />
               Signing up is disabled until all security concerns are dealt with
