@@ -84,7 +84,7 @@ const GraphViewer = () => {
 
   return (
     <>
-      <div ref={myRef} className="comp">
+      <div ref={myRef} className="comp" style={{ borderBottomLeftRadius: '5px', padding: '0px' }}>
         <svg id="graph_container" width="100%" height="100%">
           <defs>
             <marker

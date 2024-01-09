@@ -1,6 +1,7 @@
 #main {
-  display: 'flex';
-  flex-flow: 'column nowrap';
-  height: '100%';
-  margin: var(--margin);
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  padding: var(--margin);
+  box-sizing: border-box;
 }
