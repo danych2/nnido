@@ -11,7 +11,8 @@ const initialState = {
   graph: {},
   selection: { ids: [], type: 'none' },
   selectionAdjacent: { node_ids: [], link_ids: [] },
-  error: false,
+  graphListStatus: 'loading',
+  graphStatus: 'loading',
 };
 
 export const getGraphs = createAsyncThunk('graph/getAll', async (_, { getState }) => {
@@ -429,7 +430,15 @@ export const graphSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getGraphs.fulfilled, (state, action) => {
       state.graphs = action.payload;
+      state.graphListStatus = 'loaded';
     })
+      .addCase(getGraphs.pending, (state, action) => {
+        state.graphListStatus = 'loading';
+      })
+      .addCase(getGraphs.rejected, (state, action) => {
+        console.log(action.error.message);
+        state.graphListStatus = 'error';
+      })
       .addCase(getGraph.fulfilled, (state, action) => {
         const { version } = action.payload;
         let data = JSON.parse(action.payload.data);
@@ -486,26 +495,21 @@ export const graphSlice = createSlice({
           model,
           version: config.CURRENT_VERSION,
         };
+        state.graphStatus = 'loaded';
+      })
+      .addCase(getGraph.pending, (state, action) => {
+        state.graphStatus = 'loading';
+      })
+      .addCase(getGraph.rejected, (state, action) => {
+        console.log(action.error.message);
+        state.graphStatus = 'error';
       })
       .addCase(createGraph.fulfilled, (state, action) => {
         state.graphs.push(action.payload);
       })
       .addCase(deleteGraph.fulfilled, (state, action) => {
         state.graphs = state.graphs.filter((graph) => graph.pk !== action.payload);
-      })
-      .addMatcher(
-        (action) => action.type.endsWith('/fulfilled'),
-        (state) => {
-          state.error = false;
-        },
-      )
-      .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
-        (state, action) => {
-          console.log(action.error.message);
-          state.error = true;
-        },
-      );
+      });
   },
 });
 

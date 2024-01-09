@@ -15,7 +15,7 @@ const View = () => {
   const urlParams = useParams();
   const graph_pk = useSelector((state) => state.graph.graph.pk);
   const graph_name = useSelector((state) => state.graph.graph.name);
-  const error = useSelector((state) => state.graph.error);
+  const status = useSelector((state) => state.graph.graphStatus);
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -23,7 +23,7 @@ const View = () => {
     dispatch(getGraph(urlParams.graph_id));
   }, [urlParams.graph_id]);
 
-  if (!error && graph_pk) {
+  if (status === 'loaded' && graph_pk) {
     return (
       <>
         <div id="graph_name" style={{ flexShrink: '0' }}>
@@ -46,6 +46,13 @@ const View = () => {
           </div>
         </div>
       </>
+    );
+  }
+  if (status === 'loading') {
+    return (
+      <div>
+        <h1>Cargando grafo...</h1>
+      </div>
     );
   }
   return (
