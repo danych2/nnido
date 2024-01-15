@@ -1,15 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-
-import NodeTypes from './NodeTypes';
-import LinkTypes from './LinkTypes';
+import React from 'react';
+import ElementTypes from './ElementTypes';
 
 const Model = () => (
   <div className="comp">
-    <NodeTypes />
+    <ElementTypes isNodes />
     <br />
-    <LinkTypes />
+    <ElementTypes isNodes={false} />
   </div>
 );
 
