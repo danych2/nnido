@@ -45,22 +45,24 @@ const Header = () => {
       ) : (
         <>
           <table>
-            <tr>
-              <td>
-                <label><small>Nombre de usuario:</small></label>
-              </td>
-              <td>
-                <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label><small>Contraseña:</small></label>
-              </td>
-              <td>
-                <input type="password" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>
+                  <label><small>Nombre de usuario:</small></label>
+                </td>
+                <td>
+                  <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label><small>Contraseña:</small></label>
+                </td>
+                <td>
+                  <input type="password" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
+                </td>
+              </tr>
+            </tbody>
           </table>
           <br />
           <Button text="Iniciar sesión" onClick={() => dispatch(login({ username, password }))} />
