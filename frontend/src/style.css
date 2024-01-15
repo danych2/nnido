@@ -191,7 +191,6 @@ input.seamless {
 
 .collapsible {
   margin: var(--margin);
-  padding: var(--margin);
   border-radius: 5px;
   border: 1px solid rgba(125,125,125,.3);
   box-shadow: -1px -1px 4px -1px white,
@@ -201,6 +200,7 @@ input.seamless {
 }
 
 .collapsible_button {
+  padding: var(--margin);
   position: relative;
   width: auto;
   cursor: pointer;
@@ -215,6 +215,7 @@ input.seamless {
     inset -1px -1px 4px -4px black;
 }
 
-.collapsibleContent {
+.collapsible_content {
+  padding: var(--margin);
   border-top: 1px solid black;
 }

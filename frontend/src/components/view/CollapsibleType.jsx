@@ -8,7 +8,7 @@ const CollapsibleType = (props) => (
     <div className="collapsible">
       <details>
         <summary className="collapsible_button">
-          <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr 1fr', maxWidth: 'calc(100% - 20px)' }}>
+          <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr', maxWidth: 'calc(100% - 20px)' }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis',
             }}
@@ -24,7 +24,7 @@ const CollapsibleType = (props) => (
             </button>
           </span>
         </summary>
-        <div className="collapsibleContent">
+        <div className="collapsible_content">
           {props.children}
         </div>
       </details>
