@@ -1,6 +1,36 @@
 #header {
-  padding: var(--margin);
   border-radius: 5px 5px 0px 0px;
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  height: calc(4em + 2 * var(--margin));
+}
+
+#header > div {
+  top: var(--margin);
+}
+
+#header-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#header-center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+#header-center img {
+  height: 4em;
+}
+
+#header-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#header-right td {
+  text-align: right;
 }

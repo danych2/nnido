@@ -167,7 +167,7 @@ input {
   font-size: 1rem;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
   border-style: solid;
   border-width: 1px 1px;
   border-color: black;
@@ -177,7 +177,7 @@ input[type=text] {
   margin: 2px 3px;
 }
 
-input[type=text]:hover {
+input[type=text]:hover, input[type=password]:hover {
   border-color: black;
 }
 

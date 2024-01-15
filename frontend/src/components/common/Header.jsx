@@ -20,7 +20,7 @@ const Header = () => {
   const location = useLocation();
 
   const headerLeft = (
-    <span>
+    <div id="header-left">
       { location.pathname !== '/' && (
         <Button
           text="Inicio"
@@ -32,40 +32,49 @@ const Header = () => {
         text="?"
         onClick={() => { window.location.href = '/info'; }}
       />
-    </span>
+    </div>
   );
 
-  const headerRight = isAuthenticated ? (
-    <span>
-      <Button
-        text="Cerrar sesión"
-        onClick={() => dispatch(logout())}
-      />
-    </span>
-  ) : (
-    <span>
-      <label><small>Nombre de usuario:</small></label>
-      <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
-      <br />
-      <label><small>Contraseña:</small></label>
-      <input type="text" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
-      <br />
-      <Button text="Iniciar sesión" onClick={() => dispatch(login({ username, password }))} />
-    </span>
+  const headerRight = (
+    <div id="header-right">
+      { isAuthenticated ? (
+        <Button
+          text="Cerrar sesión"
+          onClick={() => dispatch(logout())}
+        />
+      ) : (
+        <>
+          <table>
+            <tr>
+              <td>
+                <label><small>Nombre de usuario:</small></label>
+              </td>
+              <td>
+                <input type="text" name="username" onChange={onChange} value={username} autoComplete="username" required />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><small>Contraseña:</small></label>
+              </td>
+              <td>
+                <input type="password" name="password" onChange={onChange} value={password} autoComplete="current-password" required />
+              </td>
+            </tr>
+          </table>
+          <br />
+          <Button text="Iniciar sesión" onClick={() => dispatch(login({ username, password }))} />
+        </>
+      )}
+    </div>
   );
 
   return (
     <div id="header" className="comp">
       { headerLeft }
-      <img
-        src={logo}
-        style={{
-          height: '50px',
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
-      />
+      <div id="header-center">
+        <img src={logo} />
+      </div>
       { headerRight }
     </div>
   );
