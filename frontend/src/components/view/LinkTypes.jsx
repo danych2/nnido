@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { createLinkType, updateDefault, switchTypeFilter } from '../../slices/graphSlice';
-import { CollapsibleType } from '../../func';
+import CollapsibleType from './CollapsibleType';
 import EditType from './EditType';
 
 const LinkTypes = () => {

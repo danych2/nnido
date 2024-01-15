@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { createNodeType, updateDefault, switchTypeFilter } from '../../slices/graphSlice';
-import { CollapsibleType } from '../../func';
+import CollapsibleType from './CollapsibleType';
 import EditType from './EditType';
 
 const NodeTypes = () => {
