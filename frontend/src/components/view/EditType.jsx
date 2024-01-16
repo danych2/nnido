@@ -62,8 +62,6 @@ const EditType = ({ typeId, element_class }) => {
 
   return (
     <>
-      <span style={{ fontSize: 'x-small' }}>{typeId}</span>
-      <br />
       {systemProperties}
       <br />
       Atributos:
