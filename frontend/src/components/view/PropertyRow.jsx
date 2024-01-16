@@ -99,11 +99,11 @@ const PropertyRow = ({
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '2fr 5fr 1fr' }}>
-      <span>{`${propertyConfig.name}:`}</span>
-      {Input}
-      <span>{isActive && !isMultiple ? <button className="button" type="button" onClick={deleteFunction}>X</button> : ''}</span>
-    </div>
+    <>
+      <div style={{ gridColumnStart: '1' }}>{`${propertyConfig.name}:`}</div>
+      <div style={{ gridColumnStart: '2' }}>{Input}</div>
+      <div style={{ gridColumnStart: '3' }}>{isActive && !isMultiple ? <button type="button" onClick={deleteFunction}>X</button> : ''}</div>
+    </>
   );
 };
 

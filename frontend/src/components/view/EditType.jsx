@@ -61,11 +61,9 @@ const EditType = ({ typeId, element_class }) => {
   };
 
   return (
-    <>
+    <div style={{ display: 'grid', gridTemplateColumns: '2fr 5fr 1fr', alignContent: 'center' }}>
       {systemProperties}
-      <br />
-      Atributos:
-      <br />
+      <div style={{ gridColumnStart: '1' }}>Atributos:</div>
       { Object.keys(type.attributes).map((attribute) => (
         <div key={attribute} style={{ display: 'flex', alignItems: 'center' }}>
           <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{attribute}</span>
@@ -90,10 +88,10 @@ const EditType = ({ typeId, element_class }) => {
           <br />
         </div>
       ))}
-      <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} style={{ width: '80%' }} />
+      <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} style={{ gridColumn: '1 / 3' }} />
       <button className="button" type="button" onClick={addAttribute}>+</button>
       <br />
-    </>
+    </div>
   );
 };
 
