@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { createNodeType, updateDefault, switchTypeFilter } from '../../slices/graphSlice';
+import {
+  createNodeType, createLinkType, updateDefault, switchTypeFilter,
+} from '../../slices/graphSlice';
 import CollapsibleType from './CollapsibleType';
 import EditType from './EditType';
 
@@ -16,8 +18,9 @@ const ElementTypes = ({ isNodes }) => {
   const elementClass = isNodes ? 'node' : 'link';
 
   const [newType, setNewType] = useState('');
+  const createElementType = isNodes ? createNodeType : createLinkType;
   const createNewType = () => {
-    dispatch(createNodeType({
+    dispatch(createElementType({
       name: newType,
     }));
     setNewType('');
