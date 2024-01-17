@@ -63,7 +63,7 @@ const EditType = ({ typeId, element_class }) => {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '2fr 5fr 1fr', alignContent: 'center' }}>
       {systemProperties}
-      <div style={{ gridColumnStart: '1' }}>Atributos:</div>
+      <div style={{ gridColumn: '1 / 3' }}>Atributos:</div>
       { Object.keys(type.attributes).map((attribute) => (
         <div key={attribute} style={{ display: 'flex', alignItems: 'center' }}>
           <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{attribute}</span>
