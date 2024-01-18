@@ -65,7 +65,7 @@ const EditType = ({ typeId, element_class }) => {
       {systemProperties}
       <div style={{ gridColumn: '1 / 3' }}>Atributos:</div>
       { Object.keys(type.attributes).map((attribute) => (
-        <div key={attribute} style={{ display: 'flex', alignItems: 'center' }}>
+        <div key={attribute} style={{ display: 'flex', alignItems: 'center', gridColumn: '1 / 3' }}>
           <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{attribute}</span>
           <div
             className="comp button"
@@ -90,7 +90,6 @@ const EditType = ({ typeId, element_class }) => {
       ))}
       <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} style={{ gridColumn: '1 / 3' }} />
       <button className="button" type="button" onClick={addAttribute}>+</button>
-      <br />
     </div>
   );
 };

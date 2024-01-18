@@ -6,7 +6,6 @@ import {
   createNodeType, createLinkType, updateDefault, switchTypeFilter,
 } from '../../slices/graphSlice';
 import CollapsibleType from './CollapsibleType';
-import EditType from './EditType';
 
 const ElementTypes = ({ isNodes }) => {
   const dispatch = useDispatch();
@@ -15,7 +14,6 @@ const ElementTypes = ({ isNodes }) => {
   const typesFilter = useSelector(
     (state) => state.graph.graph.visualization[isNodes ? 'node_types_filtered' : 'link_types_filtered'],
   );
-  const elementClass = isNodes ? 'node' : 'link';
 
   const [newType, setNewType] = useState('');
   const createElementType = isNodes ? createNodeType : createLinkType;
@@ -40,22 +38,21 @@ const ElementTypes = ({ isNodes }) => {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 20px' }}>
       <b>{`Tipos de ${isNodes ? 'nodos' : 'enlaces'}`}</b>
-      <input type="radio" name={elementClass} value="" style={{ float: 'right' }} onChange={changeDefaultType} defaultChecked />
-      { Object.keys(types).map((typeId) => (
+      <input type="radio" name={isNodes ? 'node' : 'link'} value="" style={{ float: 'right' }} onChange={changeDefaultType} defaultChecked />
+      { Object.keys(types).map((typeId, index) => (
         <CollapsibleType
           key={typeId}
           id={typeId}
+          pos={index}
           title={types[typeId].name}
           hidden={!!typesFilter[typeId]}
           //      ^ double negation used to convert undefined (default) values to false
           defaultChange={changeDefaultType}
           visibilityChange={changeTypeVisibility}
-          group={elementClass}
-        >
-          <EditType element_class={elementClass} typeId={typeId} />
-        </CollapsibleType>
+          isNode={isNodes}
+        />
       ))}
-      <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="comp" style={{ display: 'flex', alignItems: 'center', gridColumn: '1' }}>
         <input
           type="text"
           name={isNodes ? 'new_nodetype' : 'new_linktype'}
