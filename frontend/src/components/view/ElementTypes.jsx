@@ -7,6 +7,8 @@ import {
 } from '../../slices/graphSlice';
 import CollapsibleType from './CollapsibleType';
 
+import './ElementTypes.css';
+
 const ElementTypes = ({ isNodes }) => {
   const dispatch = useDispatch();
 
@@ -18,6 +20,7 @@ const ElementTypes = ({ isNodes }) => {
   const [newType, setNewType] = useState('');
   const createElementType = isNodes ? createNodeType : createLinkType;
   const createNewType = () => {
+    if (newType === '') return;
     dispatch(createElementType({
       name: newType,
     }));
@@ -36,9 +39,9 @@ const ElementTypes = ({ isNodes }) => {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 20px' }}>
+    <div className="element_types">
       <b>{`Tipos de ${isNodes ? 'nodos' : 'enlaces'}`}</b>
-      <input type="radio" name={isNodes ? 'node' : 'link'} value="" style={{ float: 'right' }} onChange={changeDefaultType} defaultChecked />
+      <input type="radio" name={isNodes ? 'node' : 'link'} value="" onChange={changeDefaultType} defaultChecked />
       { Object.keys(types).map((typeId, index) => (
         <CollapsibleType
           key={typeId}
@@ -52,7 +55,7 @@ const ElementTypes = ({ isNodes }) => {
           isNode={isNodes}
         />
       ))}
-      <div className="comp" style={{ display: 'flex', alignItems: 'center', gridColumn: '1' }}>
+      <div className="add_type">
         <input
           type="text"
           name={isNodes ? 'new_nodetype' : 'new_linktype'}
@@ -65,7 +68,7 @@ const ElementTypes = ({ isNodes }) => {
           value={newType}
           style={{ flexGrow: 1 }}
         />
-        <div className="comp button" onClick={createNewType} style={{ minWidth: '1ch' }}>+</div>
+        <button className="small_button" type="button" onClick={createNewType}>+</button>
       </div>
     </div>
   );

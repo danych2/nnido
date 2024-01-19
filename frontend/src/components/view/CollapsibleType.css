@@ -1,23 +1,10 @@
-.collapsible {
-  margin: var(--margin);
-  border-radius: 5px;
-  border: 1px solid rgba(125,125,125,.3);
-  box-shadow: -1px -1px 4px -1px white,
-    1px 1px 6px -3px black,
-    inset 1px 1px 4px -2px white,
-    inset -1px -1px 4px -4px black;
-}
-
 .collapsible_background {
   grid-column: 1;
   margin: var(--margin);
   margin-bottom: 0px;
   border-radius: 5px;
   border: 1px solid rgba(125,125,125,.3);
-  box-shadow: -1px -1px 4px -1px white,
-    1px 1px 6px -3px black,
-    inset 1px 1px 4px -2px white,
-    inset -1px -1px 4px -4px black;
+  box-shadow: var(--shadow);
 
 }
 
@@ -27,14 +14,12 @@
   padding: var(--margin);
   margin: var(--margin);
   margin-bottom: 0px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.collapsible_button:hover:not(:has(.button:hover)) {
+.collapsible_button:hover:not(:has(button:hover)) {
   background-color: rgba(125,125,125,.1);
-  box-shadow: -1px -1px 2px -1px white,
-    1px 1px 4px -3px black,
-    inset 1px 1px 4px -2px white,
-    inset -1px -1px 4px -4px black;
 }
 
 .collapsible_radio {

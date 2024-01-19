@@ -102,7 +102,7 @@ const PropertyRow = ({
     <>
       <div style={{ gridColumnStart: '1' }}>{`${propertyConfig.name}:`}</div>
       <div style={{ gridColumnStart: '2' }}>{Input}</div>
-      <div style={{ gridColumnStart: '3' }}>{isActive && !isMultiple ? <button type="button" onClick={deleteFunction}>X</button> : ''}</div>
+      <div style={{ gridColumnStart: '3' }}>{isActive && !isMultiple ? <button type="button" className="small_button" onClick={deleteFunction}>X</button> : ''}</div>
     </>
   );
 };

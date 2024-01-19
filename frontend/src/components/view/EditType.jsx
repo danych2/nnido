@@ -8,6 +8,8 @@ import config from '../../config';
 import properties from '../../properties';
 import PropertyRow from './PropertyRow';
 
+import { dictKeyFilter } from '../../func';
+
 const EditType = ({ typeId, element_class }) => {
   // typeId: ID of the type
   // element: either "node" or "link"
@@ -47,6 +49,7 @@ const EditType = ({ typeId, element_class }) => {
 
   const [newAttribute, setNewAttribute] = useState('');
   const addAttribute = () => {
+    if (newAttribute === '') return;
     dispatch(updateType({
       element_class,
       id: typeId,
@@ -61,35 +64,41 @@ const EditType = ({ typeId, element_class }) => {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '2fr 5fr 1fr', alignContent: 'center' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '3fr 3fr 1fr', alignContent: 'center' }}>
       {systemProperties}
       <div style={{ gridColumn: '1 / 3' }}>Atributos:</div>
       { Object.keys(type.attributes).map((attribute) => (
-        <div key={attribute} style={{ display: 'flex', alignItems: 'center', gridColumn: '1 / 3' }}>
-          <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}>{attribute}</span>
-          <div
-            className="comp button"
-            style={{ minWidth: '1ch' }}
-            onClick={() => {
-              delete type.attributes[attribute];
-              dispatch(updateType({
-                element_class,
-                id: typeId,
-                data: {
-                  attributes: {
-                    ...type.attributes,
-                  },
-                },
-              }));
+        <Fragment key={attribute}>
+          <span
+            style={{
+              gridColumn: '1 / 3', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis',
             }}
           >
-            X
+            {attribute}
+          </span>
+          <div style={{ gridColumn: '3 / 4', display: 'flex', justifyContent: 'center' }}>
+            <button
+              className="small_button"
+              type="button"
+              onClick={() => {
+                dispatch(updateType({
+                  element_class,
+                  id: typeId,
+                  data: {
+                    attributes: {
+                      ...dictKeyFilter(type.attributes, (key) => key !== attribute),
+                    },
+                  },
+                }));
+              }}
+            >
+              X
+            </button>
           </div>
-          <br />
-        </div>
+        </Fragment>
       ))}
       <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} style={{ gridColumn: '1 / 3' }} />
-      <button className="button" type="button" onClick={addAttribute}>+</button>
+      <button className="small_button" type="button" onClick={addAttribute}>+</button>
     </div>
   );
 };

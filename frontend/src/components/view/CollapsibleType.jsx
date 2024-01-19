@@ -31,21 +31,19 @@ const CollapsibleType = ({
         onClick={() => setOpen(!open)}
         style={{ gridRow: `${pos * 2 + 2}` }}
       >
-        <span style={{ display: 'inline-grid', gridTemplateColumns: '5fr 1fr', maxWidth: 'calc(100% - 20px)' }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis',
-          }}
-          >
-            {title}
-          </span>
-          <button type="button" className="button" onClick={(e) => visibilityChange(id)}>
-            { hidden ? (
-              <img src={eye_off} style={{ height: '10px' }} />
-            ) : (
-              <img src={eye_on} style={{ height: '10px' }} />
-            )}
-          </button>
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis',
+        }}
+        >
+          {title}
         </span>
+        <button type="button" className="small_button" onClick={(e) => { e.stopPropagation(); visibilityChange(id); }}>
+          { hidden ? (
+            <img src={eye_off} style={{ height: '10px' }} />
+          ) : (
+            <img src={eye_on} style={{ height: '10px' }} />
+          )}
+        </button>
       </div>
       <input
         className="collapsible_radio"

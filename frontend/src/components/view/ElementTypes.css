@@ -1,0 +1,11 @@
+.element_types {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+}
+
+.add_type {
+  grid-column: 1;
+  display: flex;
+  padding: calc(2*var(--margin));
+  padding-bottom: var(--margin);
+}

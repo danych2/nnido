@@ -7,8 +7,27 @@
   --node-shadow-adjacent: gainsboro;
 
   --background-color: #F9F6EE;
+  --border-color: black;
+  --soft-border-color: rgba(125,125,125,.3);
 
   --margin: 5px;
+
+  --shadow: -1px -1px 4px -1px white,
+    1px 1px 6px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
+  --shadow-hover: -1px -1px 2px -1px white,
+    1px 1px 4px -3px black,
+    inset 1px 1px 4px -2px white,
+    inset -1px -1px 4px -4px black;
+  --shadow-active: inset 1px 1px 4px -2px black,
+    inset -1px -1px 4px -4px white;
+}
+
+* {
+  overflow-wrap: break-word;
+  hyphens: auto;
+  min-width: 0px;
 }
 
 html {
@@ -126,6 +145,10 @@ line {
   overflow: hidden; /* this is to create a new float context */
 }
 
+.border {
+  border: solid 1.5px var(--border-color);
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr
@@ -174,7 +197,6 @@ input[type=text], input[type=password] {
   border-radius: 3px;
   box-shadow: inset 1px 1px 4px -2px black,
   inset -1px -1px 4px -4px white;
-  margin: 2px 3px;
 }
 
 input[type=text]:hover, input[type=password]:hover {
@@ -187,4 +209,21 @@ input.seamless {
   margin: 0px;
   padding: 0px;
   outline: none;
+}
+
+.small_button {
+  border-radius: 5px;
+  border: 1px solid rgba(125,125,125,.3);
+  padding: 0 var(--margin);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.small_button:hover {
+  background-color: rgba(125,125,125,.1);
+  box-shadow: var(--shadow-hover);
+}
+
+.small_button:active {
+  box-shadow: var(--shadow-active);
 }

@@ -8,21 +8,14 @@
   padding: var(--margin);
   cursor: pointer;
   z-index: 1;
-  box-shadow: -1px -1px 4px -1px white,
-    1px 1px 6px -3px black,
-    inset 1px 1px 4px -2px white,
-    inset -1px -1px 4px -4px black;
+  box-shadow: var(--shadow);
 }
 
 .button:hover {
   background-color: rgba(125,125,125,.1);
-  box-shadow: -1px -1px 2px -1px white,
-    1px 1px 4px -3px black,
-    inset 1px 1px 4px -2px white,
-    inset -1px -1px 4px -4px black;
+  box-shadow: var(--shadow-hover);
 }
 
 .button:active {
-  box-shadow: inset 1px 1px 4px -2px black,
-  inset -1px -1px 4px -4px white;
+  box-shadow: var(--shadow-active);
 }

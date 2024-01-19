@@ -43,6 +43,10 @@ export const dictFilter = (obj, predicate) => Object.keys(obj)
   .filter((key) => predicate(obj[key]))
   .reduce((res, key) => (res[key] = obj[key], res), {});
 
+export const dictKeyFilter = (obj, predicate) => Object.keys(obj)
+  .filter((key) => predicate(key))
+  .reduce((res, key) => (res[key] = obj[key], res), {});
+
 export function normalizeCoords(x, y) {
   const boundRect = document.getElementById('graph_container').getBoundingClientRect();
   let { width, height } = boundRect;
