@@ -6,9 +6,11 @@
   --node-shadow-selected: gray;
   --node-shadow-adjacent: gainsboro;
 
-  --background-color: #F9F6EE;
+  --background-color: hsl(43deg 47% 95%);
+  --dark-background-color: hsl(43deg 47% 85%);
   --border-color: black;
   --soft-border-color: rgba(125,125,125,.3);
+  --accent-color: hsl(43deg 47% 50%);
 
   --margin: 5px;
 
@@ -24,10 +26,15 @@
     inset -1px -1px 4px -4px white;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 * {
   overflow-wrap: break-word;
   hyphens: auto;
   min-width: 0px;
+  margin: 0px;
 }
 
 html {
@@ -226,4 +233,9 @@ input.seamless {
 
 .small_button:active {
   box-shadow: var(--shadow-active);
+}
+
+input[type=radio], input[type=checkbox] {
+  accent-color: var(--accent-color);
+  margin: calc(var(--margin) / 2);
 }

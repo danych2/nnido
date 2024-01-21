@@ -3,9 +3,29 @@
   grid-template-columns: 1fr 20px;
 }
 
+.default_type {
+  grid-column: 1;
+  grid-row: 1;
+  padding: calc(2*var(--margin));
+  padding-bottom: var(--margin);
+}
+
+.default_radio {
+  grid-column: 2;
+  grid-row: 1;
+}
+
 .add_type {
   grid-column: 1;
   display: flex;
   padding: calc(2*var(--margin));
   padding-bottom: var(--margin);
+}
+
+.active_button_background {
+  grid-column: 2;
+  grid-row: 1 / -3;
+  background: var(--dark-background-color);
+  border-radius: 10px;
+  margin: 5px 0;
 }

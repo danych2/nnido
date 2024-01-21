@@ -39,38 +39,49 @@ const ElementTypes = ({ isNodes }) => {
   };
 
   return (
-    <div className="element_types">
-      <b>{`Tipos de ${isNodes ? 'nodos' : 'enlaces'}`}</b>
-      <input type="radio" name={isNodes ? 'node' : 'link'} value="" onChange={changeDefaultType} defaultChecked />
-      { Object.keys(types).map((typeId, index) => (
-        <CollapsibleType
-          key={typeId}
-          id={typeId}
-          pos={index}
-          title={types[typeId].name}
-          hidden={!!typesFilter[typeId]}
-          //      ^ double negation used to convert undefined (default) values to false
-          defaultChange={changeDefaultType}
-          visibilityChange={changeTypeVisibility}
-          isNode={isNodes}
-        />
-      ))}
-      <div className="add_type">
-        <input
-          type="text"
-          name={isNodes ? 'new_nodetype' : 'new_linktype'}
-          onKeyUp={(e) => {
-            if (e.keyCode === 13) {
-              createNewType();
-            }
-          }}
-          onChange={(e) => setNewType(e.target.value)}
-          value={newType}
-          style={{ flexGrow: 1 }}
-        />
-        <button className="small_button" type="button" onClick={createNewType}>+</button>
+    <>
+      <div>
+        <b>{`Tipos de ${isNodes ? 'nodos' : 'enlaces'}`}</b>
       </div>
-    </div>
+      <div
+        className="element_types"
+        style={{ gridTemplateRows: `repeat(${Object.keys(types).length * 2 + 2}, auto)` }}
+      >
+        <div className="active_button_background" />
+        <div className="default_type">
+          Predeterminado
+        </div>
+        <input className="default_radio" type="radio" name={isNodes ? 'node' : 'link'} value="" onChange={changeDefaultType} defaultChecked />
+        { Object.keys(types).map((typeId, index) => (
+          <CollapsibleType
+            key={typeId}
+            id={typeId}
+            pos={index}
+            title={types[typeId].name}
+            hidden={!!typesFilter[typeId]}
+            //      ^ double negation used to convert undefined (default) values to false
+            defaultChange={changeDefaultType}
+            visibilityChange={changeTypeVisibility}
+            isNode={isNodes}
+          />
+        ))}
+        <div className="add_type">
+          <input
+            type="text"
+            name={isNodes ? 'new_nodetype' : 'new_linktype'}
+            onKeyUp={(e) => {
+              if (e.keyCode === 13) {
+                createNewType();
+              }
+            }}
+            onChange={(e) => setNewType(e.target.value)}
+            value={newType}
+            style={{ flexGrow: 1 }}
+          />
+          <button className="small_button" type="button" onClick={createNewType}>+</button>
+        </div>
+      </div>
+    </>
   );
 };
 
