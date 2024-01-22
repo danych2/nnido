@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 
 import { updateType } from '../../slices/graphSlice';
 import ColorInput from './ColorInput';
@@ -92,13 +93,13 @@ const EditType = ({ typeId, element_class }) => {
                 }));
               }}
             >
-              X
+              <FaTimes />
             </button>
           </div>
         </Fragment>
       ))}
       <input type="text" onChange={(e) => setNewAttribute(e.target.value)} value={newAttribute} style={{ gridColumn: '1 / 3' }} />
-      <button className="small_button" type="button" onClick={addAttribute}>+</button>
+      <button className="small_button" type="button" onClick={addAttribute}><FaPlus /></button>
     </div>
   );
 };

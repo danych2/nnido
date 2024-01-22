@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FaTimes } from 'react-icons/fa';
 
 import TextInput from './TextInput';
 
@@ -11,15 +12,15 @@ const EditableAttribute = ({
   let deleteButton = '';
   if (!inherited) {
     deleteButton = (
-      <div
-        className="comp"
-        style={{ minWidth: '1ch' }}
+      <button
+        type="button"
+        className="small_button"
         onClick={() => {
           deleteFunction();
         }}
       >
-        X
-      </div>
+        <FaTimes />
+      </button>
     );
   }
 

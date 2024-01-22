@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import eye_off from '../../images/eye_off.png';
-import eye_on from '../../images/eye_on.png';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import EditType from './EditType';
 
 import './CollapsibleType.css';
@@ -39,9 +38,9 @@ const CollapsibleType = ({
         </span>
         <button type="button" className="small_button" onClick={(e) => { e.stopPropagation(); visibilityChange(id); }}>
           { hidden ? (
-            <img src={eye_off} style={{ height: '10px' }} />
+            <FaRegEyeSlash />
           ) : (
-            <img src={eye_on} style={{ height: '10px' }} />
+            <FaRegEye />
           )}
         </button>
       </div>

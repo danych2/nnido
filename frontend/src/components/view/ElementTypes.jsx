@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FaPlus } from 'react-icons/fa';
 
 import {
   createNodeType, createLinkType, updateDefault, switchTypeFilter,
@@ -78,7 +79,7 @@ const ElementTypes = ({ isNodes }) => {
             value={newType}
             style={{ flexGrow: 1 }}
           />
-          <button className="small_button" type="button" onClick={createNewType}>+</button>
+          <button className="small_button" type="button" onClick={createNewType}><FaPlus /></button>
         </div>
       </div>
     </>

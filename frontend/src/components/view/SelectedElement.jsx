@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FaPlus } from 'react-icons/fa';
 
 import {
   updateElement,
@@ -233,7 +234,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
             value={newAttribute}
             style={{ flexGrow: 1 }}
           />
-          <div className="comp" onClick={addNewAttribute} style={{ minWidth: '1ch' }}>+</div>
+          <button type="button" className="small_button" onClick={addNewAttribute}><FaPlus /></button>
         </div>
       </>
     );
