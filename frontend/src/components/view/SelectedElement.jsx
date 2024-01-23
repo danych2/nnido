@@ -170,7 +170,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
     if (Object.keys(inheritedAttributes).length > 0) {
       inheritedAttributesHtml = (
         <>
-          <span style={{ fontSize: 'small' }}>Atributos del tipo:</span>
+          <div style={{ gridColumn: '1 / -1', fontSize: 'small' }}>Atributos del tipo:</div>
           { Object.keys(inheritedAttributes).map((attribute) => (
             <EditableAttribute
               key={attribute}
@@ -194,8 +194,9 @@ const SelectedElement = ({ element_ids, element_class }) => {
     }
     atributesComponent = (
       <>
-        Atributos:
-        <br />
+        <div style={{ gridColumn: '1 / -1' }}>
+          Atributos:
+        </div>
         { Object.keys(specificAttributes).map((attribute) => (
           <EditableAttribute
             key={attribute}
@@ -221,7 +222,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
           />
         ))}
         {inheritedAttributesHtml}
-        <div className="comp" style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="comp" style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center' }}>
           <input
             type="text"
             name="new_attribute"
@@ -241,72 +242,78 @@ const SelectedElement = ({ element_ids, element_class }) => {
   }
 
   return (
-    <>
-      <b>
-        {isNode ? 'Nodo seleccionado' : 'Enlace seleccionado'}
-      </b>
-      <br />
+    <div style={{ display: 'grid', gridTemplateColumns: '3fr 3fr 1fr', alignContent: 'center' }}>
+      <div style={{ gridColumn: '1 / -1' }}>
+        <b>{isNode ? 'Nodo seleccionado' : 'Enlace seleccionado'}</b>
+      </div>
       {isNode ? (
         <>
-          <TextInput
-            initialValue={firstElement.name}
-            saveFunction={(name) => {
-              if (isMultiple) {
-                dispatch(updateMultipleNodes({
-                  ids: element_ids,
-                  data: {
-                    name,
-                  },
-                }));
-              } else {
-                dispatch(updateNode({
-                  id: firstId,
-                  data: {
-                    name,
-                  },
-                }));
-              }
-            }}
-            multipleValues={isMultiple
-              && new Set(selectedElements.map((node) => node.name)).size > 1}
-          />
-          <br />
-          Contenido:
-          <TextInput
-            initialValue={firstElement.content}
-            saveFunction={(content) => {
-              if (isMultiple) {
-                dispatch(updateMultipleNodes({
-                  ids: element_ids,
-                  data: {
-                    content,
-                  },
-                }));
-              } else {
-                dispatch(updateNode({
-                  id: firstId,
-                  data: {
-                    content,
-                  },
-                }));
-              }
-            }}
-            multipleValues={isMultiple
-              && new Set(selectedElements.map((node) => node.content)).size > 1}
-          />
+          <div style={{ gridColumn: '1 / 4' }}>
+            <TextInput
+              initialValue={firstElement.name}
+              saveFunction={(name) => {
+                if (isMultiple) {
+                  dispatch(updateMultipleNodes({
+                    ids: element_ids,
+                    data: {
+                      name,
+                    },
+                  }));
+                } else {
+                  dispatch(updateNode({
+                    id: firstId,
+                    data: {
+                      name,
+                    },
+                  }));
+                }
+              }}
+              multipleValues={isMultiple
+                && new Set(selectedElements.map((node) => node.name)).size > 1}
+            />
+          </div>
+          <div style={{ gridColumn: '1 / 4' }}>
+            Contenido:
+          </div>
+          <div style={{ gridColumn: '1 / 4' }}>
+            <TextInput
+              initialValue={firstElement.content}
+              saveFunction={(content) => {
+                if (isMultiple) {
+                  dispatch(updateMultipleNodes({
+                    ids: element_ids,
+                    data: {
+                      content,
+                    },
+                  }));
+                } else {
+                  dispatch(updateNode({
+                    id: firstId,
+                    data: {
+                      content,
+                    },
+                  }));
+                }
+              }}
+              multipleValues={isMultiple
+                && new Set(selectedElements.map((node) => node.content)).size > 1}
+            />
+          </div>
         </>
       ) : `${allNodes[firstElement.source].name} - ${allNodes[firstElement.target].name}` }
-      <br />
-      Tipo:
-      {InputType}
-      <br />
+      <div style={{ gridColumn: '1' }}>
+        Tipo:
+      </div>
+      <div style={{ gridColumn: '2 / 3' }}>
+        {InputType}
+      </div>
       {systemActiveProperties}
-      <hr />
       {systemInactiveProperties}
-      <br />
       {atributesComponent}
-      <button type="button" onClick={onDelete}>{isNode ? 'Eliminar nodo' : 'Eliminar enlace'}</button>
-    </>
+      <div style={{ gridColumn: '1 / -1' }}>
+        <button type="button" onClick={onDelete}>{isNode ? 'Eliminar nodo' : 'Eliminar enlace'}</button>
+      </div>
+    </div>
   );
 };
 
