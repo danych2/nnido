@@ -25,7 +25,7 @@ const View = () => {
 
   if (status === 'loaded' && graph_pk) {
     return (
-      <>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div id="graph_name" style={{ flexShrink: '0' }}>
           {graph_name}
         </div>
@@ -45,7 +45,7 @@ const View = () => {
             {isAuthenticated && <SaveGraph />}
           </div>
         </div>
-      </>
+      </div>
     );
   }
   if (status === 'loading') {

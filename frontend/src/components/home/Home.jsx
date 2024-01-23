@@ -7,11 +7,11 @@ import NewGraphComponent from './NewGraph';
 const Home = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return (
-    <>
+    <div>
       {isAuthenticated && <NewGraphComponent /> }
       <br />
       <GraphsListComponent />
-    </>
+    </div>
   );
 };
 

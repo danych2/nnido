@@ -91,7 +91,7 @@ const Header = () => {
   );
 
   return (
-    <div id="header" className="comp">
+    <div id="header">
       { headerLeft }
       <div id="header-center">
         <img src={logo} />

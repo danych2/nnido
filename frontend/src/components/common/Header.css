@@ -1,11 +1,7 @@
 #header {
   border-radius: 5px 5px 0px 0px;
+  border: var(--border);
   position: relative;
-  height: calc(4em + 2 * var(--margin));
-}
-
-#header > div {
-  top: var(--margin);
 }
 
 #header-left {
@@ -19,10 +15,11 @@
   left: 50%;
   top: 0;
   transform: translate(-50%, 0);
+  height: 100%;
 }
 
 #header-center img {
-  height: 4em;
+  height: 100%;
 }
 
 #header-right {
