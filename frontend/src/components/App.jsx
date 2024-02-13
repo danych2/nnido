@@ -9,6 +9,7 @@ import View from './view/View';
 import Login from './accounts/Login';
 import PrivateRoute from './common/PrivateRoute';
 import Header from './common/Header';
+import '../index.css';
 import '../style.css';
 import './App.css';
 

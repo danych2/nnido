@@ -4,9 +4,6 @@ module.exports = {
   entry: {
     home: './frontend/src/home.js',
   },
-  output: {
-    path: path.resolve(__dirname, 'frontend/static/frontend'),
-  },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -21,7 +18,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,

@@ -4,6 +4,7 @@ node_modules
 
 #webpack output
 frontend/static/frontend/
+frontend/dist/
 
 ### Django ###
 *.log
