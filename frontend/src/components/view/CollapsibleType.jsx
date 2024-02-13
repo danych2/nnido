@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
 import EditType from './EditType';
 
 import './CollapsibleType.css';
@@ -34,6 +35,11 @@ const CollapsibleType = ({
           display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis',
         }}
         >
+          {open ? (
+            <GoTriangleDown />
+          ) : (
+            <GoTriangleRight />
+          )}
           {title}
         </span>
         <button type="button" className="small_button" onClick={(e) => { e.stopPropagation(); visibilityChange(id); }}>

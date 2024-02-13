@@ -9,7 +9,7 @@ const properties = {
     individualProperty: false,
   },
   name: {
-    active: true,
+    active: false,
     name: 'Nombre',
     type: 'text',
     default: '',

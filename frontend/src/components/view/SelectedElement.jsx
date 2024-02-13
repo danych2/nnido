@@ -41,29 +41,6 @@ const SelectedElement = ({ element_ids, element_class }) => {
 
   const [newAttribute, setNewAttribute] = useState('');
 
-  const InputType = (
-    <DropdownInput
-      initialValue={firstElement.type || ''}
-      options={{
-        '': '--',
-        ...Object.keys(types).reduce((dict, key) => (dict[key] = types[key].name, dict), {}),
-      }}
-      saveFunction={(type) => {
-        dispatch(updateElement({
-          element_class,
-          multiple: isMultiple,
-          id: firstId,
-          ids: element_ids,
-          data: {
-            type,
-          },
-        }));
-      }}
-      multipleValues={isMultiple && new Set(selectedElements.map((node) => node.type)).size > 1}
-      isActive={false}
-    />
-  );
-
   const systemActiveProperties = [];
   const systemInactiveProperties = [];
   Object.entries(properties).forEach(([key, property]) => {
@@ -222,7 +199,7 @@ const SelectedElement = ({ element_ids, element_class }) => {
           />
         ))}
         {inheritedAttributesHtml}
-        <div className="comp" style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center' }}>
+        <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center' }}>
           <input
             type="text"
             name="new_attribute"
@@ -305,7 +282,26 @@ const SelectedElement = ({ element_ids, element_class }) => {
         Tipo:
       </div>
       <div style={{ gridColumn: '2 / 3' }}>
-        {InputType}
+        <DropdownInput
+          initialValue={firstElement.type || ''}
+          options={{
+            '': '--',
+            ...Object.keys(types).reduce((dict, key) => (dict[key] = types[key].name, dict), {}),
+          }}
+          saveFunction={(type) => {
+            dispatch(updateElement({
+              element_class,
+              multiple: isMultiple,
+              id: firstId,
+              ids: element_ids,
+              data: {
+                type,
+              },
+            }));
+          }}
+          multipleValues={isMultiple && new Set(selectedElements.map((node) => node.type)).size > 1}
+          isActive={false}
+        />
       </div>
       {systemActiveProperties}
       {systemInactiveProperties}

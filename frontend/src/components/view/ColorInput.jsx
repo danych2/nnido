@@ -32,13 +32,13 @@ const ColorInput = ({
   });
 
   return (
-    <span>
+    <>
       <span
         style={{
-          display: 'inline-block',
-          width: '36px',
-          height: '14px',
-          borderRadius: '2px',
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          borderRadius: '9999px',
           background: initialValue,
           cursor: 'pointer',
         }}
@@ -63,7 +63,7 @@ const ColorInput = ({
           />
         </div>
       ) : null }
-    </span>
+    </>
   );
 };
 

@@ -67,6 +67,7 @@ const EditType = ({ typeId, element_class }) => {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '3fr 3fr 1fr', alignContent: 'center' }}>
       {systemProperties}
+      <div style={{ gridColumn: '1 / -1' }}><hr /></div>
       <div style={{ gridColumn: '1 / 3' }}>Atributos:</div>
       { Object.keys(type.attributes).map((attribute) => (
         <Fragment key={attribute}>

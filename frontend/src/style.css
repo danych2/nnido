@@ -47,6 +47,7 @@ html {
 body {
   font-family: monospace;
   background-color: var(--background-color);
+  line-height: 1.5;
 }
 
 a {
@@ -166,8 +167,7 @@ line {
 
 #grid_container {
   display: grid;
-  /* grid-template-columns: 1fr 3fr 1fr */
-  grid-template-columns: 5fr 1fr
+  grid-template-columns: 4fr 1fr
 }
 
 button {
@@ -185,9 +185,9 @@ button {
 
 select {
   border-color: black;
-  margin: 2px 3px;
   font-family: monospace;
   font-size: 1rem;
+  width: 100%;
 }
 
 option {
@@ -229,6 +229,8 @@ input.seamless {
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
+  width: fit-content;
+  height: fit-content;
 }
 
 .small_button:hover {
@@ -249,4 +251,8 @@ input[type=radio], input[type=checkbox] {
 
 input[type=radio]:not(:checked), input[type=checkbox]:not(:checked) {
   cursor: pointer;
+}
+
+hr {
+  margin: var(--margin) 0px;
 }
