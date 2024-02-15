@@ -34,9 +34,6 @@
 }
 
 * {
-  overflow-wrap: break-word;
-  hyphens: auto;
-  min-width: 0px;
   margin: 0px;
 }
 
