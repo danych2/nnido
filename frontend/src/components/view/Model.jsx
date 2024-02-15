@@ -14,40 +14,42 @@ const Model = () => {
   }, [expandedIndex]);
 
   return (
-    <div className="border max-h-full rounded">
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className={`cursor-pointer hover:bg-secondary p-1 ${isOpen ? 'rounded-t' : 'rounded'}`}
-      >
-        <span className="inline-flex items-center">
-          {isOpen ? (
-            <GoTriangleDown />
-          ) : (
-            <GoTriangleRight />
-          )}
-          Modelo
-        </span>
-      </div>
-      <div
-        ref={contentHeight}
-        className="overflow-hidden transition-all duration-500"
-        style={{
-          maxHeight: isOpen ? contentHeight.current.scrollHeight + extraHeight : 0,
-        }}
-      >
-        <div className="p-1 border-t">
-          <ElementTypes
-            isNodes
-            expandedIndex={expandedIndex}
-            setExpandedIndex={setExpandedIndex}
-            setExtraHeight={setExtraHeight}
-          />
-          <ElementTypes
-            isNodes={false}
-            expandedIndex={expandedIndex}
-            setExpandedIndex={setExpandedIndex}
-            setExtraHeight={setExtraHeight}
-          />
+    <div className="w-72 absolute top-0 left-0 bg-primary border-r border-b rounded-br pr-1 pb-1 border-black max-h-full">
+      <div className="border max-h-full rounded">
+        <div
+          onClick={() => setIsOpen(!isOpen)}
+          className={`cursor-pointer hover:bg-secondary p-1 ${isOpen ? 'rounded-t' : 'rounded'}`}
+        >
+          <span className="inline-flex items-center">
+            {isOpen ? (
+              <GoTriangleDown />
+            ) : (
+              <GoTriangleRight />
+            )}
+            Modelo
+          </span>
+        </div>
+        <div
+          ref={contentHeight}
+          className="overflow-hidden transition-all duration-500"
+          style={{
+            maxHeight: isOpen ? contentHeight.current.scrollHeight + extraHeight : 0,
+          }}
+        >
+          <div className="p-1 border-t">
+            <ElementTypes
+              isNodes
+              expandedIndex={expandedIndex}
+              setExpandedIndex={setExpandedIndex}
+              setExtraHeight={setExtraHeight}
+            />
+            <ElementTypes
+              isNodes={false}
+              expandedIndex={expandedIndex}
+              setExpandedIndex={setExpandedIndex}
+              setExtraHeight={setExtraHeight}
+            />
+          </div>
         </div>
       </div>
     </div>

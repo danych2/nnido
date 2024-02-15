@@ -14,8 +14,6 @@
   padding: var(--margin);
   margin: var(--margin);
   margin-bottom: 0px;
-  display: flex;
-  justify-content: space-between;
 }
 
 .collapsible_button:hover:not(:has(button:hover)) {

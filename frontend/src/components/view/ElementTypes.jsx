@@ -47,8 +47,11 @@ const ElementTypes = ({
         <b>{`Tipos de ${isNodes ? 'nodos' : 'enlaces'}`}</b>
       </div>
       <div
-        className="element_types"
-        style={{ gridTemplateRows: `repeat(${Object.keys(types).length * 2 + 2}, auto)` }}
+        className="grid"
+        style={{
+          gridTemplateColumns: 'minmax(0, 1fr) 20px',
+          gridTemplateRows: `repeat(${Object.keys(types).length * 2 + 2}, auto)`,
+        }}
       >
         <div className="active_button_background" />
         <div className="default_type">

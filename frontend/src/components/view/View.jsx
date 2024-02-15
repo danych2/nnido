@@ -31,9 +31,7 @@ const View = () => {
         </div>
         <div className="relative h-full m-1">
           <GraphViewer />
-          <div className="absolute top-0 left-0 bg-primary border-r border-b rounded-br pr-1 pb-1 border-black max-h-full">
-            <Model />
-          </div>
+          <Model />
           <div className="absolute top-0 right-0 bg-primary border-l border-b rounded-bl pl-1 pb-1 border-black">
             <Selection />
           </div>

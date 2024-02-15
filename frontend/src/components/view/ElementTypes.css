@@ -1,8 +1,3 @@
-.element_types {
-  display: grid;
-  grid-template-columns: 1fr 20px;
-}
-
 .default_type {
   grid-column: 1;
   grid-row: 1;

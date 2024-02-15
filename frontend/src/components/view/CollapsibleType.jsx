@@ -22,19 +22,18 @@ const CollapsibleType = ({
         style={{ gridRow: `${pos * 2 + 2} / ${pos * 2 + 4}` }}
       />
       <div
-        className={`collapsible_button ${isExpanded ? 'open' : 'closed'}`}
+        className={`flex justify-between items-center gap-1 collapsible_button ${isExpanded ? 'open' : 'closed'}`}
         onClick={() => setExpandedIndex(isExpanded ? null : id)}
         style={{ gridRow: `${pos * 2 + 2}` }}
       >
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis',
-        }}
-        >
+        <span className="shrink-0">
           {isExpanded ? (
             <GoTriangleDown />
           ) : (
             <GoTriangleRight />
           )}
+        </span>
+        <span className="grow truncate">
           {title}
         </span>
         <button type="button" className="small_button" onClick={(e) => { e.stopPropagation(); visibilityChange(id); }}>
