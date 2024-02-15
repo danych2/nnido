@@ -10,7 +10,9 @@ import CollapsibleType from './CollapsibleType';
 
 import './ElementTypes.css';
 
-const ElementTypes = ({ isNodes }) => {
+const ElementTypes = ({
+  isNodes, expandedIndex, setExpandedIndex, setExtraHeight,
+}) => {
   const dispatch = useDispatch();
 
   const types = useSelector((state) => state.graph.graph.model[isNodes ? 'node_types' : 'link_types']);
@@ -64,6 +66,9 @@ const ElementTypes = ({ isNodes }) => {
             defaultChange={changeDefaultType}
             visibilityChange={changeTypeVisibility}
             isNode={isNodes}
+            isExpanded={expandedIndex === typeId}
+            setExpandedIndex={setExpandedIndex}
+            setExtraHeight={setExtraHeight}
           />
         ))}
         <div className="add_type">
@@ -88,6 +93,13 @@ const ElementTypes = ({ isNodes }) => {
 
 ElementTypes.propTypes = {
   isNodes: PropTypes.bool.isRequired,
+  expandedIndex: PropTypes.string,
+  setExpandedIndex: PropTypes.func.isRequired,
+  setExtraHeight: PropTypes.func.isRequired,
+};
+
+ElementTypes.defaultProps = {
+  expandedIndex: null,
 };
 
 export default ElementTypes;

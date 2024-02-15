@@ -83,42 +83,40 @@ const GraphViewer = () => {
   }, [defaultNodeType]);
 
   return (
-    <>
-      <div ref={myRef} className="comp" style={{ borderBottomLeftRadius: '5px', padding: '0px' }}>
-        <svg id="graph_container" width="100%" height="100%">
-          <defs>
-            <marker
-              id="arrowhead"
-              markerWidth="16"
-              markerHeight="9"
-              refX="0"
-              refY="4.5"
-              orient="auto"
-              fill="none"
-              stroke="black"
-              strokeLinejoin="round"
-              strokeWidth="1"
-              markerUnits="userSpaceOnUse"
-            >
-              <polygon points="1 1, 15 4.5, 1 8" />
-            </marker>
-          </defs>
-          <g id="nodes_and_links">
-            <g className="links">
-              { visibleLinks.map((link_id) => (
-                <Link key={link_id} link_id={link_id} />
-              ))}
-            </g>
-            <g className="nodes">
-              { visibleNodes.map((node_id) => (
-                <Node key={node_id} node_id={node_id} />
-              ))}
-            </g>
+    <div ref={myRef} className="border h-full" style={{ borderBottomLeftRadius: '5px', padding: '0px' }}>
+      <svg id="graph_container" width="100%" height="100%">
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="16"
+            markerHeight="9"
+            refX="0"
+            refY="4.5"
+            orient="auto"
+            fill="none"
+            stroke="black"
+            strokeLinejoin="round"
+            strokeWidth="1"
+            markerUnits="userSpaceOnUse"
+          >
+            <polygon points="1 1, 15 4.5, 1 8" />
+          </marker>
+        </defs>
+        <g id="nodes_and_links">
+          <g className="links">
+            { visibleLinks.map((link_id) => (
+              <Link key={link_id} link_id={link_id} />
+            ))}
           </g>
-          <RubberBand />
-        </svg>
-      </div>
-    </>
+          <g className="nodes">
+            { visibleNodes.map((node_id) => (
+              <Node key={node_id} node_id={node_id} />
+            ))}
+          </g>
+        </g>
+        <RubberBand />
+      </svg>
+    </div>
   );
 };
 

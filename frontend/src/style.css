@@ -46,7 +46,6 @@ html {
 
 body {
   font-family: monospace;
-  background-color: var(--background-color);
   line-height: 1.5;
 }
 
@@ -163,11 +162,6 @@ line {
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr
-}
-
-#grid_container {
-  display: grid;
-  grid-template-columns: 4fr 1fr
 }
 
 button {

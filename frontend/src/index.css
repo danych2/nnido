@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 43deg 47% 95%;
+    --color-secondary: 43deg 47% 85%;
+  }
+}

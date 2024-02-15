@@ -29,21 +29,15 @@ const View = () => {
         <div id="graph_name" style={{ flexShrink: '0' }}>
           {graph_name}
         </div>
-        <div id="grid_container" style={{ flexGrow: '1', overflow: 'hidden' }}>
-          {/* <div className="comp">
-            <CreateNode />
-            <DeleteNode />
-            <CreateLink />
-            <DeleteLink />
-          </div> */}
+        <div className="relative h-full m-1">
           <GraphViewer />
-          <div style={{ overflowY: 'scroll' }}>
-            <Selection />
-            <br />
+          <div className="absolute top-0 left-0 bg-primary border-r border-b rounded-br pr-1 pb-1 border-black max-h-full">
             <Model />
-            <br />
-            {isAuthenticated && <SaveGraph />}
           </div>
+          <div className="absolute top-0 right-0 bg-primary border-l border-b rounded-bl pl-1 pb-1 border-black">
+            <Selection />
+          </div>
+          {isAuthenticated && <SaveGraph />}
         </div>
       </div>
     );

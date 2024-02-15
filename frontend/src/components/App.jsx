@@ -22,7 +22,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div id="main">
+        <div id="main" className="bg-primary">
           <Header />
           <Switch>
             <Route exact path="/" component={Home} />

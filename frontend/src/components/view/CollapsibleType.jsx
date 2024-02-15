@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
 import EditType from './EditType';
@@ -8,18 +7,14 @@ import EditType from './EditType';
 import './CollapsibleType.css';
 
 const CollapsibleType = ({
-  title, isNode, pos, id, hidden, defaultChange, visibilityChange,
+  title, isNode, pos, id, hidden, defaultChange,
+  visibilityChange, isExpanded, setExpandedIndex, setExtraHeight,
 }) => {
-  const type = useSelector((state) => {
-    if (isNode) {
-      return state.graph.graph.model.node_types[id];
-    }
-    return state.graph.graph.model.link_types[id];
-  });
+  const contentHeight = useRef(0);
+  useEffect(() => {
+    if (isExpanded) setExtraHeight(contentHeight.current.scrollHeight);
+  }, [isExpanded]);
 
-  const approximateSize = `calc(${Object.keys(type.attributes).length} * 1.5em + 10em)`;
-
-  const [open, setOpen] = useState(false);
   return (
     <>
       <div
@@ -27,15 +22,15 @@ const CollapsibleType = ({
         style={{ gridRow: `${pos * 2 + 2} / ${pos * 2 + 4}` }}
       />
       <div
-        className={`collapsible_button ${open ? 'open' : 'closed'}`}
-        onClick={() => setOpen(!open)}
+        className={`collapsible_button ${isExpanded ? 'open' : 'closed'}`}
+        onClick={() => setExpandedIndex(isExpanded ? null : id)}
         style={{ gridRow: `${pos * 2 + 2}` }}
       >
         <span style={{
           display: 'inline-flex', alignItems: 'center', overflow: 'hidden', textOverflow: 'ellipsis',
         }}
         >
-          {open ? (
+          {isExpanded ? (
             <GoTriangleDown />
           ) : (
             <GoTriangleRight />
@@ -59,10 +54,13 @@ const CollapsibleType = ({
         style={{ gridRow: `${pos * 2 + 2}` }}
       />
       <div
-        className={`collapsible_content ${open ? 'open' : 'closed'}`}
-        style={{ gridRow: `${pos * 2 + 3}`, maxHeight: open ? approximateSize : '0px' }}
+        ref={contentHeight}
+        className="overflow-hidden transition-all duration-500 col-start-1"
+        style={{ gridRow: `${pos * 2 + 3}`, maxHeight: isExpanded ? contentHeight.current.scrollHeight : '0px' }}
       >
-        <EditType element_class={isNode ? 'node' : 'link'} typeId={id} />
+        <div className="m-1 p-1">
+          <EditType element_class={isNode ? 'node' : 'link'} typeId={id} />
+        </div>
       </div>
     </>
   );
@@ -76,6 +74,9 @@ CollapsibleType.propTypes = {
   hidden: PropTypes.bool.isRequired,
   defaultChange: PropTypes.func.isRequired,
   visibilityChange: PropTypes.func.isRequired,
+  isExpanded: PropTypes.bool.isRequired,
+  setExpandedIndex: PropTypes.func.isRequired,
+  setExtraHeight: PropTypes.func.isRequired,
 };
 
 export default CollapsibleType;
