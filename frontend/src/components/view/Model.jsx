@@ -1,17 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
 import ElementTypes from './ElementTypes';
 
 const Model = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
-
-  const contentHeight = useRef(null);
-  const [extraHeight, setExtraHeight] = useState(0);
-
-  useEffect(() => {
-    if (expandedIndex === null) setExtraHeight(0);
-  }, [expandedIndex]);
 
   return (
     <div className="w-72 absolute top-0 left-0 bg-primary border-r border-b rounded-br pr-1 pb-1 border-black max-h-full">
@@ -30,10 +23,9 @@ const Model = () => {
           </span>
         </div>
         <div
-          ref={contentHeight}
-          className="overflow-hidden transition-all duration-500"
+          className="overflow-hidden"
           style={{
-            maxHeight: isOpen ? contentHeight.current.scrollHeight + extraHeight : 0,
+            height: isOpen ? 'auto' : 0,
           }}
         >
           <div className="p-1 border-t">
@@ -41,13 +33,11 @@ const Model = () => {
               isNodes
               expandedIndex={expandedIndex}
               setExpandedIndex={setExpandedIndex}
-              setExtraHeight={setExtraHeight}
             />
             <ElementTypes
               isNodes={false}
               expandedIndex={expandedIndex}
               setExpandedIndex={setExpandedIndex}
-              setExtraHeight={setExtraHeight}
             />
           </div>
         </div>

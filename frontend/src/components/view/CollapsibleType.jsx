@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { GoTriangleRight, GoTriangleDown } from 'react-icons/go';
@@ -8,12 +8,9 @@ import './CollapsibleType.css';
 
 const CollapsibleType = ({
   title, isNode, pos, id, hidden, defaultChange,
-  visibilityChange, isExpanded, setExpandedIndex, setExtraHeight,
+  visibilityChange, isExpanded, setExpandedIndex,
 }) => {
   const contentHeight = useRef(0);
-  useEffect(() => {
-    if (isExpanded) setExtraHeight(contentHeight.current.scrollHeight);
-  }, [isExpanded]);
 
   return (
     <>
@@ -75,7 +72,6 @@ CollapsibleType.propTypes = {
   visibilityChange: PropTypes.func.isRequired,
   isExpanded: PropTypes.bool.isRequired,
   setExpandedIndex: PropTypes.func.isRequired,
-  setExtraHeight: PropTypes.func.isRequired,
 };
 
 export default CollapsibleType;

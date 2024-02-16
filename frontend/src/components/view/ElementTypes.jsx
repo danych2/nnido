@@ -11,7 +11,7 @@ import CollapsibleType from './CollapsibleType';
 import './ElementTypes.css';
 
 const ElementTypes = ({
-  isNodes, expandedIndex, setExpandedIndex, setExtraHeight,
+  isNodes, expandedIndex, setExpandedIndex,
 }) => {
   const dispatch = useDispatch();
 
@@ -71,7 +71,6 @@ const ElementTypes = ({
             isNode={isNodes}
             isExpanded={expandedIndex === typeId}
             setExpandedIndex={setExpandedIndex}
-            setExtraHeight={setExtraHeight}
           />
         ))}
         <div className="add_type">
@@ -98,7 +97,6 @@ ElementTypes.propTypes = {
   isNodes: PropTypes.bool.isRequired,
   expandedIndex: PropTypes.string,
   setExpandedIndex: PropTypes.func.isRequired,
-  setExtraHeight: PropTypes.func.isRequired,
 };
 
 ElementTypes.defaultProps = {

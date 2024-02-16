@@ -23,13 +23,6 @@ const Selection = () => {
     );
   }
 
-  const contentHeight = useRef(null);
-
-  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
-  useEffect(() => {
-    setTimeout(() => forceUpdate());
-  }, [selection]);
-
   return (
     <div className="border rounded">
       <div
@@ -46,15 +39,13 @@ const Selection = () => {
         </span>
       </div>
       <div
-        className="overflow-hidden transition-all duration-[1000ms]"
+        className="overflow-hidden"
         style={{
-          height: isOpen ? contentHeight.current.scrollHeight : 0,
+          height: isOpen ? 'auto' : 0,
         }}
       >
-        <div ref={contentHeight}>
-          <div className="p-1 border-t">
-            { content }
-          </div>
+        <div className="p-1 border-t">
+          { content }
         </div>
       </div>
     </div>
