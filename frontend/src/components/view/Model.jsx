@@ -23,22 +23,24 @@ const Model = () => {
           </span>
         </div>
         <div
-          className="overflow-hidden"
+          className="grid transition-all duration-500"
           style={{
-            height: isOpen ? 'auto' : 0,
+            gridTemplateRows: isOpen ? '1fr' : '0fr',
           }}
         >
-          <div className="p-1 border-t">
-            <ElementTypes
-              isNodes
-              expandedIndex={expandedIndex}
-              setExpandedIndex={setExpandedIndex}
-            />
-            <ElementTypes
-              isNodes={false}
-              expandedIndex={expandedIndex}
-              setExpandedIndex={setExpandedIndex}
-            />
+          <div className="overflow-hidden row-start-1 row-span-2">
+            <div className="p-1 border-t">
+              <ElementTypes
+                isNodes
+                expandedIndex={expandedIndex}
+                setExpandedIndex={setExpandedIndex}
+              />
+              <ElementTypes
+                isNodes={false}
+                expandedIndex={expandedIndex}
+                setExpandedIndex={setExpandedIndex}
+              />
+            </div>
           </div>
         </div>
       </div>

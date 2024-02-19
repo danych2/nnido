@@ -32,9 +32,7 @@ const View = () => {
         <div className="relative h-full m-1">
           <GraphViewer />
           <Model />
-          <div className="absolute top-0 right-0 bg-primary border-l border-b rounded-bl pl-1 pb-1 border-black">
-            <Selection />
-          </div>
+          <Selection />
           {isAuthenticated && <SaveGraph />}
         </div>
       </div>

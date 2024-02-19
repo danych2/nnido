@@ -47,11 +47,13 @@ const CollapsibleType = ({
       style={{ gridRow: `${pos * 2 + 2}` }}
     />
     <div
-      className="overflow-hidden col-start-1"
-      style={{ gridRow: `${pos * 2 + 3}`, maxHeight: isExpanded ? 'auto' : '0px' }}
+      className="col-start-1 grid transition-all duration-500"
+      style={{ gridRow: `${pos * 2 + 3}`, gridTemplateRows: isExpanded ? '1fr' : '0fr' }}
     >
-      <div className="m-1 p-1">
-        <EditType element_class={isNode ? 'node' : 'link'} typeId={id} />
+      <div className="overflow-hidden row-start-1 row-span-2">
+        <div className="m-1 p-1">
+          <EditType element_class={isNode ? 'node' : 'link'} typeId={id} />
+        </div>
       </div>
     </div>
   </>
